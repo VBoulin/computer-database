@@ -1,71 +1,71 @@
 package com.excilys.formation.java.model;
 
 public class Company {
-	/*Attributes*/
-	private long id;
-	private String name;
-	
-	/*Constructors*/
-	public Company() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+  public Long   id;
+  public String name;
 
-	public Company(String name, long id) {
-		super();
-		this.name = name;
-		this.id = id;
-	}
+  public Company() {
+    super();
+    // TODO Auto-generated constructor stub
+  }
 
-	/*Getters and Setters*/
-	public String getName() {
-		return name;
-	}
+  public Company(Long id, String name) {
+    super();
+    this.id = id;
+    this.name = name;
+  }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+  public Long getId() {
+    return id;
+  }
 
-	public long getId() {
-		return id;
-	}
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  public String getName() {
+    return name;
+  }
 
-	/*hashCode, equals & toString*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
+  public void setName(String name) {
+    this.name = name;
+  }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Company other = (Company) obj;
-		if (id != other.id)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
 
-	@Override
-	public String toString() {
-		return "Company [name=" + name + ", id=" + id + "]";
-	}
-	
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Company other = (Company) obj;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder("Company [id=");
+    sb.append(id).append(", name=").append(name).append("]");
+    return sb.toString();
+  }
 }
