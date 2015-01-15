@@ -3,45 +3,73 @@ package com.excilys.formation.java.ui;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
+import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.service.CompanyDBService;
+import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.service.ServiceFactory;
-import com.excilys.formation.java.service.ServiceInterface;
+import com.excilys.formation.java.validator.impl.DateValidator;
+import com.excilys.formation.java.validator.impl.IdValidator;
 
 public class UserConsole {
 
-  private ServiceInterface service;
+  private ComputerDBService computerDBService;
+  private CompanyDBService companyDBService;
 
-  
+  private boolean          stop = false;
+  private Scanner          scanner;
+  private DateValidator    dateValidator;
+  private IdValidator      idValidator;
+
+  /**
+   * Constructor
+   * Instantiation of the scanner, the service and the validators
+   */
   public UserConsole() {
-    service = ServiceFactory.getInstance().getService();
+    computerDBService = ServiceFactory.getInstance().getComputerDBService();
+    companyDBService = ServiceFactory.getInstance().getCompanyDBService();
+    scanner = new Scanner(System.in);
+    dateValidator = new DateValidator();
+    idValidator = new IdValidator();
   }
 
+  /**
+   * Main menu of the console
+   */
   public void showMenu() {
-    System.out.println("<---------------------------------->");
-    System.out.println("<---------------Menu--------------->");
-    System.out.println("<---------------------------------->");
-    System.out.println("[1] : Display all computers");
-    System.out.println("[2] : Display all companies");
-    System.out.println("[3] : Show computer details");
-    System.out.println("[4] : Create a computer");
-    System.out.println("[5] : Update a computer");
-    System.out.println("[6] : Delete a computer");
-    System.out.println("[7] : Quit");
-    chooseOption();
+    while (!stop) {
+      System.out.println("<---------------------------------->");
+      System.out.println("<---------------Menu--------------->");
+      System.out.println("<---------------------------------->");
+      System.out.println("[1] : Display all computers");
+      System.out.println("[2] : Display all companies");
+      System.out.println("[3] : Show computer details");
+      System.out.println("[4] : Create a computer");
+      System.out.println("[5] : Update a computer");
+      System.out.println("[6] : Delete a computer");
+      System.out.println("[7] : Quit");
+      chooseOption();
+    }
   }
 
+  /**
+   * Check the input and send to the corresponding function.
+   */
   public void chooseOption() {
-    Scanner scanner = new Scanner(System.in);
-    String string;
+    String input;
+
+    //Check the input and send to the corresponding function.
+    Pattern regex = Pattern.compile("^[1-7]$");
 
     do {
       System.out.print("Choose an option [1-7]: ");
-      string = scanner.next();
-    } while (!checkOption(string));
+      input = scanner.next();
+    } while (!regex.matcher(input).find());
 
-    switch (string) {
+    switch (input) {
       case "1":
         displayAllComputers();
         break;
@@ -61,307 +89,279 @@ public class UserConsole {
         deleteComputer();
         break;
       case "7":
+        //close the scanner and stop the loop
         scanner.close();
-        System.exit(0);
+        stop = true;
         break;
     }
   }
+
   /**
-   * Check if the option chosen in the menu is correct
-   * @param s String that need to be checked
-   * @return True if the format is correct, false otherwise
+   * Display the content of the list
+   * @param companies : list of company
    */
-  public boolean checkOption(String s) {
-    int option;
-    try {
-      option = Integer.parseInt(s);
-    } catch (NumberFormatException nfe) {
-      System.out.println("You must choose a number.");
-      return false;
+  public void showComputerPage(List<Computer> computers){
+    for(int i=0;i<computers.size();i++){
+      System.out.println(new StringBuilder("Id : ").append(computers.get(i).getId()).append(" | Name : ")
+          .append(computers.get(i).getName()));
     }
-    if (option < 1 || option > 7) {
-      System.out.println("You must use a number between 1 and 7.");
-      return false;
-    }
-    return true;
   }
-
-  public void pageComputer(List<Computer> computers) {
-    Scanner scanner = new Scanner(System.in);
-    String input;
-    int debutPage = 0;
-    int finPage = 10;
-
-    do {
-      for (int i = debutPage; i < finPage; i++) {
-        System.out.println(new StringBuilder().append(computers.get(i).getId()).append(" - ")
-            .append(computers.get(i).getName()).toString());
-      }
-      do {
-        System.out.print("<- Enter 1 | Enter 2 ->       Enter 0 to quit : ");
-        input = scanner.next().trim();
-      } while (!input.equals("0") && !input.equals("1") && !input.equals("2"));
-      switch (input) {
-        case "1":
-          debutPage -= 10;
-          if (debutPage < 0) {
-            debutPage = 0;
-            finPage = 10;
-          } else {
-            finPage -= 10;
-          }
-          break;
-        case "2":
-          finPage += 10;
-          if (finPage > computers.size()) {
-            debutPage = computers.size() - 10;
-            finPage = computers.size();
-          } else {
-            debutPage += 10;
-          }
-          break;
-      }
-    } while (!input.equals("0"));
-  }
-
-  public void pageCompany(List<Company> companies) {
-    Scanner scanner = new Scanner(System.in);
-    String input;
-    int debutPage = 0;
-    int finPage = 10;
-
-    do {
-      for (int i = debutPage; i < finPage; i++) {
-        System.out.println(new StringBuilder().append(companies.get(i).getId()).append(" - ")
-            .append(companies.get(i).getName()).toString());
-      }
-      do {
-        System.out.print("<- Enter 1 | Enter 2 ->       Enter 0 to quit : ");
-        input = scanner.next().trim();
-      } while (!input.equals("0") && !input.equals("1") && !input.equals("2"));
-      switch (input) {
-        case "1":
-          debutPage -= 10;
-          if (debutPage < 0) {
-            debutPage = 0;
-            finPage = 10;
-          } else {
-            finPage -= 10;
-          }
-          break;
-        case "2":
-          finPage += 10;
-          if (finPage > companies.size()) {
-            debutPage = companies.size() - 10;
-            finPage = companies.size();
-          } else {
-            debutPage += 10;
-          }
-          break;
-      }
-    } while (!input.equals("0"));
-  }
-
   /**
    * Retrieve a list containing all the computers and display them in a page.
    */
   public void displayAllComputers() {
-    List<Computer> computers = service.getAllComputers();
+    String input;
 
-    System.out.println("[1] : Display all computers :");
-    System.out.println("Id - Name");
+    //Retrieve the first Page
+    Page<Computer> page = computerDBService.createPage(new Page<Computer>());
 
-    pageComputer(computers);
+    //Show the content of the page
+    System.out.println("Number of results found : " + page.getNbResults());
+    showComputerPage(page.getList());
+
+    do {
+      do {
+        System.out.print("<- Enter 1 | Enter 2 ->       Enter 0 to quit : ");
+        input = scanner.next().trim();
+      } while (!input.equals("0") && !input.equals("1") && !input.equals("2"));
+      switch (input) {
+      //Show the previous Page
+        case "1":
+          if (page.previousPageOrFirst()) {
+            page = computerDBService.createPage(page);
+          }
+          System.out.println("Total : " + page.getNbResults());
+          showComputerPage(page.getList());
+          break;
+        //Show the next Page
+        case "2":
+          if (page.nextPage()) {
+            page = computerDBService.createPage(page);
+          }
+          System.out.println("Total : " + page.getNbResults());
+          showComputerPage(page.getList());
+          break;
+      }
+    } while (!input.equals("0"));
   }
 
+  /**
+   * Display the content of the list
+   * @param companies : list of company
+   */
+  public void showCompanyPage(List<Company> companies){
+    for(int i=0;i<companies.size();i++){
+      System.out.println(new StringBuilder("Id : ").append(companies.get(i).getId()).append(" | Name : ")
+          .append(companies.get(i).getName()));
+    }
+  }
   /**
    * Retrieve a list containing all the companies and display them in a page.
    */
   public void displayAllCompanies() {
-    List<Company> companies = service.getAllCompanies();
+    String input;
 
-    System.out.println("[2] : Display all companies :");
-    System.out.println("Id - Name");
+    //Retrieve the first Page
+    Page<Company> page = companyDBService.createPage(new Page<Company>());
 
-    pageCompany(companies);
+    //Show the content of the page
+    System.out.println("Number of results found : " + page.getNbResults());
+    showCompanyPage(page.getList());
+    
+    do {
+      do {
+        System.out.print("<- Enter 1 | Enter 2 ->       Enter 0 to quit : ");
+        input = scanner.next().trim();
+      } while (!input.equals("0") && !input.equals("1") && !input.equals("2"));
+      switch (input) {
+      //Show the previous Page
+        case "1":
+          if (page.previousPageOrFirst()) {
+            page = companyDBService.createPage(page);
+          }
+          System.out.println("Total : " + page.getNbResults());
+          showCompanyPage(page.getList());
+          break;
+        //Show the next Page
+        case "2":
+          if (page.nextPage()) {
+            page = companyDBService.createPage(page);
+          }
+          System.out.println("Total : " + page.getNbResults());
+          showCompanyPage(page.getList());
+          break;
+      }
+    } while (!input.equals("0"));
   }
 
   /**
-   * Display all the information about one computer thanks to his id
+   * Display all the information about one computer
    */
   public void showDetailsComputer() {
     System.out.println("[3] : Show computer details :");
-    Scanner scanner = new Scanner(System.in);
     String input;
-    
+
     do {
       System.out.print("Enter computer id : ");
       input = scanner.next().trim();
-    } while (!checkID(input));
+    } while (!idValidator.validate(input));
 
-    Computer computer = service.getOneComputer(Long.parseLong(input));
-
+    Computer computer = computerDBService.getOne(Long.parseLong(input));
+    
     System.out.println(computer.toString());
   }
 
   /**
-   * Check if the date is in the correct format
-   * @param date
-   * @return True if the format is correct, false otherwise
-   */
-  public boolean checkDate(String date) {
-    try {
-      LocalDate.parse(date);
-    } catch (Exception e) {
-      return false;
-    }
-    if (date.length() != 10) {
-      return false;
-    }
-    return true;
-  }
-
-  /**
-   * Check if the id is in the correct format
-   * @param input
-   * @return True if the format is correct, false otherwise
-   */
-  public boolean checkID(String input) {
-    Long id = 0l;
-    try {
-      id = Long.parseLong(input);
-    } catch (Exception e) {
-      return false;
-    }
-    if (id < 1) {
-      return false;
-    }
-    return true;
-  }
-
-  /**
-   * 
+   * Create one computer
    */
   public void createComputer() {
     System.out.println("[4] : Create a computer :");
-    Scanner scanner = new Scanner(System.in);
-
-    Computer computer = new Computer();
     String input;
+    Company company = null;
 
-    do {
-      System.out.print("Enter computer name : ");
-      input = scanner.next().trim();
-    } while (input.isEmpty());
+    System.out.print("Enter computer name : ");
+    input = scanner.next().trim();
 
-    computer.setName(input);
+    //computer builder
+    Computer.Builder b = Computer.builder(input);
 
     do {
       System.out.print("Enter introduced date (yyyy-mm-dd) or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !checkDate(input));
+    } while (!input.equals("0") && !dateValidator.validate(input));
 
     if (!input.equals("0")) {
-      computer.setIntroduced(LocalDate.parse(input));
+      b.introduced(LocalDate.parse(input));
     }
 
     do {
       System.out.print("Enter discontinued date (yyyy-mm-dd) or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !checkDate(input));
+    } while (!input.equals("0") && !dateValidator.validate(input));
 
     if (!input.equals("0")) {
-      computer.setDiscontinued(LocalDate.parse(input));
+      b.discontinued(LocalDate.parse(input));
     }
 
     do {
       System.out.print("Enter company id or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !checkID(input));
+    } while (!input.equals("0") && !idValidator.validate(input));
 
     if (!input.equals("0")) {
-      computer.setCompany(service.getOneCompany(Long.parseLong(input)));
+      company=companyDBService.getOne(Long.parseLong(input));
+      if(company!=null)
+        b.company(companyDBService.getOne(Long.parseLong(input)));
     }
 
-    service.createComputer(computer);
+    Computer computer = b.build();
+
+    //Add the computer to the database
+    computerDBService.create(computer);
     System.out.println("Computer created with success.");
   }
 
+  /**
+   * Update a computer
+   */
   public void updateComputer() {
     System.out.println("[5] : Update a computer :");
-    Scanner scanner = new Scanner(System.in);
-
-    Computer computer = new Computer();
     String input;
+    Long id;
+    Company company = null;
 
     do {
       System.out.print("Enter computer id : ");
       input = scanner.next().trim();
-    } while (!checkID(input));
+    } while (!idValidator.validate(input));
 
-    computer.setId(Long.parseLong(input));
+    id = Long.parseLong(input);
+    Computer computer = computerDBService.getOne(id);
+    
+    //Check if the computer exist in the database
+    if (computer == null) {
+      System.out.println("Computer not found.");
+    } else {
+      //computer builder
+      Computer.Builder b = Computer.builder();
+      b.id(id);
 
-    do {
-      System.out.print("Enter computer name : ");
+      System.out.print("Enter the new computer name : ");
       input = scanner.next().trim();
-    } while (input.isEmpty());
 
-    computer.setName(input);
+      b.name(input);
 
-    do {
-      System.out.print("Enter introduced date (yyyy-mm-dd) or enter 0 : ");
-      input = scanner.next().trim();
-    } while (!input.equals("0") && !checkDate(input));
+      do {
+        System.out.print("Enter the new introduced date (yyyy-mm-dd) or enter 0 : ");
+        input = scanner.next().trim();
+      } while (!input.equals("0") && !dateValidator.validate(input));
 
-    if (!input.equals("0")) {
-      computer.setIntroduced(LocalDate.parse(input));
+      if (!input.equals("0")) {
+        b.introduced(LocalDate.parse(input));
+      }
+
+      do {
+        System.out.print("Enter the new discontinued date (yyyy-mm-dd) or enter 0 : ");
+        input = scanner.next().trim();
+      } while (!input.equals("0") && !dateValidator.validate(input));
+
+      if (!input.equals("0")) {
+        b.discontinued(LocalDate.parse(input));
+      }
+
+      do {
+        System.out.print("Enter the new company id or enter 0 : ");
+        input = scanner.next().trim();
+      } while (!input.equals("0") && !idValidator.validate(input));
+
+      if (!input.equals("0")) {
+        company=companyDBService.getOne(Long.parseLong(input));
+        if(company!=null)
+          b.company(companyDBService.getOne(Long.parseLong(input)));
+      }
+
+      computer = b.build();
+      //Update the computer in the database
+      computerDBService.update(computer);
+      System.out.println("Computer updated with success.");
     }
 
-    do {
-      System.out.print("Enter discontinued date (yyyy-mm-dd) or enter 0 : ");
-      input = scanner.next().trim();
-    } while (!input.equals("0") && !checkDate(input));
-
-    if (!input.equals("0")) {
-      computer.setDiscontinued(LocalDate.parse(input));
-    }
-
-    do {
-      System.out.print("Enter company id or enter 0 : ");
-      input = scanner.next().trim();
-    } while (!input.equals("0") && !checkID(input));
-
-    if (!input.equals("0")) {
-      computer.setCompany(service.getOneCompany(Long.parseLong(input)));
-    }
-
-    service.updateComputer(computer);
-    System.out.println("Computer updated with success.");
   }
 
   /**
-   * Delete a computer thanks to his id
+   * Delete a computer
    */
   public void deleteComputer() {
     System.out.println("[6] : Delete a computer :");
-    Scanner scanner = new Scanner(System.in);
+    String input;
     Long id;
 
-    System.out.print("Enter computer id : ");
-    id = scanner.nextLong();
+    do {
+      System.out.print("Enter computer id : ");
+      input = scanner.next().trim();
+    } while (!idValidator.validate(input));
+    
+    id=Long.parseLong(input);
+    Computer computer = computerDBService.getOne(id);
 
-    service.deleteComputer(id);
-
-    System.out.println("Computer deleted with success.");
+    if(computer != null){
+      //Delete the computer in the database
+      computerDBService.delete(id);
+      System.out.println("Computer deleted with success.");
+    }else{
+      System.out.println("Computer not found.");
+    }
 
   }
 
+  /**
+   * Main function
+   * Instantiation of the console
+   * @param args
+   */
   public static void main(String[] args) {
-    // TODO Auto-generated method stub
     UserConsole console = new UserConsole();
-    while (true) {
-      console.showMenu();
-    }
+    console.showMenu();
   }
 
 }

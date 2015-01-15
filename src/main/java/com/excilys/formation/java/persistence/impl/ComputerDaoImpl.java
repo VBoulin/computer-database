@@ -1,30 +1,52 @@
-package com.excilys.formation.java.persistence;
+package com.excilys.formation.java.persistence.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.formation.java.model.Company;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.service.Service;
+import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.persistence.ComputerDao;
+import com.excilys.formation.java.persistence.DaoFactory;
+import com.excilys.formation.java.persistence.mapper.impl.ComputerRowMapperImpl;
 
-public class ComputerDao implements Dao<Computer> {
+public class ComputerDaoImpl implements ComputerDao {
 
-  private static final String URL      = "jdbc:mysql://localhost:3306/computer-database-db";
-  private static final String USR      = "admincdb";
-  private static final String PASSWORD = "qwerty1234";
+  private static final String          URL             = "jdbc:mysql://localhost:3306/computer-database-db";
+  private static final String          USR             = "admincdb";
+  private static final String          PASSWORD        = "qwerty1234";
 
-  @Override
+  private Logger                       logger          = LoggerFactory
+                                                           .getLogger("com.excilys.formation.java.persistence.impl.ComputerDaoImpl");
+
+  private final static ComputerDaoImpl computerDaoImpl = new ComputerDaoImpl();
+
+  /**
+   * Singleton : provide the access service to the database (company)
+   */
+  private ComputerDaoImpl() {}
+
+  public static ComputerDaoImpl getInstance() {
+    return computerDaoImpl;
+  }
+
+  /**
+   * Add one computer in the database
+   * @param o : computer that needs to be added to the database
+   */
   public void create(Computer o) {
-    // TODO Auto-generated method stub
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    String query = "insert into computer(name, introduced, discontinued, company_id)  value (?, ?, ?, ?);";
+    String query = "INSERT INTO computer(name, introduced, discontinued, company_id)  VALUE (?, ?, ?, ?);";
 
     try {
       conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
@@ -47,83 +69,55 @@ public class ComputerDao implements Dao<Computer> {
       }
       stmt.executeUpdate();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("SQLError with creation");
+      throw new PersistenceException(e.getMessage(), e);
     } finally {
+      //Close the connection
       DaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
   }
 
-  @Override
+  /**
+   * Retrieve one computer from the database
+   * @param id Id of the computer
+   * @return the computer asked or null
+   */
   public Computer getOne(Long id) {
-    // TODO Auto-generated method stub
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    Computer computer = new Computer();
+    Computer computer = null;
 
-    String query = "select * from computer where id = ?;";
+    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.id = ?";
 
     try {
       conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
-      while (rs.next()) {
-        computer.setId(id);
-        computer.setName(rs.getString("name"));
-        if(rs.getDate("introduced")!=null){
-          computer.setIntroduced(rs.getDate("introduced").toLocalDate());
-        }
-        if(rs.getDate("discontinued")!=null){
-          computer.setDiscontinued(rs.getDate("discontinued").toLocalDate());
-        }
-        Company company = Service.getInstance().getOneCompany(rs.getLong("company_id"));
-        computer.setCompany(company);
-      }
+
+      ComputerRowMapperImpl mapper = new ComputerRowMapperImpl();
+      computer = mapper.mapRow(rs);
+
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("SQLError with getOne()");
+      throw new PersistenceException(e.getMessage(), e);
     } finally {
+      //Close the connection
       DaoFactory.getInstance().closeConnection(conn, stmt, rs);
     }
     return computer;
   }
 
-  @Override
-  public List<Computer> getAll() {
-    // TODO Auto-generated method stub
-    Connection conn = null;
-    PreparedStatement stmt = null;
-    ResultSet rs = null;
-    Computer computer;
-    List<Computer> computers = new ArrayList<Computer>();
-
-    String query = "select * from computer;";
-
-    try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
-      stmt = conn.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        computer = new Computer();
-        computer.setId(rs.getLong("id"));
-        computer.setName(rs.getString("name"));
-        computers.add(computer);
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      DaoFactory.getInstance().closeConnection(conn, stmt, rs);
-    }
-    return computers;
-  }
-
-  @Override
+  /**
+   * Update one computer
+   * @param o computer that needs to be updated in the database
+   */
   public void update(Computer o) {
-    // TODO Auto-generated method stub
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    String query = "update computer set name = ?, introduced = ?, discontinued = ?, company_id = ? where id = ?;";
+    String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 
     try {
       conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
@@ -147,19 +141,23 @@ public class ComputerDao implements Dao<Computer> {
       stmt.setLong(5, o.getId());
       stmt.executeUpdate();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("SQLError with update()");
+      throw new PersistenceException(e.getMessage(), e);
     } finally {
+      //Close the connection
       DaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
   }
 
-  @Override
+  /**
+   * Delete one computer
+   * @param id Id of the computer that needs to be deleted
+   */
   public void delete(Long id) {
-    // TODO Auto-generated method stub
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    String query = "delete from computer where id = ?;";
+    String query = "DELETE FROM computer WHERE id = ?;";
 
     try {
       conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
@@ -167,10 +165,58 @@ public class ComputerDao implements Dao<Computer> {
       stmt.setLong(1, id);
       stmt.executeUpdate();
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("SQLError with delete()");
+      throw new PersistenceException(e.getMessage(), e);
     } finally {
+      //Close the connection
       DaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
+  }
+
+  /**
+   * Create one page by requesting the necessary informations
+   * @param page Previous page
+   * @return page Next page requested containing all the necessary informations
+   */
+  public Page<Computer> createPage(Page<Computer> page) {
+    Computer computer;
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    Statement countStmt = null;
+    ResultSet rs = null;
+    List<Computer> computers;
+
+    String countQuery = "SELECT COUNT(id) as total FROM computer";
+    String query = "SELECT * FROM computer LIMIT ? OFFSET ? ;";
+
+    try {
+      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+
+      countStmt = conn.createStatement();
+
+      rs = countStmt.executeQuery(countQuery);
+      rs.next();
+      page.setNbResults(rs.getInt("total"));
+
+      stmt = conn.prepareStatement(query);
+      stmt.setInt(1, page.getNbResultsPerPage());
+      stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
+
+      rs = stmt.executeQuery();
+
+      ComputerRowMapperImpl mapper = new ComputerRowMapperImpl();
+      computers = mapper.mapRowList(rs);
+
+      page.setList(computers);
+
+    } catch (SQLException e) {
+      throw new PersistenceException(e.getMessage(), e);
+    } finally {
+      logger.error("SQLError with getPagedList()");
+      //Close the connection
+      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+    }
+    return page;
   }
 
 }

@@ -1,6 +1,8 @@
-package com.excilys.formation.java.validator;
+package com.excilys.formation.java.validator.impl;
 
 import java.util.regex.Pattern;
+
+import com.excilys.formation.java.validator.Validator;
 
 public class DateValidator implements Validator{
 

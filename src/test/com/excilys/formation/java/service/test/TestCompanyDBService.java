@@ -1,32 +1,53 @@
 package com.excilys.formation.java.service.test;
 
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.excilys.formation.java.model.Company;
+import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
-import com.excilys.formation.java.service.impl.CompanyDBServiceImpl;
+import com.excilys.formation.java.service.CompanyDBService;
 
-public class TestCompanyDBServiceImpl {
+@RunWith(MockitoJUnitRunner.class)
+public class TestCompanyDBService {
 
-  private CompanyDBServiceImpl companyDBService;
-  private CompanyDao           companyDao;
-
+  CompanyDBService companyDBService;
+  CompanyDao companyDao;
+  Page<Company> page;
+  Page<Company> pageR;
+  
   @Before
   public void setUp() {
-    companyDBService = CompanyDBServiceImpl.getInstance();
-    companyDao = Mockito.mock(CompanyDao.class);
-
-    Mockito.when(companyDao.getOne(5l)).thenReturn(new Company(5l, "Company5"));
-    Mockito.when(companyDao.getOne(3l)).thenReturn(new Company(3l, "Company3"));
-    Mockito.when(companyDao.getOne(1l)).thenReturn(new Company(1l, "Company1"));
+      companyDao = Mockito.mock(CompanyDao.class);
+      companyDBService = new MockCompanyDBService(companyDao);
+      
+      page = new Page<Company>();
+      pageR = new Page<Company>(1,new ArrayList<Company>(),10,12);
+      
+      Mockito.when(companyDao.getOne(1l)).thenReturn(Company.builder().id(1l).name("truc").build());
+      Mockito.when(companyDao.createPage(page)).thenReturn(pageR);
   }
-
+  
+  /**
+   * test the getOne() metjod
+   */
   @Test
   public void testGetOne() {
-    Assert.assertEquals((new Company(5l, "Company5")), companyDBService.getOne(5l));
+      Assert.assertEquals(Company.builder().id(1L).name("truc").build(),companyDBService.getOne(1L));
+  }
+  
+  /**
+   * test the createpage() method
+   */
+  @Test
+  public void testCreatePage() {
+      Assert.assertEquals(pageR,companyDBService.createPage(page));
   }
 }

@@ -9,9 +9,16 @@ public class Computer {
   public LocalDate discontinued;
   public Company   company;
 
+  //------------------------------
+  //Constructors
+  //------------------------------
   public Computer() {
     super();
-    // TODO Auto-generated constructor stub
+  }
+
+  public Computer(String name) {
+    super();
+    this.name = name;
   }
 
   public Computer(long id, String name, LocalDate introduced, LocalDate discontinued,
@@ -23,6 +30,10 @@ public class Computer {
     this.discontinued = discontinued;
     this.company = company;
   }
+
+  //------------------------------
+  //Getters & setters
+  //------------------------------
 
   public Long getId() {
     return id;
@@ -64,6 +75,9 @@ public class Computer {
     this.company = company;
   }
 
+  //------------------------------
+  //hashcode & equals & toString
+  //------------------------------
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -114,7 +128,60 @@ public class Computer {
   public String toString() {
     StringBuilder sb = new StringBuilder("Computer [id=");
     sb.append(id).append(", name=").append(name).append(", introduced=").append(introduced);
-    sb.append(", discontinued=").append(discontinued).append(", company=").append(company).append("]");
+    sb.append(", discontinued=").append(discontinued).append(", company=").append(company)
+        .append("]");
     return sb.toString();
+  }
+
+  //------------------------------
+  //Builder
+  //------------------------------
+  public static Builder builder(String name) {
+    return new Builder(name);
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static class Builder {
+    private Computer c;
+
+    private Builder() {
+      c = new Computer();
+    }
+
+    private Builder(String name) {
+      c = new Computer(name);
+    }
+
+    public Builder id(Long id) {
+      c.id = id;
+      return this;
+    }
+
+    public Builder name(String name) {
+      c.name = name;
+      return this;
+    }
+
+    public Builder introduced(LocalDate introduced) {
+      c.introduced = introduced;
+      return this;
+    }
+
+    public Builder discontinued(LocalDate discontinued) {
+      c.discontinued = discontinued;
+      return this;
+    }
+
+    public Builder company(Company company) {
+      c.company = company;
+      return this;
+    }
+
+    public Computer build() {
+      return c;
+    }
   }
 }

@@ -17,5 +17,5 @@ public interface CompanyDao {
    * @param page Previous page
    * @return page Next page requested containing all the necessary informations
    */
-  Page<Company> getPagedList(Page<Company> page);
+  Page<Company> createPage(Page<Company> page);
 }

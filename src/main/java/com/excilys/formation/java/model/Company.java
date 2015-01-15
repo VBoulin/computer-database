@@ -4,9 +4,11 @@ public class Company {
   public Long   id;
   public String name;
 
+  //------------------------------
+  //Constructors
+  //------------------------------
   public Company() {
     super();
-    // TODO Auto-generated constructor stub
   }
 
   public Company(Long id, String name) {
@@ -15,6 +17,9 @@ public class Company {
     this.name = name;
   }
 
+  //------------------------------
+  //Getters and setters
+  //------------------------------
   public Long getId() {
     return id;
   }
@@ -31,6 +36,9 @@ public class Company {
     this.name = name;
   }
 
+  //------------------------------
+  //hashcode & equals & toString
+  //------------------------------
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -68,4 +76,34 @@ public class Company {
     sb.append(id).append(", name=").append(name).append("]");
     return sb.toString();
   }
+  
+  //------------------------------
+  //Builder
+  //------------------------------
+
+  public static Builder builder() {
+	    return new Builder();
+  }
+  
+  public static class Builder {
+	    private Company c;
+
+	    private Builder() {
+	      c = new Company();
+	    }
+
+	    public Builder id(Long id) {
+	      c.id = id;
+	      return this;
+	    }
+
+	    public Builder name(String name) {
+	      c.name = name;
+	      return this;
+	    }
+
+	    public Company build() {
+	      return c;
+	    }
+	  }
 }

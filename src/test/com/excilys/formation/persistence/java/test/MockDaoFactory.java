@@ -22,9 +22,6 @@ public class MockDaoFactory {
 
   private static final String     DRIVER  = "com.mysql.jdbc.Driver";
 
-  private MockCompanyDao              companyDao;
-  private MockComputerDao             computerDao;
-
   /**
    * Singleton : DAO
    */
@@ -34,22 +31,10 @@ public class MockDaoFactory {
     } catch (ClassNotFoundException e) {
       throw new PersistenceException(e.getMessage(), e);
     }
-
-    companyDao = MockCompanyDao.getInstance();
-    computerDao = MockComputerDao.getInstance();
   }
 
   public static MockDaoFactory getInstance() {
     return factory;
-  }
-
-  
-  public CompanyDao getCompanyDao() {
-    return companyDao;
-  }
-
-  public ComputerDao getComputerDao() {
-    return computerDao;
   }
 
   /**

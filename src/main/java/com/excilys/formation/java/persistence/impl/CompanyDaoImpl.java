@@ -1,92 +1,119 @@
-package com.excilys.formation.java.persistence;
+package com.excilys.formation.java.persistence.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.sql.Statement;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
+import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.persistence.CompanyDao;
+import com.excilys.formation.java.persistence.DaoFactory;
+import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
 
-public class CompanyDao implements Dao<Company> {
+public class CompanyDaoImpl implements CompanyDao{
 
+  //Connections informations 
   private static final String URL      = "jdbc:mysql://localhost:3306/computer-database-db";
   private static final String USR      = "admincdb";
   private static final String PASSWORD = "qwerty1234";
+  
+  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.impl.CompanyDaoImpl");
 
-  @Override
-  public void create(Company o) {
-    // TODO Auto-generated method stub
+  private final static CompanyDaoImpl companyDaoImpl = new CompanyDaoImpl();
 
+  /**
+   * Singleton : provide the access service to the database (company)
+   */
+  private CompanyDaoImpl() {
   }
 
-  @Override
+  public static CompanyDaoImpl getInstance() {
+    return companyDaoImpl;
+  }
+  
+  /**
+   * retrieve one company from the database
+   * @param id Id of the company
+   * @return The company requested or null
+   */
   public Company getOne(Long id) {
-    // TODO Auto-generated method stub
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    Company company = new Company();
+    Company company = null;
 
-    String query = "select * from company where id = ?;";
+    String query = "SELECT * FROM company WHERE id = ?;";
 
     try {
       conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
-      while (rs.next()) {
-        company.setId(id);
-        company.setName(rs.getString("name"));
-      }
+      
+      CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
+      company = mapper.mapRow(rs);
+      
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("SQLError with getOne()");
+      throw new PersistenceException(e.getMessage(), e);
     } finally {
+      //Close the connection
       DaoFactory.getInstance().closeConnection(conn, stmt, rs);
     }
     return company;
   }
 
-  @Override
-  public List<Company> getAll() {
-    // TODO Auto-generated method stub
+  /**
+   * Create one page by requesting the necessary informations
+   * @param page Previous page
+   * @return page Next page requested containing all the necessary informations
+   */
+  public Page<Company> createPage(Page<Company> page) {
+
     Connection conn = null;
     PreparedStatement stmt = null;
+    Statement countStmt = null;
     ResultSet rs = null;
-    Company company;
-    List<Company> companies = new ArrayList<Company>();
+    List<Company> companies;
 
-    String query = "select * from company;";
+    String countQuery = "SELECT COUNT(id) AS total FROM company";
+    String query = "SELECT * FROM company LIMIT ? OFFSET ? ;";
 
     try {
       conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+
+      countStmt = conn.createStatement();
+
+      rs = countStmt.executeQuery(countQuery);
+      rs.next();
+      page.setNbResults(rs.getInt("total"));
+
       stmt = conn.prepareStatement(query);
+      stmt.setInt(1, page.getNbResultsPerPage());
+      stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
+
       rs = stmt.executeQuery();
-      while (rs.next()) {
-        company = new Company();
-        company.setId(rs.getLong("id"));
-        company.setName(rs.getString("name"));
-        companies.add(company);
-      }
+      
+      CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
+      companies = mapper.mapRowList(rs);
+      
+      page.setList(companies);
+
     } catch (SQLException e) {
-      e.printStackTrace();
+      logger.error("SQLError with getPagedList()");
+      throw new PersistenceException(e.getMessage(), e);
     } finally {
-      DaoFactory.getInstance().closeConnection(conn, stmt, rs);
+      //Close the connection
+      DaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
-    return companies;
-  }
-
-  @Override
-  public void update(Company o) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void delete(Long id) {
-    // TODO Auto-generated method stub
-
+    return page;
   }
 
 }

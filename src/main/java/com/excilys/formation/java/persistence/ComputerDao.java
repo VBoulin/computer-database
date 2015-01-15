@@ -35,5 +35,5 @@ public interface ComputerDao {
    * @param page Previous page
    * @return page Next page requested containing all the necessary informations
    */
-  Page<Computer> getPagedList(Page<Computer> page);
+  Page<Computer> createPage(Page<Computer> page);
 }

@@ -67,8 +67,6 @@ public class Page<T> {
   //hashcode & equals & toString
   //------------------------------
 
-  
-
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -129,7 +127,7 @@ public class Page<T> {
    * Check if there is a previous page
    * @return True : Page exist | False : otherwise
    */
-  public boolean previousPage() {
+  public boolean previousPageOrFirst() {
     if (pageNumber > 1) {
       pageNumber--;
       return true;

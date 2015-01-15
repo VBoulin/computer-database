@@ -36,7 +36,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
    * Return one computer
    */
   @Override
-  public Computer getOneComputer(Long id) {
+  public Computer getOne(Long id) {
     return computerDao.getOne(id);
   }
 
@@ -44,7 +44,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
    * Create one computer
    */
   @Override
-  public void createComputer(Computer c) {
+  public void create(Computer c) {
     if (c == null) {
       logger.error("SQLError with create()");
       throw new IllegalArgumentException("Computer cannot be null");
@@ -56,7 +56,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
    * update one computer
    */
   @Override
-  public void updateComputer(Computer c) {
+  public void update(Computer c) {
     if (c == null) {
       logger.error("SQLError with update()");
       throw new IllegalArgumentException("Computer cannot be null");
@@ -68,7 +68,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
    * delete one computer 
    */
   @Override
-  public void deleteComputer(Long id) {
+  public void delete(Long id) {
     if (id == null) {
       logger.error("SQLError with delete()");
       throw new IllegalArgumentException("Id cannot be null");
@@ -80,8 +80,8 @@ public class ComputerDBServiceImpl implements ComputerDBService {
    * return a page containing 10 computers
    */
   @Override
-  public Page<Computer> getPagedListComputer(Page<Computer> page) {
-    return computerDao.getPagedList(page);
+  public Page<Computer> createPage(Page<Computer> page) {
+    return computerDao.createPage(page);
   }
 
 }

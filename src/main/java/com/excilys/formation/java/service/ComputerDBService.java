@@ -4,14 +4,36 @@ import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 
 public interface ComputerDBService {
-  Computer getOneComputer(Long id);
+	/**
+	 * Retrieve one computer
+	 * @param id Id of the computer that need to be retrieved
+	 * @return Computer corresponding to the id
+	 */
+  Computer getOne(Long id);
 
-  void createComputer(Computer c);
+  /**
+   * Create one computer
+   * @param c computer that needs to be created
+   */
+  void create(Computer c);
 
-  void updateComputer(Computer c);
+  /**
+   * Updated a computer
+   * @param c computer that needs to be updated
+   */
+  void update(Computer c);
 
-  void deleteComputer(Long id);
+  /**
+   * Delete a computer
+   * @param id Id corresponding to the computer that need to be deleted
+   */
+  void delete(Long id);
 
-  Page<Computer> getPagedListComputer(Page<Computer> page);
+  /**
+   * Create a page containing a list of computers
+   * @param page Raw page with only basics informations such as number of results per page
+   * @return Page with a list
+   */
+  Page<Computer> createPage(Page<Computer> page);
 
 }

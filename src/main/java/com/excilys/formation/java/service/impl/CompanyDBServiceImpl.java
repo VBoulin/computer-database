@@ -31,7 +31,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
    * return one company
    */
   @Override
-  public Company getOneCompany(Long id) {
+  public Company getOne(Long id) {
     return companyDao.getOne(id);
   }
 
@@ -39,8 +39,8 @@ public class CompanyDBServiceImpl implements CompanyDBService {
    * Return a page containing 10 companies
    */
   @Override
-  public Page<Company> getPagedListCompany(Page<Company> page) {
-    return companyDao.getPagedList(page);
+  public Page<Company> createPage(Page<Company> page) {
+    return companyDao.createPage(page);
   }
 
 }
