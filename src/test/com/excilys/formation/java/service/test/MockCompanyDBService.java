@@ -1,5 +1,7 @@
 package com.excilys.formation.java.service.test;
 
+import java.util.List;
+
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
@@ -21,5 +23,10 @@ public class MockCompanyDBService implements CompanyDBService{
   @Override
   public Page<Company> createPage(Page<Company> page) {
     return companyDao.createPage(page);
+  }
+
+  @Override
+  public List<Company> getAll() {
+    return companyDao.getAll();
   }
 }

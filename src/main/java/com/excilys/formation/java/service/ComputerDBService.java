@@ -1,5 +1,7 @@
 package com.excilys.formation.java.service;
 
+import java.util.List;
+
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 
@@ -10,6 +12,12 @@ public interface ComputerDBService {
 	 * @return Computer corresponding to the id
 	 */
   Computer getOne(Long id);
+  
+  /**
+   * Find all the computers
+   * @return a list of computers
+   */
+  List<Computer> getAll();
 
   /**
    * Create one computer

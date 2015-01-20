@@ -52,9 +52,9 @@ public class EditComputer extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	  long id = 0;
-      String idString = request.getParameter("computerId");
-      if (Validator.isID(idString)) {
-          id = Long.valueOf(idString);
+      String idComputer = request.getParameter("id");
+      if (Validator.isID(idComputer)) {
+          id = Long.valueOf(idComputer);
           
           Computer computer = computerDBService.getOne(id);        
           request.setAttribute("computer", computer);

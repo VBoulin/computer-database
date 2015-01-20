@@ -1,5 +1,7 @@
 package com.excilys.formation.java.persistence;
 
+import java.util.List;
+
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 
@@ -12,6 +14,12 @@ public interface ComputerDao {
    */
   Computer getOne(Long id);
 
+  /**
+   * Find all the computers
+   * @return a list of computers
+   */
+  List<Computer> getAll();
+  
   /**
    * Create a new computer
    * @param computer : computer that needs to be added in the database

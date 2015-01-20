@@ -1,4 +1,4 @@
-package com.excilys.formation.persistence.java.test;
+package com.excilys.formation.java.persistence.test;
 
 
 import java.sql.Connection;
@@ -32,22 +32,22 @@ public class TestCompanyDao{
   private static final String PASSWORD = "qwerty12345";
 
   private MockCompanyDao companyDao;
-  List<Company> list;
+  List<Company> companies;
   
   @Before
   public void setUp() throws SQLException {
      companyDao = new MockCompanyDao();
-     list = new ArrayList<Company>();
-     list.add(new Company(1l, "Apple Inc."));
-     list.add(new Company(2l, "Thinking Machines"));
-     list.add(new Company(3l, "RCA"));
-     list.add(new Company(4l, "Netronics"));
-     list.add(new Company(5l, "Tandy Corporation"));
-     list.add(new Company(6l, "Commodore International"));
-     list.add(new Company(7l, "MOS Technology"));
-     list.add(new Company(8l, "Micro Instrumentation and Telemetry Systems"));
-     list.add(new Company(9l, "IMS Associates, Inc."));
-     list.add(new Company(10l, "Digital Equipment Corporation"));
+     companies = new ArrayList<Company>();
+     companies.add(new Company(1l, "Apple Inc."));
+     companies.add(new Company(2l, "Thinking Machines"));
+     companies.add(new Company(3l, "RCA"));
+     companies.add(new Company(4l, "Netronics"));
+     companies.add(new Company(5l, "Tandy Corporation"));
+     companies.add(new Company(6l, "Commodore International"));
+     companies.add(new Company(7l, "MOS Technology"));
+     companies.add(new Company(8l, "Micro Instrumentation and Telemetry Systems"));
+     companies.add(new Company(9l, "IMS Associates, Inc."));
+     companies.add(new Company(10l, "Digital Equipment Corporation"));
   }
   
   /**
@@ -66,7 +66,7 @@ public class TestCompanyDao{
       pageR.setNbResultsPerPage(10);
       pageR.setPageNumber(1);
       pageR.setNbResults(42);
-      pageR.setList(list);
+      pageR.setList(companies);
       Assert.assertEquals(pageR, companyDao.createPage(page));
   }
 

@@ -1,5 +1,7 @@
 package com.excilys.formation.java.service;
 
+import java.util.List;
+
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 
@@ -11,6 +13,12 @@ public interface CompanyDBService {
 	 * @return The company corresponding to the id
 	 */
   Company getOne(Long id);
+  
+  /**
+   * Find all the companies
+   * @return a list of companies
+   */
+  List<Company> getAll();
 
   /**
    * Create a page containing a list of companies

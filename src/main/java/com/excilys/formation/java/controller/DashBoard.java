@@ -24,7 +24,6 @@ public class DashBoard extends HttpServlet {
   private static final long        serialVersionUID = 1L;
 
   private static ComputerDBService computerDBService;
-  private static CompanyDBService  companyDBService;
   private ServiceFactory           service;
 
   /**
@@ -34,21 +33,21 @@ public class DashBoard extends HttpServlet {
     super();
     service = ServiceFactory.getInstance();
     computerDBService = service.getComputerDBService();
-    companyDBService = service.getCompanyDBService();
   }
 
   /**
+   * 
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     Page<Computer> page = new Page<Computer>();
 
-    String intString = request.getParameter("page");
+    String pageNb = request.getParameter("page");
     int pageNumber = 0;
 
-    if (Validator.isInt(intString)) {
-      pageNumber = Integer.valueOf(intString);
+    if (Validator.isInt(pageNb)) {
+      pageNumber = Integer.valueOf(pageNb);
     }
 
     if (pageNumber < 1) {
@@ -57,11 +56,11 @@ public class DashBoard extends HttpServlet {
       page.setPageNumber(pageNumber);
     }
 
-    String nbResultsString = request.getParameter("nbResults");
+    String nbRs = request.getParameter("nbResults");
     int nbResults = 0;
 
-    if (Validator.isInt(intString)) {
-      nbResults = Integer.valueOf(nbResultsString);
+    if (nbRs!=null) {
+      nbResults = Integer.valueOf(nbRs);
     }
 
     if (nbResults < 10) {
@@ -75,8 +74,8 @@ public class DashBoard extends HttpServlet {
     int nbPages=0;
     
     if (page.getNbResultsPerPage() != 0) {
-      nbPages = nbResults / page.getNbResultsPerPage();
-      if (nbResults % page.getNbResultsPerPage() != 0) {
+      nbPages = page.getNbResults() / page.getNbResultsPerPage();
+      if (page.getNbResults() % page.getNbResultsPerPage() != 0) {
           nbPages++;
       }
     }

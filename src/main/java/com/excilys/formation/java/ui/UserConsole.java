@@ -11,8 +11,7 @@ import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.service.ServiceFactory;
-import com.excilys.formation.java.validator.impl.DateValidator;
-import com.excilys.formation.java.validator.impl.IdValidator;
+import com.excilys.formation.java.validator.Validator;
 
 public class UserConsole {
 
@@ -21,8 +20,6 @@ public class UserConsole {
 
   private boolean          stop = false;
   private Scanner          scanner;
-  private DateValidator    dateValidator;
-  private IdValidator      idValidator;
 
   /**
    * Constructor
@@ -32,8 +29,6 @@ public class UserConsole {
     computerDBService = ServiceFactory.getInstance().getComputerDBService();
     companyDBService = ServiceFactory.getInstance().getCompanyDBService();
     scanner = new Scanner(System.in);
-    dateValidator = new DateValidator();
-    idValidator = new IdValidator();
   }
 
   /**
@@ -204,7 +199,7 @@ public class UserConsole {
     do {
       System.out.print("Enter computer id : ");
       input = scanner.next().trim();
-    } while (!idValidator.validate(input));
+    } while (!Validator.isID(input));
 
     Computer computer = computerDBService.getOne(Long.parseLong(input));
     
@@ -219,8 +214,10 @@ public class UserConsole {
     String input;
     Company company = null;
 
-    System.out.print("Enter computer name : ");
-    input = scanner.next().trim();
+    do{
+      System.out.print("Enter computer name : ");
+      input = scanner.next().trim();
+    }while(!Validator.isName(input));
 
     //computer builder
     Computer.Builder b = Computer.builder(input);
@@ -228,7 +225,7 @@ public class UserConsole {
     do {
       System.out.print("Enter introduced date (yyyy-mm-dd) or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !dateValidator.validate(input));
+    } while (!input.equals("0") && !Validator.isDate(input));
 
     if (!input.equals("0")) {
       b.introduced(LocalDate.parse(input));
@@ -237,7 +234,7 @@ public class UserConsole {
     do {
       System.out.print("Enter discontinued date (yyyy-mm-dd) or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !dateValidator.validate(input));
+    } while (!input.equals("0") && !Validator.isDate(input));
 
     if (!input.equals("0")) {
       b.discontinued(LocalDate.parse(input));
@@ -246,7 +243,7 @@ public class UserConsole {
     do {
       System.out.print("Enter company id or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !idValidator.validate(input));
+    } while (!input.equals("0") && !Validator.isID(input));
 
     if (!input.equals("0")) {
       company=companyDBService.getOne(Long.parseLong(input));
@@ -273,7 +270,7 @@ public class UserConsole {
     do {
       System.out.print("Enter computer id : ");
       input = scanner.next().trim();
-    } while (!idValidator.validate(input));
+    } while (!Validator.isID(input));
 
     id = Long.parseLong(input);
     Computer computer = computerDBService.getOne(id);
@@ -294,7 +291,7 @@ public class UserConsole {
       do {
         System.out.print("Enter the new introduced date (yyyy-mm-dd) or enter 0 : ");
         input = scanner.next().trim();
-      } while (!input.equals("0") && !dateValidator.validate(input));
+      } while (!input.equals("0") && !Validator.isID(input));
 
       if (!input.equals("0")) {
         b.introduced(LocalDate.parse(input));
@@ -303,7 +300,7 @@ public class UserConsole {
       do {
         System.out.print("Enter the new discontinued date (yyyy-mm-dd) or enter 0 : ");
         input = scanner.next().trim();
-      } while (!input.equals("0") && !dateValidator.validate(input));
+      } while (!input.equals("0") && !Validator.isDate(input));
 
       if (!input.equals("0")) {
         b.discontinued(LocalDate.parse(input));
@@ -312,7 +309,7 @@ public class UserConsole {
       do {
         System.out.print("Enter the new company id or enter 0 : ");
         input = scanner.next().trim();
-      } while (!input.equals("0") && !idValidator.validate(input));
+      } while (!input.equals("0") && !Validator.isID(input));
 
       if (!input.equals("0")) {
         company=companyDBService.getOne(Long.parseLong(input));
@@ -339,7 +336,7 @@ public class UserConsole {
     do {
       System.out.print("Enter computer id : ");
       input = scanner.next().trim();
-    } while (!idValidator.validate(input));
+    } while (!Validator.isID(input));
     
     id=Long.parseLong(input);
     Computer computer = computerDBService.getOne(id);

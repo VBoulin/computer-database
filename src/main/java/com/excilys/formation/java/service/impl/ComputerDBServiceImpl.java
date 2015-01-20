@@ -1,5 +1,7 @@
 package com.excilys.formation.java.service.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,6 +84,14 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   @Override
   public Page<Computer> createPage(Page<Computer> page) {
     return computerDao.createPage(page);
+  }
+
+  /**
+   * return a list containing all the computers
+   */
+  @Override
+  public List<Computer> getAll() {
+    return computerDao.getAll();
   }
 
 }

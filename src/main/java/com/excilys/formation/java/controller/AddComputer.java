@@ -51,6 +51,7 @@ public class AddComputer extends HttpServlet {
       throws ServletException, IOException {
 
     List<Company> companies = companyDBService.getAll();
+    
     request.setAttribute("companies", companies);
 
     RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/addComputer.jsp");
@@ -67,10 +68,15 @@ public class AddComputer extends HttpServlet {
     Computer computer = addComputer(request);
 
     if (computer != null) {
+      
       computerDBService.create(computer);
+      
       response.sendRedirect("DashBoard");
+      
     } else {
-      doGet(request, response);
+      
+      doGet(request,response);
+      
     }
   }
 
@@ -81,30 +87,33 @@ public class AddComputer extends HttpServlet {
    * @return A computer or null if there was an error
    */
   public Computer addComputer(HttpServletRequest request) {
-    Computer.Builder builder = Computer.builder();
+    Computer.Builder b = Computer.builder();
 
     Map<String, String> error = new HashMap<String, String>();
 
     String name = request.getParameter("name");
+    
     if (Validator.isName(name)) {
-      builder.name(name);
+      b.name(name);
     } else {
       error.put("name", "Incorrect name : you must enter a name");
     }
 
     String introduced = request.getParameter("introduced");
+    
     if(!introduced.trim().isEmpty()){
       if (Validator.isDate(introduced)) {
-        builder.introduced(LocalDate.parse(introduced, DateTimeFormatter.ISO_LOCAL_DATE));
+        b.introduced(LocalDate.parse(introduced, DateTimeFormatter.ISO_LOCAL_DATE));
       } else {
         error.put("introduced", "Incorrect date format : yyyy-mm-dd");
       }
     }
 
     String discontinued = request.getParameter("discontinued");
+    
     if(!discontinued.trim().isEmpty()){
       if (Validator.isDate(discontinued)) {
-        builder.discontinued(LocalDate.parse(discontinued, DateTimeFormatter.ISO_LOCAL_DATE));
+        b.discontinued(LocalDate.parse(discontinued, DateTimeFormatter.ISO_LOCAL_DATE));
       } else {
         error.put("discontinued", "Incorrect date format : yyyy-mm-dd");
       }
@@ -116,7 +125,7 @@ public class AddComputer extends HttpServlet {
       if (Validator.isID(companyId)) {
         Company company = companyDBService.getOne(Long.valueOf(companyId));
         if (company != null) {
-          builder.company(company);
+          b.company(company);
         }
       } else {
         error.put("companyId", "Incorrect Company identifier");
@@ -124,10 +133,14 @@ public class AddComputer extends HttpServlet {
     }
 
     if (error.isEmpty()) {
-      return builder.build();
+      
+      return b.build();
+      
     }else{
+  
       request.setAttribute("error", error);
       return null;
+      
     }
 
   }

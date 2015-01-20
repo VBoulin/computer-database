@@ -179,7 +179,6 @@ public class ComputerDaoImpl implements ComputerDao {
    * @return page Next page requested containing all the necessary informations
    */
   public Page<Computer> createPage(Page<Computer> page) {
-    Computer computer;
     Connection conn = null;
     PreparedStatement stmt = null;
     Statement countStmt = null;
@@ -187,7 +186,7 @@ public class ComputerDaoImpl implements ComputerDao {
     List<Computer> computers;
 
     String countQuery = "SELECT COUNT(id) as total FROM computer";
-    String query = "SELECT * FROM computer LIMIT ? OFFSET ? ;";
+    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id LIMIT ? OFFSET ? ;";
 
     try {
       conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
@@ -210,13 +209,43 @@ public class ComputerDaoImpl implements ComputerDao {
       page.setList(computers);
 
     } catch (SQLException e) {
+      logger.error("SQLError with getPagedList()");
       throw new PersistenceException(e.getMessage(), e);
     } finally {
-      logger.error("SQLError with getPagedList()");
       //Close the connection
       DaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return page;
+  }
+
+  @Override
+  public List<Computer> getAll() {
+    // TODO Auto-generated method stub
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+    List<Computer> computers;
+
+    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id ;";
+
+    try {
+      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+
+      stmt = conn.prepareStatement(query);
+
+      rs = stmt.executeQuery();
+
+      ComputerRowMapperImpl mapper = new ComputerRowMapperImpl();
+      computers = mapper.mapRowList(rs);
+
+    } catch (SQLException e) {
+      logger.error("SQLError with getAll()");
+      throw new PersistenceException(e.getMessage(), e);
+    } finally {
+      //Close the connection
+      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+    }
+    return computers;
   }
 
 }

@@ -1,5 +1,7 @@
 package com.excilys.formation.java.service.test;
 
+import java.util.List;
+
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.ComputerDao;
@@ -36,6 +38,11 @@ public class MockComputerDBService implements ComputerDBService {
   @Override
   public Page<Computer> createPage(Page<Computer> page) {
     return computerDao.createPage(page);
+  }
+
+  @Override
+  public List<Computer> getAll() {
+    return computerDao.getAll();
   }
 
 }

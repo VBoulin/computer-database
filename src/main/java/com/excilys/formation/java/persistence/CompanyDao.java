@@ -1,5 +1,7 @@
 package com.excilys.formation.java.persistence;
 
+import java.util.List;
+
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 
@@ -11,6 +13,12 @@ public interface CompanyDao {
    * @return the company found or null
    */
   Company getOne(Long id);
+  
+  /**
+   * Find all the companies
+   * @return a list of companies
+   */
+  List<Company> getAll();
 
   /**
    * Create one page by requesting the necessary informations

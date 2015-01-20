@@ -1,4 +1,4 @@
-package com.excilys.formation.persistence.java.test;
+package com.excilys.formation.java.persistence.test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -110,6 +110,36 @@ public class MockCompanyDao implements CompanyDao {
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return page;
+  }
+
+  @Override
+  public List<Company> getAll() {
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+    List<Company> companies = new ArrayList<Company>();
+
+    String query = "SELECT * FROM company;";
+
+    try {
+      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+
+      stmt = conn.prepareStatement(query);
+
+      rs = stmt.executeQuery();
+
+      while (rs.next()) {
+          companies.add(Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build());
+      }
+
+    } catch (SQLException e) {
+      logger.error("SQLError with getPagedList()");
+      throw new PersistenceException(e.getMessage(), e);
+    } finally {
+      //Close the connection
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+    }
+    return companies;
   }
 
 }

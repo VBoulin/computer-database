@@ -33,14 +33,19 @@
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name ="companyId">
                                     <option value="0">--</option>
+                                    
                                     <c:forEach items="${companies}" var="company">
+                                    
 	                                   	<c:if test="${company.id == computer.company.id}">
-	                                   	<option value="${company.id}" selected="selected">${company.name}</option>
+	                                   		<option value="${company.id}" selected="selected">${company.name}</option>
 	                                   	</c:if>
+	                                   	
 	                                   	<c:if test="${company.id != computer.company.id}">
-	                                   	<option value="${company.id}">${company.name}</option>
+	                                   		<option value="${company.id}">${company.name}</option>
 	                                   	</c:if>
+	                                   	
                                    	</c:forEach>
+                                   	
                                 </select>
                                 <span>${error.get("companyId")}</span>
                             </div>            

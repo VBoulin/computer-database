@@ -30,37 +30,57 @@ pageEncoding="UTF-8"%>
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<!-- Variable declarations for passing labels as parameters -->
-						<!-- Table header for Computer Name -->
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <!-- Variable declarations for passing labels as parameters -->
+                        <!-- Table header for Computer Name -->
 
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
-						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
-						<!-- Table header for Company -->
-						<th>Company</th>
+                        <th class="editMode" style="width: 60px; height: 22px;">
+                            <input type="checkbox" id="selectall" /> 
+                            <span style="vertical-align: top;">
+                                 -  <a href="#" id="deleteSelected" onclick="$.fn.deleteSelected();">
+                                        <i class="fa fa-trash-o fa-lg"></i>
+                                    </a>
+                            </span>
+                        </th>
+                        <th>
+                            Computer name
+                        </th>
+                        <th>
+                            Introduced date
+                        </th>
+                        <!-- Table header for Discontinued Date -->
+                        <th>
+                            Discontinued date
+                        </th>
+                        <!-- Table header for Company -->
+                        <th>
+                            Company
+                        </th>
 
-					</tr>
-				</thead>
+                    </tr>
+                </thead>
+
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 				<c:forEach items="${page.list}" var="computer">
 					<tr>
-						<td class="editMode"><input type="checkbox" name="cb" class="cb" value="${computer.id}"></td>
-						<td><a href="EditComputer?id=${computer.id}" onclick="">${computer.name}</a></td>
-						<td>${computer.introduced}</td>
-						<td>${computer.discontinued}</td>
-						<td>${computer.company.name}</td>
+						<td class="editMode">
+							<input type="checkbox" name="cb" class="cb" value="${computer.id}">
+						</td>
+						<td>
+							<a href="EditComputer?id=${computer.id}" onclick="">${computer.name}</a>
+						</td>
+						<td>
+							${computer.introduced}
+						</td>
+						<td>
+							${computer.discontinued}
+						</td>
+						<td>
+							${computer.company.name}
+						</td>
 					</tr>
 				</c:forEach>
 				</tbody>
@@ -69,34 +89,55 @@ pageEncoding="UTF-8"%>
 	</section>
 
 	<footer class="navbar-fixed-bottom">
+	
 		<div class="container text-center">
+		
 			<ul class="pagination">
+			
 				<c:if test="${page.pageNumber != 1}">
 					<li><a href="DashBoard?page=${page.pageNumber-1}&nbResults=${page.nbResultsPerPage}" 
 						aria-label="Previous"> 
 						<span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
-				<c:if test="${page.pageNumber-3 < 0}">
-					<li><a href="DashBoard?page=${page.pageNumber-3}&nbResults=${page.nbResultsPerPage}">${page.pageNumber-3}</a></li>
+				
+				<c:if test="${page.pageNumber-3 > 0}">
+					<li>
+						<a href="DashBoard?page=${page.pageNumber-3}&nbResults=${page.nbResultsPerPage}">${page.pageNumber-3}</a>
+					</li>
 				</c:if>
-				<c:if test="${page.pageNumber-2 < 0}">
-					<li><a href="DashBoard?page=${page.pageNumber-2}&nbResults=${page.nbResultsPerPage}">${page.pageNumber-2}</a></li>
+				
+				<c:if test="${page.pageNumber-2 > 0}">
+					<li>
+						<a href="DashBoard?page=${page.pageNumber-2}&nbResults=${page.nbResultsPerPage}">${page.pageNumber-2}</a>
+					</li>
 				</c:if>
-				<c:if test="${page.pageNumber-1 < 0}">
-					<li><a href="DashBoard?page=${page.pageNumber-1}&nbResults=${page.nbResultsPerPage}">${page.pageNumber-1}</a></li>
+				
+				<c:if test="${page.pageNumber-1 > 0}">
+					<li>
+						<a href="DashBoard?page=${page.pageNumber-1}&nbResults=${page.nbResultsPerPage}">${page.pageNumber-1}</a>
+					</li>
 				</c:if>
+				
 				<c:forEach begin="${page.pageNumber}" end="${page.pageNumber+3}" var="i">
+				
 					<c:if test="${i <= nbPages}">
-						<li><a href="DashBoard?page=${i}&nbResults=${page.nbResultsPerPage}" >${i}</a></li>
+						<li>
+							<a href="DashBoard?page=${i}&nbResults=${page.nbResultsPerPage}" >${i}</a>
+						</li>
 					</c:if>
+					
 				</c:forEach>
-					<c:if test="${page.pageNumber != nbPages}">
-					<li><a href="DashBoard?page=${page.pageNumber+1}&nbResults=${page.nbResultsPerPage}"
-						aria-label="Next"> 
-						<span aria-hidden="true">&raquo;</span>
-					</a></li>
+				
+				<c:if test="${page.pageNumber != nbPages}">
+					<li>
+						<a href="DashBoard?page=${page.pageNumber+1}&nbResults=${page.nbResultsPerPage}"
+							aria-label="Next"> 
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
 				</c:if>
+				
 			</ul>
 			
 			<div class="btn-group btn-group-sm pull-right" role="group">

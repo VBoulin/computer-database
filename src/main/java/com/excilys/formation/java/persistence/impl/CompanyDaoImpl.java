@@ -12,10 +12,12 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
+import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.DaoFactory;
 import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
+import com.excilys.formation.java.persistence.mapper.impl.ComputerRowMapperImpl;
 
 public class CompanyDaoImpl implements CompanyDao{
 
@@ -114,6 +116,37 @@ public class CompanyDaoImpl implements CompanyDao{
       DaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return page;
+  }
+
+  @Override
+  public List<Company> getAll() {
+
+    // TODO Auto-generated method stub
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+    List<Company> companies;
+
+    String query = "SELECT * FROM company;";
+
+    try {
+      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+
+      stmt = conn.createStatement();
+
+      rs = stmt.executeQuery(query);
+
+      CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
+      companies = mapper.mapRowList(rs);
+
+    } catch (SQLException e) {
+      logger.error("SQLError with getAll()");
+      throw new PersistenceException(e.getMessage(), e);
+    } finally {
+      //Close the connection
+      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+    }
+    return companies;
   }
 
 }

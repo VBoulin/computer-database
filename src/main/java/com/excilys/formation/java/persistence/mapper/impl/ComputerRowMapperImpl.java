@@ -2,6 +2,7 @@ package com.excilys.formation.java.persistence.mapper.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +37,18 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
       while (rs.next()) {
         Long id = rs.getLong("id");
         String name = rs.getString("name");
-        LocalDate introduced = null;
-        if (rs.getDate("introduced") != null)
-          introduced = rs.getDate("introduced").toLocalDate();
-        LocalDate discontinued = null;
-        if (rs.getDate("discontinued") != null)
-          discontinued = rs.getDate("discontinued").toLocalDate();
+        Timestamp introduced = null;
+        LocalDate introducedDate=null;
+        if (rs.getDate("introduced") != null){
+          introduced = rs.getTimestamp("introduced");
+          introducedDate=introduced.toLocalDateTime().toLocalDate();
+        }
+        Timestamp discontinued = null;
+        LocalDate discontinuedDate=null;
+        if (rs.getDate("discontinued") != null){
+          discontinued = rs.getTimestamp("discontinued");
+          discontinuedDate=discontinued.toLocalDateTime().toLocalDate();
+        }
         Long companyId = rs.getLong("cpId");
         String companyName = rs.getString("cpName");
 
@@ -51,8 +58,8 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
         }
 
         Computer.Builder b = Computer.builder();
-        computer = b.id(id).name(name).discontinued(discontinued).introduced(introduced)
-            .company(company).build();
+        computer = b.id(id).name(name).discontinued(discontinuedDate)
+            .introduced(introducedDate).company(company).build();
       }
     } catch (SQLException e) {
       logger.error("SQLException while mapping a computer");
@@ -71,6 +78,7 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
   public List<Computer> mapRowList(ResultSet rs) {
     // TODO Auto-generated method stub
     Computer computer = null;
+    Company company = null;
     List<Computer> computers = new ArrayList<Computer>();
 
     if (rs == null) {
@@ -80,9 +88,29 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
       while (rs.next()) {
         Long id = rs.getLong("id");
         String name = rs.getString("name");
+        Timestamp introduced = null;
+        LocalDate introducedDate=null;
+        if (rs.getDate("introduced") != null){
+          introduced = rs.getTimestamp("introduced");
+          introducedDate=introduced.toLocalDateTime().toLocalDate();
+        }
+        Timestamp discontinued = null;
+        LocalDate discontinuedDate=null;
+        if (rs.getDate("discontinued") != null){
+          discontinued = rs.getTimestamp("discontinued");
+          discontinuedDate=discontinued.toLocalDateTime().toLocalDate();
+        }
+        Long companyId = rs.getLong("cpId");
+        String companyName = rs.getString("cpName");
+
+        if (companyId > 0) {
+          Company.Builder bcp = Company.builder();
+          company = bcp.id(companyId).name(companyName).build();
+        }
 
         Computer.Builder b = Computer.builder();
-        computer = b.id(id).name(name).build();
+        computer = b.id(id).name(name).discontinued(discontinuedDate)
+            .introduced(introducedDate).company(company).build();
 
         computers.add(computer);
       }

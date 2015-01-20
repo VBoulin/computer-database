@@ -1,4 +1,4 @@
-package com.excilys.formation.persistence.java.test;
+package com.excilys.formation.java.persistence.test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -217,6 +217,40 @@ public class MockComputerDao implements ComputerDao{
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return page;
+  }
+
+  @Override
+  public List<Computer> getAll() {
+    Computer computer;
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+    List<Computer> computers=new ArrayList<Computer>();
+
+    String query = "SELECT * FROM computer;";
+
+    try {
+      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+
+      stmt = conn.prepareStatement(query);
+
+      rs = stmt.executeQuery();
+      
+      while (rs.next()) {
+        computer = new Computer();
+        computer.setId(rs.getLong("id"));
+        computer.setName(rs.getString("name"));
+        computers.add(computer);
+      }
+
+    } catch (SQLException e) {
+      throw new PersistenceException(e.getMessage(), e);
+    } finally {
+      logger.error("SQLError with createPage()");
+      //Close the connection
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+    }
+    return computers;
   }
 
 }
