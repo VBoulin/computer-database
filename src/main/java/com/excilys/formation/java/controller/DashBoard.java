@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.service.CompanyDBService;
@@ -25,8 +28,11 @@ public class DashBoard extends HttpServlet {
 
   private static ComputerDBService computerDBService;
   private ServiceFactory           service;
+  
+  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.controller.DashBoard");
 
   /**
+   * Instantiation of the services
    * @see HttpServlet#HttpServlet()
    */
   public DashBoard() {
@@ -36,7 +42,7 @@ public class DashBoard extends HttpServlet {
   }
 
   /**
-   * 
+   * Creation of a page based on the request
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -79,6 +85,8 @@ public class DashBoard extends HttpServlet {
           nbPages++;
       }
     }
+
+    logger.info("Page created with success");
     
     request.setAttribute("nbPages", nbPages);
 
@@ -87,14 +95,6 @@ public class DashBoard extends HttpServlet {
     RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 
     dispatcher.forward(request, response);
-  }
-
-  /**
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-   */
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-    // TODO Auto-generated method stub
   }
 
 }

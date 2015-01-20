@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
@@ -36,6 +37,8 @@ public class EditComputer extends HttpServlet {
     private CompanyDBService companyDBService;
     private ServiceFactory service;
     
+    private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.controller.EditComputer");
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -47,6 +50,7 @@ public class EditComputer extends HttpServlet {
     }
 
 	/**
+	 * Update the information of a computer (corresponding to the id in the url)
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -70,6 +74,7 @@ public class EditComputer extends HttpServlet {
 	}
 
 	/**
+	 * Update a computer in the database and redirect to the dashboard
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -77,12 +82,20 @@ public class EditComputer extends HttpServlet {
       
       if (computer != null) {
           computerDBService.update(computer);
+
+          logger.info("Computer updated with success");
+          
           response.sendRedirect("DashBoard");
       } else {
           doGet(request, response);
       }
 	}
 
+	/**
+	 * Display the information of a computer corresponding to the id in the url
+	 * @param request
+	 * @return
+	 */
 	public Computer updateComputer(HttpServletRequest request) {      
       Map<String, String> error = new HashMap<String, String>();
       

@@ -1,5 +1,7 @@
 <jsp:include page="includes/header.jsp" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
 <%@ page import="com.excilys.formation.java.model.*"%>
 
     <section id="main">
@@ -51,7 +53,7 @@
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <input type="submit" id="submit" value="Edit" class="btn btn-primary">
                             or
                             <a href="DashBoard" class="btn btn-default">Cancel</a>
                         </div>

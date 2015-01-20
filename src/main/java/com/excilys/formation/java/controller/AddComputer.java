@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.service.CompanyDBService;
@@ -32,6 +35,8 @@ public class AddComputer extends HttpServlet {
   private CompanyDBService  companyDBService;
   private ServiceFactory    service;
 
+  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.controller.AddComputer");
+
   /**
    * Instantiation of the services 
    * @see HttpServlet#HttpServlet()
@@ -44,7 +49,7 @@ public class AddComputer extends HttpServlet {
   }
 
   /**
-   * 
+   * Instantiation of the list of companies
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -60,6 +65,7 @@ public class AddComputer extends HttpServlet {
   }
 
   /**
+   * Add a computer in the database and redirect to the dashboard
    * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -70,6 +76,8 @@ public class AddComputer extends HttpServlet {
     if (computer != null) {
       
       computerDBService.create(computer);
+      
+      logger.info("Computer added with success");
       
       response.sendRedirect("DashBoard");
       
