@@ -25,13 +25,9 @@ public enum ComputerDBServiceImpl implements ComputerDBService {
    * Singleton : provide the access service to the database
    */
   private ComputerDBServiceImpl() {
-    daoFactory = DaoFactory.getInstance();
+    daoFactory = DaoFactory.INSTANCE;
 
     computerDao = daoFactory.getComputerDao();
-  }
-
-  public static ComputerDBServiceImpl getInstance() {
-    return INSTANCE;
   }
 
   /**

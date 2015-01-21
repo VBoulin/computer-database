@@ -11,8 +11,8 @@ public enum ServiceFactory {
   ComputerDBService computerDBService;
 
   private ServiceFactory() {
-    companyDBService = CompanyDBServiceImpl.getInstance();
-    computerDBService = ComputerDBServiceImpl.getInstance();
+    companyDBService = CompanyDBServiceImpl.INSTANCE;
+    computerDBService = ComputerDBServiceImpl.INSTANCE;
   }
 
   public static ServiceFactory getInstance() {

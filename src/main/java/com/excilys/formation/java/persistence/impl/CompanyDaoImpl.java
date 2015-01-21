@@ -28,10 +28,6 @@ public enum CompanyDaoImpl implements CompanyDao {
    */
   private CompanyDaoImpl() {}
 
-  public static CompanyDaoImpl getInstance() {
-    return INSTANCE;
-  }
-
   /**
    * retrieve one company from the database
    * @param id Id of the company

@@ -28,11 +28,6 @@ public enum ComputerDaoImpl implements ComputerDao {
    * Singleton : provide the access service to the database (company)
    */
   private ComputerDaoImpl() {}
-
-  public static ComputerDaoImpl getInstance() {
-    return INSTANCE;
-  }
-
   /**
    * Add one computer in the database
    * @param o : computer that needs to be added to the database

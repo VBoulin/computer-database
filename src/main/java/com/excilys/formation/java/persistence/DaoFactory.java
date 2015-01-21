@@ -48,18 +48,14 @@ public enum DaoFactory {
     } catch (ClassNotFoundException e) {
       throw new PersistenceException(e.getMessage(), e);
     }
-    companyDao = CompanyDaoImpl.getInstance();
-    computerDao = ComputerDaoImpl.getInstance();
+    companyDao = CompanyDaoImpl.INSTANCE;
+    computerDao = ComputerDaoImpl.INSTANCE;
   }
 
   /**
    * Singleton : DAO
    */
   private DaoFactory() {}
-
-  public static DaoFactory getInstance() {
-    return INSTANCE;
-  }
 
   public CompanyDao getCompanyDao() {
     return companyDao;

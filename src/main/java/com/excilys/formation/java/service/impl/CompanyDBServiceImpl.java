@@ -26,13 +26,9 @@ public enum CompanyDBServiceImpl implements CompanyDBService {
    * Singleton : provide the access service to the database (company)
    */
   private CompanyDBServiceImpl() {
-    daoFactory = DaoFactory.getInstance();
+    daoFactory = DaoFactory.INSTANCE;
 
     companyDao = daoFactory.getCompanyDao();
-  }
-
-  public static CompanyDBServiceImpl getInstance() {
-    return INSTANCE;
   }
 
   /**

@@ -3,6 +3,7 @@
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.excilys.formation.java.model.Page"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 	<section id="main">
 		<div class="container">
@@ -44,19 +45,21 @@ pageEncoding="UTF-8"%>
                                     </a>
                             </span>
                         </th>
+                        <!-- Table header for Computer name -->
                         <th>
-                            Computer name
+                        	<t:link url="dashBoard" nbResultsPerPage="${page.nbResultsPerPage}" order="name">Computer name</t:link>
                         </th>
+                        <!-- Table header for Introduced date -->
                         <th>
-                            Introduced date
+                        	<t:link url="dashBoard" nbResultsPerPage="${page.nbResultsPerPage}" order="introduced">Introduced date</t:link>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                        	<t:link url="dashBoard" nbResultsPerPage="${page.nbResultsPerPage}" order="discontinued">Discontinued date</t:link>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                        	<t:link url="dashBoard" nbResultsPerPage="${page.nbResultsPerPage}" order="company">Company</t:link>
                         </th>
 
                     </tr>
@@ -88,14 +91,4 @@ pageEncoding="UTF-8"%>
 		</div>
 	</section>
 
-	<footer class="navbar-fixed-bottom">
-		<div class="container text-center">
-			<jsp:include page="includes/pagination.jsp" />
-		</div>
-	</footer>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/dashboard.js"></script>
-
-</body>
-</html>
+<jsp:include page="includes/footer.jsp" />
