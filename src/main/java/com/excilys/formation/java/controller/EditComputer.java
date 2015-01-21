@@ -37,7 +37,7 @@ public class EditComputer extends HttpServlet {
     private CompanyDBService companyDBService;
     private ServiceFactory service;
     
-    private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.controller.EditComputer");
+    private Logger logger = LoggerFactory.getLogger(EditComputer.class);
     
     /**
      * @see HttpServlet#HttpServlet()

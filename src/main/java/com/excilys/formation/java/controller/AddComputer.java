@@ -35,7 +35,7 @@ public class AddComputer extends HttpServlet {
   private CompanyDBService  companyDBService;
   private ServiceFactory    service;
 
-  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.controller.AddComputer");
+  private Logger logger = LoggerFactory.getLogger(AddComputer.class);
 
   /**
    * Instantiation of the services 

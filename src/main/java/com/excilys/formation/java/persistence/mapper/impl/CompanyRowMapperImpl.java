@@ -16,8 +16,7 @@ import com.excilys.formation.java.persistence.mapper.RowMapper;
 
 public class CompanyRowMapperImpl implements RowMapper<Company> {
 
-  private Logger logger = LoggerFactory
-                            .getLogger("com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl");
+  private Logger logger = LoggerFactory.getLogger(CompanyRowMapperImpl.class);
 
   @Override
   public Company mapRow(ResultSet rs) {

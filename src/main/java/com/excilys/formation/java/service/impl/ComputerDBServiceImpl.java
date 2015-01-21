@@ -13,7 +13,7 @@ import com.excilys.formation.java.service.ComputerDBService;
 
 public class ComputerDBServiceImpl implements ComputerDBService {
 
-  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.service.impl.CompanyDBServiceImpl");
+  private Logger logger = LoggerFactory.getLogger(ComputerDBServiceImpl.class);
   
   private ComputerDao                        computerDao;
 

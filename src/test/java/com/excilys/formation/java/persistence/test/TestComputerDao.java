@@ -17,14 +17,10 @@ import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.ComputerDao;
 
 public class TestComputerDao {
-  //Connections informations 
-  private static final String URL      = "jdbc:mysql://localhost:3306/test-computer-database-db";
-  private static final String USR      = "admintestcdb";
-  private static final String PASSWORD = "qwerty12345";
 
-  ComputerDao                 computerDao;
-  List<Computer>              computers;
-  Company                     company  = new Company(1L, "Apple Inc.");
+  ComputerDao    computerDao;
+  List<Computer> computers;
+  Company        company = new Company(1L, "Apple Inc.");
 
   @Before
   public void setUp() throws SQLException {
@@ -33,7 +29,7 @@ public class TestComputerDao {
     computers.add(new Computer(1L, "MacBook Pro 15.4 inch", null, null, company));
     computers.add(new Computer(2L, "MacBook Pro", LocalDate.parse("2006-01-10"), null, company));
     MockDaoFactory dao = MockDaoFactory.getInstance();
-    Connection conn = dao.getConnection(URL, USR, PASSWORD);
+    Connection conn = dao.getConnection();
 
     Statement stmt = conn.createStatement();
     stmt.execute("Truncate computer");

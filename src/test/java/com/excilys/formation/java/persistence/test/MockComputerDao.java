@@ -19,62 +19,58 @@ import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.ComputerDao;
 
-public class MockComputerDao implements ComputerDao{
-  
-  //Connections informations 
-  private static final String URL      = "jdbc:mysql://localhost:3306/test-computer-database-db";
-  private static final String USR      = "admintestcdb";
-  private static final String PASSWORD = "qwerty12345";
+public class MockComputerDao implements ComputerDao {
 
-  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.persistence.java.test.MockComputerDao");
-  
+  private Logger                      logger  = LoggerFactory.getLogger(MockComputerDao.class);
+
+  private final static MockDaoFactory mockDao = MockDaoFactory.getInstance();
 
   @Override
   public Computer getOne(Long id) {
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    Computer computer=null;
-    Company company =null;
+    Computer computer = null;
+    Company company = null;
 
     String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.id = ?";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
-      
+
       if (rs == null) {
         return null;
       }
-        while (rs.next()) {
-          String name = rs.getString("name");
-          LocalDate introduced = null;
-          if (rs.getDate("introduced") != null)
-            introduced = rs.getDate("introduced").toLocalDate();
-          LocalDate discontinued = null;
-          if (rs.getDate("discontinued") != null)
-            discontinued = rs.getDate("discontinued").toLocalDate();
-          Long companyId = rs.getLong("cpId");
-          String companyName = rs.getString("cpName");
+      while (rs.next()) {
+        String name = rs.getString("name");
+        LocalDate introduced = null;
+        if (rs.getDate("introduced") != null)
+          introduced = rs.getDate("introduced").toLocalDate();
+        LocalDate discontinued = null;
+        if (rs.getDate("discontinued") != null)
+          discontinued = rs.getDate("discontinued").toLocalDate();
+        Long companyId = rs.getLong("cpId");
+        String companyName = rs.getString("cpName");
 
-          if (companyId > 0) {
-            Company.Builder bcp = Company.builder();
-            company = bcp.id(companyId).name(companyName).build();
-          }
-
-          Computer.Builder b = Computer.builder();
-          computer = b.id(id).name(name).discontinued(discontinued).introduced(introduced)
-              .company(company).build();
+        if (companyId > 0) {
+          Company.Builder bcp = Company.builder();
+          company = bcp.id(companyId).name(companyName).build();
         }
-          
+
+        Computer.Builder b = Computer.builder();
+        computer = b.id(id).name(name).discontinued(discontinued).introduced(introduced)
+            .company(company).build();
+      }
+
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, rs);
+      mockDao.closeConnection(conn, stmt, rs);
     }
     return computer;
   }
@@ -87,7 +83,7 @@ public class MockComputerDao implements ComputerDao{
     String query = "INSERT INTO computer(name, introduced, discontinued, company_id)  VALUE (?, ?, ?, ?);";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setString(1, o.getName());
       if (o.getIntroduced() == null) {
@@ -111,7 +107,7 @@ public class MockComputerDao implements ComputerDao{
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+      mockDao.closeConnection(conn, stmt, null);
     }
   }
 
@@ -123,7 +119,7 @@ public class MockComputerDao implements ComputerDao{
     String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setString(1, o.getName());
       if (o.getIntroduced() == null) {
@@ -148,7 +144,7 @@ public class MockComputerDao implements ComputerDao{
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+      mockDao.closeConnection(conn, stmt, null);
     }
   }
 
@@ -160,7 +156,7 @@ public class MockComputerDao implements ComputerDao{
     String query = "DELETE FROM computer WHERE id = ?;";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       stmt.executeUpdate();
@@ -169,7 +165,7 @@ public class MockComputerDao implements ComputerDao{
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+      mockDao.closeConnection(conn, stmt, null);
     }
   }
 
@@ -180,13 +176,13 @@ public class MockComputerDao implements ComputerDao{
     PreparedStatement stmt = null;
     Statement countStmt = null;
     ResultSet rs = null;
-    List<Computer> computers=new ArrayList<Computer>();
+    List<Computer> computers = new ArrayList<Computer>();
 
     String countQuery = "SELECT COUNT(id) as total FROM computer";
     String query = "SELECT * FROM computer LIMIT ? OFFSET ? ;";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
 
       countStmt = conn.createStatement();
 
@@ -199,14 +195,14 @@ public class MockComputerDao implements ComputerDao{
       stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
 
       rs = stmt.executeQuery();
-      
+
       while (rs.next()) {
         computer = new Computer();
         computer.setId(rs.getLong("id"));
         computer.setName(rs.getString("name"));
         computers.add(computer);
       }
-        
+
       page.setList(computers);
 
     } catch (SQLException e) {
@@ -214,7 +210,7 @@ public class MockComputerDao implements ComputerDao{
     } finally {
       logger.error("SQLError with createPage()");
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+      mockDao.closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -225,17 +221,17 @@ public class MockComputerDao implements ComputerDao{
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    List<Computer> computers=new ArrayList<Computer>();
+    List<Computer> computers = new ArrayList<Computer>();
 
     String query = "SELECT * FROM computer;";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
 
       stmt = conn.prepareStatement(query);
 
       rs = stmt.executeQuery();
-      
+
       while (rs.next()) {
         computer = new Computer();
         computer.setId(rs.getLong("id"));
@@ -248,7 +244,7 @@ public class MockComputerDao implements ComputerDao{
     } finally {
       logger.error("SQLError with createPage()");
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+      mockDao.closeConnection(conn, stmt, null);
     }
     return computers;
   }

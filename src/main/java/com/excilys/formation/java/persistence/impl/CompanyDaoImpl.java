@@ -19,27 +19,24 @@ import com.excilys.formation.java.persistence.DaoFactory;
 import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
 import com.excilys.formation.java.persistence.mapper.impl.ComputerRowMapperImpl;
 
-public class CompanyDaoImpl implements CompanyDao{
+public class CompanyDaoImpl implements CompanyDao {
 
-  //Connections informations 
-  private static final String URL      = "jdbc:mysql://localhost:3306/computer-database-db";
-  private static final String USR      = "admincdb";
-  private static final String PASSWORD = "qwerty1234";
-  
-  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.impl.CompanyDaoImpl");
+  private Logger                      logger         = LoggerFactory
+                                                         .getLogger(CompanyDaoImpl.class);
+
+  private final static DaoFactory     dao            = DaoFactory.getInstance();
 
   private final static CompanyDaoImpl companyDaoImpl = new CompanyDaoImpl();
 
   /**
    * Singleton : provide the access service to the database (company)
    */
-  private CompanyDaoImpl() {
-  }
+  private CompanyDaoImpl() {}
 
   public static CompanyDaoImpl getInstance() {
     return companyDaoImpl;
   }
-  
+
   /**
    * retrieve one company from the database
    * @param id Id of the company
@@ -54,20 +51,20 @@ public class CompanyDaoImpl implements CompanyDao{
     String query = "SELECT * FROM company WHERE id = ?;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
-      
+
       CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
       company = mapper.mapRow(rs);
-      
+
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, rs);
+      dao.closeConnection(conn, stmt, rs);
     }
     return company;
   }
@@ -89,7 +86,7 @@ public class CompanyDaoImpl implements CompanyDao{
     String query = "SELECT * FROM company LIMIT ? OFFSET ? ;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
 
       countStmt = conn.createStatement();
 
@@ -102,10 +99,10 @@ public class CompanyDaoImpl implements CompanyDao{
       stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
 
       rs = stmt.executeQuery();
-      
+
       CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
       companies = mapper.mapRowList(rs);
-      
+
       page.setList(companies);
 
     } catch (SQLException e) {
@@ -113,7 +110,7 @@ public class CompanyDaoImpl implements CompanyDao{
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+      dao.closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -130,7 +127,7 @@ public class CompanyDaoImpl implements CompanyDao{
     String query = "SELECT * FROM company;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
 
       stmt = conn.createStatement();
 
@@ -144,7 +141,7 @@ public class CompanyDaoImpl implements CompanyDao{
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+      dao.closeConnection(conn, stmt, null);
     }
     return companies;
   }

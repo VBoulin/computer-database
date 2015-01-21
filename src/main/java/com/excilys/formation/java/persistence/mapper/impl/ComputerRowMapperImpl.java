@@ -18,8 +18,7 @@ import com.excilys.formation.java.persistence.mapper.RowMapper;
 
 public class ComputerRowMapperImpl implements RowMapper<Computer> {
 
-  private Logger logger = LoggerFactory
-                            .getLogger("com.excilys.formation.java.persistence.mapper.impl.ComputerRowMapperImpl");
+  private Logger logger = LoggerFactory.getLogger(ComputerRowMapperImpl.class);
 
   /**
      * Maps the element
@@ -38,16 +37,16 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
         Long id = rs.getLong("id");
         String name = rs.getString("name");
         Timestamp introduced = null;
-        LocalDate introducedDate=null;
-        if (rs.getDate("introduced") != null){
+        LocalDate introducedDate = null;
+        if (rs.getDate("introduced") != null) {
           introduced = rs.getTimestamp("introduced");
-          introducedDate=introduced.toLocalDateTime().toLocalDate();
+          introducedDate = introduced.toLocalDateTime().toLocalDate();
         }
         Timestamp discontinued = null;
-        LocalDate discontinuedDate=null;
-        if (rs.getDate("discontinued") != null){
+        LocalDate discontinuedDate = null;
+        if (rs.getDate("discontinued") != null) {
           discontinued = rs.getTimestamp("discontinued");
-          discontinuedDate=discontinued.toLocalDateTime().toLocalDate();
+          discontinuedDate = discontinued.toLocalDateTime().toLocalDate();
         }
         Long companyId = rs.getLong("cpId");
         String companyName = rs.getString("cpName");
@@ -58,8 +57,8 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
         }
 
         Computer.Builder b = Computer.builder();
-        computer = b.id(id).name(name).discontinued(discontinuedDate)
-            .introduced(introducedDate).company(company).build();
+        computer = b.id(id).name(name).discontinued(discontinuedDate).introduced(introducedDate)
+            .company(company).build();
       }
     } catch (SQLException e) {
       logger.error("SQLException while mapping a computer");
@@ -89,16 +88,16 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
         Long id = rs.getLong("id");
         String name = rs.getString("name");
         Timestamp introduced = null;
-        LocalDate introducedDate=null;
-        if (rs.getDate("introduced") != null){
+        LocalDate introducedDate = null;
+        if (rs.getDate("introduced") != null) {
           introduced = rs.getTimestamp("introduced");
-          introducedDate=introduced.toLocalDateTime().toLocalDate();
+          introducedDate = introduced.toLocalDateTime().toLocalDate();
         }
         Timestamp discontinued = null;
-        LocalDate discontinuedDate=null;
-        if (rs.getDate("discontinued") != null){
+        LocalDate discontinuedDate = null;
+        if (rs.getDate("discontinued") != null) {
           discontinued = rs.getTimestamp("discontinued");
-          discontinuedDate=discontinued.toLocalDateTime().toLocalDate();
+          discontinuedDate = discontinued.toLocalDateTime().toLocalDate();
         }
         Long companyId = rs.getLong("cpId");
         String companyName = rs.getString("cpName");
@@ -109,8 +108,8 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
         }
 
         Computer.Builder b = Computer.builder();
-        computer = b.id(id).name(name).discontinued(discontinuedDate)
-            .introduced(introducedDate).company(company).build();
+        computer = b.id(id).name(name).discontinued(discontinuedDate).introduced(introducedDate)
+            .company(company).build();
 
         computers.add(computer);
       }

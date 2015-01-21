@@ -29,7 +29,7 @@ public class DashBoard extends HttpServlet {
   private static ComputerDBService computerDBService;
   private ServiceFactory           service;
   
-  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.controller.DashBoard");
+  private Logger logger = LoggerFactory.getLogger(DashBoard.class);
 
   /**
    * Instantiation of the services

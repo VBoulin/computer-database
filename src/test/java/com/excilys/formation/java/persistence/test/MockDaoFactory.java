@@ -15,12 +15,17 @@ import com.excilys.formation.java.persistence.ComputerDao;
 
 public class MockDaoFactory {
 
-  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.persistence.java.test.MockDaoFactory");
+  //Connections informations 
+  private static final String         URL      = "jdbc:mysql://localhost:3306/test-computer-database-db";
+  private static final String         USR      = "admintestcdb";
+  private static final String         PASSWORD = "qwerty12345";
+
+  private Logger                      logger   = LoggerFactory.getLogger(MockDaoFactory.class);
 
   //Singleton
-  private final static MockDaoFactory factory = new MockDaoFactory();
+  private final static MockDaoFactory factory  = new MockDaoFactory();
 
-  private static final String     DRIVER  = "com.mysql.jdbc.Driver";
+  private static final String         DRIVER   = "com.mysql.jdbc.Driver";
 
   /**
    * Singleton : DAO
@@ -44,10 +49,10 @@ public class MockDaoFactory {
    * @param password password needed for the authentification
    * @return Return the connection to the database
    */
-  public Connection getConnection(String url, String usr, String password) {
+  public Connection getConnection() {
     Connection conn = null;
     try {
-      conn = DriverManager.getConnection(url, usr, password);
+      conn = DriverManager.getConnection(URL, USR, PASSWORD);
     } catch (SQLException e) {
       logger.error("SQLError while creating connection");
       throw new PersistenceException(e.getMessage(), e);

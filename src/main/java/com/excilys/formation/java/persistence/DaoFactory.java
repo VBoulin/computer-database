@@ -15,12 +15,16 @@ import com.excilys.formation.java.persistence.impl.ComputerDaoImpl;
 
 public class DaoFactory {
 
-  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.java.persistence.DaoFactory");
+  private static final String     URL      = "jdbc:mysql://localhost:3306/computer-database-db";
+  private static final String     USR      = "admincdb";
+  private static final String     PASSWORD = "qwerty1234";
+
+  private static final String     DRIVER   = "com.mysql.jdbc.Driver";
+
+  private Logger                  logger   = LoggerFactory.getLogger(DaoFactory.class);
 
   //Singleton
-  private final static DaoFactory factory = new DaoFactory();
-
-  private static final String     DRIVER  = "com.mysql.jdbc.Driver";
+  private final static DaoFactory factory  = new DaoFactory();
 
   private CompanyDao              companyDao;
   private ComputerDao             computerDao;
@@ -43,7 +47,6 @@ public class DaoFactory {
     return factory;
   }
 
-  
   public CompanyDao getCompanyDao() {
     return companyDao;
   }
@@ -59,10 +62,10 @@ public class DaoFactory {
    * @param password password needed for the authentification
    * @return Return the connection to the database
    */
-  public Connection getConnection(String url, String usr, String password) {
+  public Connection getConnection() {
     Connection conn = null;
     try {
-      conn = DriverManager.getConnection(url, usr, password);
+      conn = DriverManager.getConnection(URL, USR, PASSWORD);
     } catch (SQLException e) {
       logger.error("SQLError while creating connection");
       throw new PersistenceException(e.getMessage(), e);

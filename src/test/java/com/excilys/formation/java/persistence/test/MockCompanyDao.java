@@ -18,19 +18,15 @@ import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
 
 public class MockCompanyDao implements CompanyDao {
-  
-  //Connections informations 
-  private static final String URL      = "jdbc:mysql://localhost:3306/test-computer-database-db";
-  private static final String USR      = "admintestcdb";
-  private static final String PASSWORD = "qwerty12345";
 
-  private Logger logger = LoggerFactory.getLogger("com.excilys.formation.persistence.java.test.MockCompanyDao");
+  private Logger                      logger  = LoggerFactory.getLogger(MockCompanyDao.class);
+
+  private final static MockDaoFactory mockDao = MockDaoFactory.getInstance();
 
   /**
    * Singleton : provide the access service to the database (company)
    */
-  public MockCompanyDao() {
-  }
+  public MockCompanyDao() {}
 
   /**
    * retrieve one company from the database
@@ -46,22 +42,21 @@ public class MockCompanyDao implements CompanyDao {
     String query = "SELECT * FROM company WHERE id = ?;";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
-      
 
       while (rs.next()) {
-          company=Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build();
+        company = Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build();
       }
-      
+
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, rs);
+      mockDao.closeConnection(conn, stmt, rs);
     }
     return company;
   }
@@ -83,7 +78,7 @@ public class MockCompanyDao implements CompanyDao {
     String query = "SELECT * FROM company LIMIT ? OFFSET ? ;";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
 
       countStmt = conn.createStatement();
 
@@ -98,7 +93,7 @@ public class MockCompanyDao implements CompanyDao {
       rs = stmt.executeQuery();
 
       while (rs.next()) {
-          companies.add(Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build());
+        companies.add(Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build());
       }
       page.setList(companies);
 
@@ -107,7 +102,7 @@ public class MockCompanyDao implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+      mockDao.closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -122,14 +117,14 @@ public class MockCompanyDao implements CompanyDao {
     String query = "SELECT * FROM company;";
 
     try {
-      conn = MockDaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = MockDaoFactory.getInstance().getConnection();
 
       stmt = conn.prepareStatement(query);
 
       rs = stmt.executeQuery();
 
       while (rs.next()) {
-          companies.add(Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build());
+        companies.add(Company.builder().id(rs.getLong("id")).name(rs.getString("name")).build());
       }
 
     } catch (SQLException e) {
@@ -137,7 +132,7 @@ public class MockCompanyDao implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
+      mockDao.closeConnection(conn, stmt, null);
     }
     return companies;
   }

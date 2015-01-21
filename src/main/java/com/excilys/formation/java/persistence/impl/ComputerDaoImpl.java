@@ -20,14 +20,12 @@ import com.excilys.formation.java.persistence.mapper.impl.ComputerRowMapperImpl;
 
 public class ComputerDaoImpl implements ComputerDao {
 
-  private static final String          URL             = "jdbc:mysql://localhost:3306/computer-database-db";
-  private static final String          USR             = "admincdb";
-  private static final String          PASSWORD        = "qwerty1234";
-
   private Logger                       logger          = LoggerFactory
-                                                           .getLogger("com.excilys.formation.java.persistence.impl.ComputerDaoImpl");
+                                                           .getLogger(ComputerDaoImpl.class);
 
   private final static ComputerDaoImpl computerDaoImpl = new ComputerDaoImpl();
+
+  private final static DaoFactory      dao             = DaoFactory.getInstance();
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -49,7 +47,7 @@ public class ComputerDaoImpl implements ComputerDao {
     String query = "INSERT INTO computer(name, introduced, discontinued, company_id)  VALUE (?, ?, ?, ?);";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setString(1, o.getName());
       if (o.getIntroduced() == null) {
@@ -73,7 +71,7 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+      dao.closeConnection(conn, stmt, null);
     }
   }
 
@@ -91,7 +89,7 @@ public class ComputerDaoImpl implements ComputerDao {
     String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.id = ?";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
@@ -104,7 +102,7 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, rs);
+      dao.closeConnection(conn, stmt, rs);
     }
     return computer;
   }
@@ -120,7 +118,7 @@ public class ComputerDaoImpl implements ComputerDao {
     String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setString(1, o.getName());
       if (o.getIntroduced() == null) {
@@ -145,7 +143,7 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+      dao.closeConnection(conn, stmt, null);
     }
   }
 
@@ -160,7 +158,7 @@ public class ComputerDaoImpl implements ComputerDao {
     String query = "DELETE FROM computer WHERE id = ?;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       stmt.executeUpdate();
@@ -169,7 +167,7 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+      dao.closeConnection(conn, stmt, null);
     }
   }
 
@@ -189,7 +187,7 @@ public class ComputerDaoImpl implements ComputerDao {
     String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id LIMIT ? OFFSET ? ;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
 
       countStmt = conn.createStatement();
 
@@ -213,7 +211,7 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+      dao.closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -229,7 +227,7 @@ public class ComputerDaoImpl implements ComputerDao {
     String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id ;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection(URL, USR, PASSWORD);
+      conn = DaoFactory.getInstance().getConnection();
 
       stmt = conn.prepareStatement(query);
 
@@ -243,7 +241,7 @@ public class ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.getInstance().closeConnection(conn, stmt, null);
+      dao.closeConnection(conn, stmt, null);
     }
     return computers;
   }

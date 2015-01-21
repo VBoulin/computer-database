@@ -7,12 +7,12 @@ import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.service.CompanyDBService;
 
-public class MockCompanyDBService implements CompanyDBService{
+public class MockCompanyDBService implements CompanyDBService {
 
   private CompanyDao companyDao;
-  
+
   public MockCompanyDBService(CompanyDao companyDAO) {
-      this.companyDao = companyDAO;
+    this.companyDao = companyDAO;
   }
 
   @Override
