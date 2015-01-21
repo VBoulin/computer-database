@@ -8,7 +8,7 @@ pageEncoding="UTF-8"%>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="AddComputer" method="POST">
+                    <form action="addComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -41,7 +41,7 @@ pageEncoding="UTF-8"%>
                         <div class="actions pull-right">
                             <input type="submit" id="submit" value="Add" class="btn btn-primary">
                             or
-                            <a href="DashBoard" class="btn btn-default">Cancel</a>
+                            <a href="dashBoard" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

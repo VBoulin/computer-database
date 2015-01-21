@@ -1,4 +1,4 @@
-package com.excilys.formation.java.service.test;
+package com.excilys.formation.java.service;
 
 import java.util.List;
 

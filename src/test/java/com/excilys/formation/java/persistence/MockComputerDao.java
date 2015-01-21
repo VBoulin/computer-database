@@ -1,4 +1,4 @@
-package com.excilys.formation.java.persistence.test;
+package com.excilys.formation.java.persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,9 +21,7 @@ import com.excilys.formation.java.persistence.ComputerDao;
 
 public class MockComputerDao implements ComputerDao {
 
-  private Logger                      logger  = LoggerFactory.getLogger(MockComputerDao.class);
-
-  private final static MockDaoFactory mockDao = MockDaoFactory.getInstance();
+  private Logger logger = LoggerFactory.getLogger(MockComputerDao.class);
 
   @Override
   public Computer getOne(Long id) {
@@ -70,7 +68,7 @@ public class MockComputerDao implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      mockDao.closeConnection(conn, stmt, rs);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, rs);
     }
     return computer;
   }
@@ -107,7 +105,7 @@ public class MockComputerDao implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      mockDao.closeConnection(conn, stmt, null);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
   }
 
@@ -144,7 +142,7 @@ public class MockComputerDao implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      mockDao.closeConnection(conn, stmt, null);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
   }
 
@@ -165,7 +163,7 @@ public class MockComputerDao implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      mockDao.closeConnection(conn, stmt, null);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
   }
 
@@ -210,7 +208,7 @@ public class MockComputerDao implements ComputerDao {
     } finally {
       logger.error("SQLError with createPage()");
       //Close the connection
-      mockDao.closeConnection(conn, stmt, null);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -244,7 +242,7 @@ public class MockComputerDao implements ComputerDao {
     } finally {
       logger.error("SQLError with createPage()");
       //Close the connection
-      mockDao.closeConnection(conn, stmt, null);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return computers;
   }

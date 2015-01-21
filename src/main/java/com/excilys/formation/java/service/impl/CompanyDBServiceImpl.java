@@ -9,13 +9,13 @@ import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.DaoFactory;
 import com.excilys.formation.java.service.CompanyDBService;
 
-public class CompanyDBServiceImpl implements CompanyDBService {
+public enum CompanyDBServiceImpl implements CompanyDBService {
+  
+  INSTANCE;
 
   private CompanyDao                        companyDao;
 
   private DaoFactory                        daoFactory;
-
-  private final static CompanyDBServiceImpl service = new CompanyDBServiceImpl();
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -27,7 +27,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
   }
 
   public static CompanyDBServiceImpl getInstance() {
-    return service;
+    return INSTANCE;
   }
 
   /**

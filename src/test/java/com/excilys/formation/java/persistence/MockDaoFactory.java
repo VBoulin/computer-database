@@ -1,10 +1,13 @@
-package com.excilys.formation.java.persistence.test;
+package com.excilys.formation.java.persistence;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,34 +15,48 @@ import org.slf4j.LoggerFactory;
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.ComputerDao;
+import com.excilys.formation.java.persistence.impl.CompanyDaoImpl;
+import com.excilys.formation.java.persistence.impl.ComputerDaoImpl;
 
-public class MockDaoFactory {
+public enum MockDaoFactory {
+
+  INSTANCE;
 
   //Connections informations 
-  private static final String         URL      = "jdbc:mysql://localhost:3306/test-computer-database-db";
-  private static final String         USR      = "admintestcdb";
-  private static final String         PASSWORD = "qwerty12345";
+  private static final String URL;
+  private static final String USR;
+  private static final String PASSWORD;
 
-  private Logger                      logger   = LoggerFactory.getLogger(MockDaoFactory.class);
+  private static Logger       logger = LoggerFactory.getLogger(MockDaoFactory.class);
 
-  //Singleton
-  private final static MockDaoFactory factory  = new MockDaoFactory();
-
-  private static final String         DRIVER   = "com.mysql.jdbc.Driver";
-
-  /**
-   * Singleton : DAO
-   */
-  private MockDaoFactory() {
+  static {
+    Properties prop = new Properties();
+    InputStream stream = null;
     try {
-      Class.forName(DRIVER);
+      stream = MockDaoFactory.class.getClassLoader().getResourceAsStream("dbTest.properties");
+      prop.load(stream);
+
+      //Load the Driver class
+      Class.forName(prop.getProperty("db.driver"));
+      URL = prop.getProperty("db.url");
+      USR = prop.getProperty("db.usr");
+      PASSWORD = prop.getProperty("db.password");
+      logger.info("Properties loaded with success!");
+    } catch (final IOException e) {
+      logger.error("Couldn't load db.properties");
+      throw new PersistenceException(e.getMessage(), e);
     } catch (ClassNotFoundException e) {
       throw new PersistenceException(e.getMessage(), e);
     }
   }
 
+  /**
+   * Singleton : DAO
+   */
+  private MockDaoFactory() {}
+
   public static MockDaoFactory getInstance() {
-    return factory;
+    return INSTANCE;
   }
 
   /**

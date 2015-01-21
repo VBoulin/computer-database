@@ -3,9 +3,9 @@ package com.excilys.formation.java.service;
 import com.excilys.formation.java.service.impl.CompanyDBServiceImpl;
 import com.excilys.formation.java.service.impl.ComputerDBServiceImpl;
 
-public class ServiceFactory {
-
-  private final static ServiceFactory factory = new ServiceFactory();
+public enum ServiceFactory {
+  
+  INSTANCE;
 
   CompanyDBService companyDBService;
   ComputerDBService computerDBService;
@@ -16,7 +16,7 @@ public class ServiceFactory {
   }
 
   public static ServiceFactory getInstance() {
-    return factory;
+    return INSTANCE;
   }
 
   /**

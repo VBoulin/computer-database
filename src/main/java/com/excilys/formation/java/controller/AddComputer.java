@@ -27,7 +27,7 @@ import com.excilys.formation.java.validator.Validator;
 /**
  * Servlet implementation class AddComputer
  */
-@WebServlet("/AddComputer")
+@WebServlet("/addComputer")
 public class AddComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,7 @@ public class AddComputer extends HttpServlet {
   private CompanyDBService  companyDBService;
   private ServiceFactory    service;
 
-  private Logger logger = LoggerFactory.getLogger(AddComputer.class);
+  private Logger            logger           = LoggerFactory.getLogger(AddComputer.class);
 
   /**
    * Instantiation of the services 
@@ -56,7 +56,7 @@ public class AddComputer extends HttpServlet {
       throws ServletException, IOException {
 
     List<Company> companies = companyDBService.getAll();
-    
+
     request.setAttribute("companies", companies);
 
     RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/addComputer.jsp");
@@ -74,17 +74,17 @@ public class AddComputer extends HttpServlet {
     Computer computer = addComputer(request);
 
     if (computer != null) {
-      
+
       computerDBService.create(computer);
-      
+
       logger.info("Computer added with success");
-      
-      response.sendRedirect("DashBoard");
-      
+
+      response.sendRedirect("dashBoard");
+
     } else {
-      
-      doGet(request,response);
-      
+
+      doGet(request, response);
+
     }
   }
 
@@ -100,7 +100,7 @@ public class AddComputer extends HttpServlet {
     Map<String, String> error = new HashMap<String, String>();
 
     String name = request.getParameter("name");
-    
+
     if (Validator.isName(name)) {
       b.name(name);
     } else {
@@ -108,8 +108,8 @@ public class AddComputer extends HttpServlet {
     }
 
     String introduced = request.getParameter("introduced");
-    
-    if(!introduced.trim().isEmpty()){
+
+    if (!introduced.trim().isEmpty()) {
       if (Validator.isDate(introduced)) {
         b.introduced(LocalDate.parse(introduced, DateTimeFormatter.ISO_LOCAL_DATE));
       } else {
@@ -118,8 +118,8 @@ public class AddComputer extends HttpServlet {
     }
 
     String discontinued = request.getParameter("discontinued");
-    
-    if(!discontinued.trim().isEmpty()){
+
+    if (!discontinued.trim().isEmpty()) {
       if (Validator.isDate(discontinued)) {
         b.discontinued(LocalDate.parse(discontinued, DateTimeFormatter.ISO_LOCAL_DATE));
       } else {
@@ -129,7 +129,7 @@ public class AddComputer extends HttpServlet {
 
     String companyId = request.getParameter("companyId");
 
-    if(!companyId.trim().equals("0") || !companyId.trim().isEmpty()){
+    if (!companyId.trim().equals("0") || !companyId.trim().isEmpty()) {
       if (Validator.isID(companyId)) {
         Company company = companyDBService.getOne(Long.valueOf(companyId));
         if (company != null) {
@@ -141,14 +141,14 @@ public class AddComputer extends HttpServlet {
     }
 
     if (error.isEmpty()) {
-      
+
       return b.build();
-      
-    }else{
-  
+
+    } else {
+
       request.setAttribute("error", error);
       return null;
-      
+
     }
 
   }

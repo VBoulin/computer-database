@@ -11,15 +11,15 @@ import com.excilys.formation.java.persistence.ComputerDao;
 import com.excilys.formation.java.persistence.DaoFactory;
 import com.excilys.formation.java.service.ComputerDBService;
 
-public class ComputerDBServiceImpl implements ComputerDBService {
+public enum ComputerDBServiceImpl implements ComputerDBService {
+  
+  INSTANCE;
 
   private Logger logger = LoggerFactory.getLogger(ComputerDBServiceImpl.class);
   
   private ComputerDao                        computerDao;
 
   private DaoFactory                         daoFactory;
-
-  private final static ComputerDBServiceImpl service = new ComputerDBServiceImpl();
 
   /**
    * Singleton : provide the access service to the database
@@ -31,7 +31,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   }
 
   public static ComputerDBServiceImpl getInstance() {
-    return service;
+    return INSTANCE;
   }
 
   /**

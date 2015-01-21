@@ -75,11 +75,11 @@
 
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
+			<artifactId>selenium-firefox-driver</artifactId>
 			<version>${selenium.version}</version>
 			<scope>test</scope>
 		</dependency>
-	
+
 		<!-- Servlets -->
 		<dependency>
 			<groupId>javax.servlet</groupId>

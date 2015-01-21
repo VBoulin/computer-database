@@ -22,14 +22,14 @@ import com.excilys.formation.java.validator.Validator;
 /**
  * Servlet implementation class DashBoard
  */
-@WebServlet("/DashBoard")
+@WebServlet("/dashBoard")
 public class DashBoard extends HttpServlet {
   private static final long        serialVersionUID = 1L;
 
   private static ComputerDBService computerDBService;
   private ServiceFactory           service;
-  
-  private Logger logger = LoggerFactory.getLogger(DashBoard.class);
+
+  private Logger                   logger           = LoggerFactory.getLogger(DashBoard.class);
 
   /**
    * Instantiation of the services
@@ -65,7 +65,7 @@ public class DashBoard extends HttpServlet {
     String nbRs = request.getParameter("nbResults");
     int nbResults = 0;
 
-    if (nbRs!=null) {
+    if (nbRs != null) {
       nbResults = Integer.valueOf(nbRs);
     }
 
@@ -76,18 +76,18 @@ public class DashBoard extends HttpServlet {
     }
 
     page = computerDBService.createPage(page);
-    
-    int nbPages=0;
-    
+
+    int nbPages = 0;
+
     if (page.getNbResultsPerPage() != 0) {
       nbPages = page.getNbResults() / page.getNbResultsPerPage();
       if (page.getNbResults() % page.getNbResultsPerPage() != 0) {
-          nbPages++;
+        nbPages++;
       }
     }
 
     logger.info("Page created with success");
-    
+
     request.setAttribute("nbPages", nbPages);
 
     request.setAttribute("page", page);

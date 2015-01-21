@@ -1,4 +1,4 @@
-package com.excilys.formation.java.persistence.test;
+package com.excilys.formation.java.persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,9 +19,7 @@ import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
 
 public class MockCompanyDao implements CompanyDao {
 
-  private Logger                      logger  = LoggerFactory.getLogger(MockCompanyDao.class);
-
-  private final static MockDaoFactory mockDao = MockDaoFactory.getInstance();
+  private Logger logger = LoggerFactory.getLogger(MockCompanyDao.class);
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -56,7 +54,7 @@ public class MockCompanyDao implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      mockDao.closeConnection(conn, stmt, rs);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, rs);
     }
     return company;
   }
@@ -102,7 +100,7 @@ public class MockCompanyDao implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      mockDao.closeConnection(conn, stmt, null);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -132,7 +130,7 @@ public class MockCompanyDao implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      mockDao.closeConnection(conn, stmt, null);
+      MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return companies;
   }

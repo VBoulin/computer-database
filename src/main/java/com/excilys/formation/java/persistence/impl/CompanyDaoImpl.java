@@ -12,21 +12,16 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.DaoFactory;
 import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
-import com.excilys.formation.java.persistence.mapper.impl.ComputerRowMapperImpl;
 
-public class CompanyDaoImpl implements CompanyDao {
+public enum CompanyDaoImpl implements CompanyDao {
 
-  private Logger                      logger         = LoggerFactory
-                                                         .getLogger(CompanyDaoImpl.class);
+  INSTANCE;
 
-  private final static DaoFactory     dao            = DaoFactory.getInstance();
-
-  private final static CompanyDaoImpl companyDaoImpl = new CompanyDaoImpl();
+  private Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -34,7 +29,7 @@ public class CompanyDaoImpl implements CompanyDao {
   private CompanyDaoImpl() {}
 
   public static CompanyDaoImpl getInstance() {
-    return companyDaoImpl;
+    return INSTANCE;
   }
 
   /**
@@ -51,7 +46,7 @@ public class CompanyDaoImpl implements CompanyDao {
     String query = "SELECT * FROM company WHERE id = ?;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection();
+      conn = DaoFactory.INSTANCE.getConnection();
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
@@ -64,7 +59,7 @@ public class CompanyDaoImpl implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      dao.closeConnection(conn, stmt, rs);
+      DaoFactory.INSTANCE.closeConnection(conn, stmt, rs);
     }
     return company;
   }
@@ -86,7 +81,7 @@ public class CompanyDaoImpl implements CompanyDao {
     String query = "SELECT * FROM company LIMIT ? OFFSET ? ;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection();
+      conn = DaoFactory.INSTANCE.getConnection();
 
       countStmt = conn.createStatement();
 
@@ -110,15 +105,13 @@ public class CompanyDaoImpl implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      dao.closeConnection(conn, stmt, null);
+      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
     }
     return page;
   }
 
   @Override
   public List<Company> getAll() {
-
-    // TODO Auto-generated method stub
     Connection conn = null;
     Statement stmt = null;
     ResultSet rs = null;
@@ -127,7 +120,7 @@ public class CompanyDaoImpl implements CompanyDao {
     String query = "SELECT * FROM company;";
 
     try {
-      conn = DaoFactory.getInstance().getConnection();
+      conn = DaoFactory.INSTANCE.getConnection();
 
       stmt = conn.createStatement();
 
@@ -141,7 +134,7 @@ public class CompanyDaoImpl implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      dao.closeConnection(conn, stmt, null);
+      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
     }
     return companies;
   }

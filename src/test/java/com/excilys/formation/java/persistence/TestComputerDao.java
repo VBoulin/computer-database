@@ -1,4 +1,4 @@
-package com.excilys.formation.java.persistence.test;
+package com.excilys.formation.java.persistence;
 
 import java.sql.Connection;
 import java.sql.SQLException;
