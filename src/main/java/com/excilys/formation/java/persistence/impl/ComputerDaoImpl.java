@@ -64,8 +64,11 @@ public enum ComputerDaoImpl implements ComputerDao {
       }
       stmt.executeUpdate();
     } catch (SQLException e) {
-      logger.error("SQLError with creation");
+      logger.error("SQLError with create()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne){
+      logger.error("NullError with create()");
+      throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
       DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
@@ -97,6 +100,9 @@ public enum ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne){
+      logger.error("NullError with getOne()");
+      throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
       DaoFactory.INSTANCE.closeConnection(conn, stmt, rs);
@@ -138,6 +144,9 @@ public enum ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with update()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne){
+      logger.error("NullError with update()");
+      throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
       DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
@@ -162,6 +171,9 @@ public enum ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with delete()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne){
+      logger.error("NullError with delete()");
+      throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
       DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
@@ -204,8 +216,11 @@ public enum ComputerDaoImpl implements ComputerDao {
       page.setList(computers);
 
     } catch (SQLException e) {
-      logger.error("SQLError with getPagedList()");
+      logger.error("SQLError with createPage()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne){
+      logger.error("NullError with createPage()");
+      throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
       DaoFactory.INSTANCE.closeConnection(conn, stmt, null);

@@ -40,6 +40,20 @@ public class TestCompanyDBService {
   @Test
   public void testGetOne() {
     Assert.assertEquals(Company.builder().id(1L).name("truc").build(), companyDBService.getOne(1L));
+    
+    try {
+      companyDBService.getOne(-10L);
+      Assert.fail("Should throw exception when the id is a negative number");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("negative"));
+    }
+    
+    try {
+      companyDBService.getOne(null);
+      Assert.fail("Should throw exception when the id is null");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("null"));
+    }
   }
 
   /**
@@ -48,5 +62,12 @@ public class TestCompanyDBService {
   @Test
   public void testCreatePage() {
     Assert.assertEquals(pageR, companyDBService.createPage(page));
+    
+    try {
+      companyDBService.createPage(null);
+      Assert.fail("Should throw exception when the page is null");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("null"));
+    }
   }
 }

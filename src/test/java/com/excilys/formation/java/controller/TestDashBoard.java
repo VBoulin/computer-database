@@ -16,7 +16,7 @@ public class TestDashBoard {
 
   @Test
   public void editComputer() {
-    driver.get("http://localhost:8080/computer-database/DashBoard?page=1&nbResults=10");
+    driver.get("http://localhost:8080/computer-database/dashBoard?page=1&nbResults=10");
 
   }
 

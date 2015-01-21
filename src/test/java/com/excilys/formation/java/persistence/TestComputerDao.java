@@ -11,9 +11,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.ComputerDao;
 
 public class TestComputerDao {
@@ -42,6 +42,13 @@ public class TestComputerDao {
   @Test
   public void testGetOne() {
     Assert.assertEquals(computers.get(0), computerDao.getOne(1l));
+
+    try {
+      computerDao.getOne(null);
+      Assert.fail("Should throw exception when the id is null");
+    } catch (PersistenceException aExp) {
+      assert (aExp.getMessage().contains("NullError"));
+    }
   }
 
   @Test
@@ -52,6 +59,13 @@ public class TestComputerDao {
     computerDao.create(computer);
     computer.setId(3L);
     Assert.assertEquals(computer, computerDao.getOne(3L));
+
+    try {
+      computerDao.create(null);
+      Assert.fail("Should throw exception when the computer is null");
+    } catch (PersistenceException aExp) {
+      assert (aExp.getMessage().contains("NullError"));
+    }
   }
 
   @Test
@@ -63,6 +77,13 @@ public class TestComputerDao {
         .introduced(LocalDate.parse("1993-01-12")).build();
     computerDao.update(computer2);
     Assert.assertEquals(computer2, computerDao.getOne(3L));
+
+    try {
+      computerDao.update(null);
+      Assert.fail("Should throw exception when the computer is null");
+    } catch (PersistenceException aExp) {
+      assert (aExp.getMessage().contains("NullError"));
+    }
   }
 
   @Test
@@ -73,5 +94,12 @@ public class TestComputerDao {
     Assert.assertNotNull(computerDao.getOne(3L));
     computerDao.delete(3L);
     Assert.assertEquals(null, computerDao.getOne(3L));
+
+    try {
+      computerDao.delete(null);
+      Assert.fail("Should throw exception when the computer is null");
+    } catch (PersistenceException aExp) {
+      assert (aExp.getMessage().contains("NullError"));
+    }
   }
 }

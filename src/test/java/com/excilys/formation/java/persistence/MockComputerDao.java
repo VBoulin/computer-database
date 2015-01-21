@@ -65,7 +65,10 @@ public class MockComputerDao implements ComputerDao {
 
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
-      throw new PersistenceException(e.getMessage(), e);
+      throw new PersistenceException("SQLError " + e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with getOne()");
+      throw new PersistenceException("NullError " + ne.getMessage(), ne);
     } finally {
       //Close the connection
       MockDaoFactory.getInstance().closeConnection(conn, stmt, rs);
@@ -103,6 +106,9 @@ public class MockComputerDao implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with create()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with create()");
+      throw new PersistenceException("NullError " + ne.getMessage(), ne);
     } finally {
       //Close the connection
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
@@ -140,6 +146,9 @@ public class MockComputerDao implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with update()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with update()");
+      throw new PersistenceException("NullError " + ne.getMessage(), ne);
     } finally {
       //Close the connection
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
@@ -161,6 +170,9 @@ public class MockComputerDao implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with delete()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with delete()");
+      throw new PersistenceException("NullError " + ne.getMessage(), ne);
     } finally {
       //Close the connection
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
@@ -204,7 +216,11 @@ public class MockComputerDao implements ComputerDao {
       page.setList(computers);
 
     } catch (SQLException e) {
+      logger.error("NullError with createPage()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with createPage()");
+      throw new PersistenceException("NullError " + ne.getMessage(), ne);
     } finally {
       logger.error("SQLError with createPage()");
       //Close the connection
@@ -238,9 +254,9 @@ public class MockComputerDao implements ComputerDao {
       }
 
     } catch (SQLException e) {
+      logger.error("SQLError with getAll()");
       throw new PersistenceException(e.getMessage(), e);
     } finally {
-      logger.error("SQLError with createPage()");
       //Close the connection
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }

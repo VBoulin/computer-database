@@ -57,6 +57,9 @@ public enum CompanyDaoImpl implements CompanyDao {
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with getOne()");
+      throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
       DaoFactory.INSTANCE.closeConnection(conn, stmt, rs);
@@ -101,8 +104,11 @@ public enum CompanyDaoImpl implements CompanyDao {
       page.setList(companies);
 
     } catch (SQLException e) {
-      logger.error("SQLError with getPagedList()");
+      logger.error("SQLError with createPage()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with createPage()");
+      throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
       DaoFactory.INSTANCE.closeConnection(conn, stmt, null);

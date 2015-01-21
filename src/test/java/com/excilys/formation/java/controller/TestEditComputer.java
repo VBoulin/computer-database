@@ -20,7 +20,7 @@ public class TestEditComputer {
 
   @Test
   public void editComputer() {
-    driver.get("http://localhost:8080/computer-database/EditComputer?id=1");
+    driver.get("http://localhost:8080/computer-database/editComputer?id=1");
 
     WebElement name = driver.findElement(By.name("name"));
     name.sendKeys("NameTest");

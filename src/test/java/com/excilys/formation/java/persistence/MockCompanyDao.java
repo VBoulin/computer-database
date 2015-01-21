@@ -51,7 +51,10 @@ public class MockCompanyDao implements CompanyDao {
 
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
-      throw new PersistenceException(e.getMessage(), e);
+      throw new PersistenceException("SQLError " + e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with getOne()");
+      throw new PersistenceException("NullError " + ne.getMessage(), ne);
     } finally {
       //Close the connection
       MockDaoFactory.getInstance().closeConnection(conn, stmt, rs);
@@ -96,8 +99,11 @@ public class MockCompanyDao implements CompanyDao {
       page.setList(companies);
 
     } catch (SQLException e) {
-      logger.error("SQLError with getPagedList()");
+      logger.error("SQLError with createPage()");
       throw new PersistenceException(e.getMessage(), e);
+    } catch (NullPointerException ne) {
+      logger.error("NullError with createPage()");
+      throw new PersistenceException("NullError " + ne.getMessage(), ne);
     } finally {
       //Close the connection
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);

@@ -38,13 +38,13 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
         String name = rs.getString("name");
         Timestamp introduced = null;
         LocalDate introducedDate = null;
-        if (rs.getDate("introduced") != null) {
+        if (rs.getTimestamp("introduced") != null) {
           introduced = rs.getTimestamp("introduced");
           introducedDate = introduced.toLocalDateTime().toLocalDate();
         }
         Timestamp discontinued = null;
         LocalDate discontinuedDate = null;
-        if (rs.getDate("discontinued") != null) {
+        if (rs.getTimestamp("discontinued") != null) {
           discontinued = rs.getTimestamp("discontinued");
           discontinuedDate = discontinued.toLocalDateTime().toLocalDate();
         }
@@ -89,13 +89,13 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
         String name = rs.getString("name");
         Timestamp introduced = null;
         LocalDate introducedDate = null;
-        if (rs.getDate("introduced") != null) {
+        if (rs.getTimestamp("introduced") != null) {
           introduced = rs.getTimestamp("introduced");
           introducedDate = introduced.toLocalDateTime().toLocalDate();
         }
         Timestamp discontinued = null;
         LocalDate discontinuedDate = null;
-        if (rs.getDate("discontinued") != null) {
+        if (rs.getTimestamp("discontinued") != null) {
           discontinued = rs.getTimestamp("discontinued");
           discontinuedDate = discontinued.toLocalDateTime().toLocalDate();
         }

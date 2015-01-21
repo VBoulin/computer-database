@@ -18,7 +18,7 @@ import com.excilys.formation.java.service.ComputerDBService;
 public class TestComputerDBService {
   ComputerDBService computerDBService;
   ComputerDao       computerDao;
-  Computer          computer;
+  Computer          computer = new Computer();
   Page<Computer>    page;
   Page<Computer>    pageR;
 
@@ -41,6 +41,20 @@ public class TestComputerDBService {
   public void testGetOne() {
     Assert.assertEquals(Computer.builder().id(1L).name("truc").build(),
         computerDBService.getOne(1L));
+    
+    try {
+      computerDBService.getOne(-10L);
+      Assert.fail("Should throw exception when the id is a negative number");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("negative"));
+    }
+    
+    try {
+      computerDBService.getOne(null);
+      Assert.fail("Should throw exception when the id is null");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("null"));
+    }
   }
 
   /**
@@ -50,6 +64,13 @@ public class TestComputerDBService {
   public void testCreate() {
     computerDBService.create(computer);
     Mockito.verify(computerDao).create(computer);
+    
+    try {
+      computerDBService.create(null);
+      Assert.fail("Should throw exception when the computer is null");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("null"));
+    }
   }
 
   /**
@@ -59,6 +80,13 @@ public class TestComputerDBService {
   public void testUpdate() {
     computerDBService.update(computer);
     Mockito.verify(computerDao).update(computer);
+    
+    try {
+      computerDBService.update(null);
+      Assert.fail("Should throw exception when the computer is null");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("null"));
+    }
   }
 
   /**
@@ -68,6 +96,20 @@ public class TestComputerDBService {
   public void testDelete() {
     computerDBService.delete(1l);
     Mockito.verify(computerDao).delete(1l);
+    
+    try {
+      computerDBService.delete(-10L);
+      Assert.fail("Should throw exception when the id is a negative number");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("negative"));
+    }
+    
+    try {
+      computerDBService.delete(null);
+      Assert.fail("Should throw exception when the id is null");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("null"));
+    }
   }
 
   /**
@@ -76,5 +118,12 @@ public class TestComputerDBService {
   @Test
   public void testCreatePage() {
     Assert.assertEquals(pageR, computerDBService.createPage(page));
+    
+    try {
+      computerDBService.createPage(null);
+      Assert.fail("Should throw exception when the page is null");
+    }catch(IllegalArgumentException aExp){
+      assert(aExp.getMessage().contains("null"));
+    }
   }
 }
