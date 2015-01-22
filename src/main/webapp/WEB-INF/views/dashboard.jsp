@@ -1,9 +1,9 @@
-<jsp:include page="includes/header.jsp" />
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="com.excilys.formation.java.model.Page"%>
+<%@ page import="com.excilys.formation.java.model.*"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<jsp:include page="includes/header.jsp" />
 
 	<section id="main">
 		<div class="container">
@@ -20,7 +20,7 @@ pageEncoding="UTF-8"%>
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="editComputer"
+						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
@@ -47,19 +47,19 @@ pageEncoding="UTF-8"%>
                         </th>
                         <!-- Table header for Computer name -->
                         <th>
-                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" order="name" search="${page.search}" >Computer name</t:link>
+                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="name" order="${page.order.order}" search="${page.search}" >Computer name</t:link>
                         </th>
                         <!-- Table header for Introduced date -->
                         <th>
-                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" order="introduced" search="${page.search}">Introduced date</t:link>
+                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="introduced" order="${page.order.order}" search="${page.search}">Introduced date</t:link>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" order="discontinued" search="${page.search}">Discontinued date</t:link>
+                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="discontinued" order="${page.order.order}" search="${page.search}">Discontinued date</t:link>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" order="company" search="${page.search}">Company</t:link>
+                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="company_name" order="${page.order.order}" search="${page.search}">Company</t:link>
                         </th>
 
                     </tr>
@@ -67,25 +67,25 @@ pageEncoding="UTF-8"%>
 
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-				<c:forEach items="${page.list}" var="computer">
-					<tr>
-						<td class="editMode">
-							<input type="checkbox" name="cb" class="cb" value="${computer.id}">
-						</td>
-						<td>
-							<a href="editComputer?id=${computer.id}" onclick="">${computer.name}</a>
-						</td>
-						<td>
-							${computer.introduced}
-						</td>
-						<td>
-							${computer.discontinued}
-						</td>
-						<td>
-							${computer.company.name}
-						</td>
-					</tr>
-				</c:forEach>
+					<c:forEach items="${page.list}" var="computer">
+						<tr>
+							<td class="editMode">
+								<input type="checkbox" name="cb" class="cb" value="${computer.id}">
+							</td>
+							<td>
+								<a href="editComputer?id=${computer.id}" onclick="">${computer.name}</a>
+							</td>
+							<td>
+								${computer.introduced}
+							</td>
+							<td>
+								${computer.discontinued}
+							</td>
+							<td>
+								${computer.company.name}
+							</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>

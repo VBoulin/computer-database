@@ -22,7 +22,9 @@ public enum ComputerDaoImpl implements ComputerDao {
 
   INSTANCE;
 
-  private Logger logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
+  private ComputerRowMapperImpl mapper = new ComputerRowMapperImpl();
+
+  private Logger                logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -89,9 +91,10 @@ public enum ComputerDaoImpl implements ComputerDao {
       stmt = conn.prepareStatement(query);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
-
-      ComputerRowMapperImpl mapper = new ComputerRowMapperImpl();
-      computer = mapper.mapRow(rs);
+      
+      if (rs.next()) {
+        computer = mapper.mapRow(rs);
+      }
 
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
@@ -189,7 +192,8 @@ public enum ComputerDaoImpl implements ComputerDao {
     List<Computer> computers;
 
     String countQuery = "SELECT COUNT(id) as total FROM computer";
-    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.name LIKE ? OR cp.name LIKE ? LIMIT ? OFFSET ? ;";
+    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.name LIKE ? OR cp.name LIKE ? ORDER BY " 
+          +page.getSort().getColumn()+" "+page.getOrder().getOrder()+" LIMIT ? OFFSET ? ;";
 
     StringBuilder search = new StringBuilder("%").append(page.getSearch()).append("%");
     try {
@@ -209,7 +213,6 @@ public enum ComputerDaoImpl implements ComputerDao {
 
       rs = stmt.executeQuery();
 
-      ComputerRowMapperImpl mapper = new ComputerRowMapperImpl();
       computers = mapper.mapRowList(rs);
 
       page.setList(computers);

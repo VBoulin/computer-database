@@ -22,6 +22,8 @@ public enum CompanyDaoImpl implements CompanyDao {
   INSTANCE;
 
   private Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
+  
+  private CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -47,8 +49,9 @@ public enum CompanyDaoImpl implements CompanyDao {
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
 
-      CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
-      company = mapper.mapRow(rs);
+      if (rs.next()) {
+        company = mapper.mapRow(rs);
+      }
 
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
@@ -94,7 +97,6 @@ public enum CompanyDaoImpl implements CompanyDao {
 
       rs = stmt.executeQuery();
 
-      CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
       companies = mapper.mapRowList(rs);
 
       page.setList(companies);

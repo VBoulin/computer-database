@@ -15,7 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.model.Computer;
+import com.excilys.formation.java.model.OrderBy;
 import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.SortBy;
 import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.service.ServiceFactory;
 import com.excilys.formation.java.validator.Validator;
@@ -85,17 +87,41 @@ public class DashBoard extends HttpServlet {
       page.setSearch(search.trim());
     }
 
+    String sortBy = request.getParameter("sort");
+
+    SortBy sort = SortBy.getInstance(sortBy);
+    
+    if (sort == null) {
+      sort = SortBy.ID;
+    }
+    
+    page.setSort(sort);
+
+    String orderBy = request.getParameter("order");
+    
+    if(orderBy!=null){
+      orderBy=orderBy.toUpperCase();
+    }
+
+    OrderBy order = OrderBy.getInstance(orderBy);
+    
+    if(OrderBy.getInstance("ASC").equals(order)){
+      order = OrderBy.DESC;
+    }else{
+      order = OrderBy.ASC;
+    }
+    
+    if (order == null) {
+      order = OrderBy.ASC;
+    }
+    
+    page.setOrder(order);
+    
     page = computerDBService.createPage(page);
 
     int nbPages = 0;
 
     nbPages = page.getNbTotalPage();
-
-    String sortBy = request.getParameter("order");
-
-    if (sortBy != null) {
-      sortElement(page, sortBy);
-    }
 
     logger.info("Page created with success");
 
@@ -106,27 +132,6 @@ public class DashBoard extends HttpServlet {
     RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 
     dispatcher.forward(request, response);
-  }
-
-  /**
-   * Sort the list of elements of a page
-   * @param page Page containing the list of elements
-   * @param order Parameter by which the list is sorted
-   */
-  public void sortElement(Page<Computer> page, String sortBy) {
-    List<Computer> list = page.getList();
-    for (Computer c : list) {
-      c.setComparison(sortBy);
-    }
-    Collections.sort(list);
-
-    orderAsc = !orderAsc;
-
-    if (!orderAsc) {
-      Collections.reverse(list);
-    }
-
-    logger.info("List of computer sorted with success");
   }
 
 }

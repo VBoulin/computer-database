@@ -12,11 +12,11 @@ public class ComputerDto {
   //------------------------------
   //Constructors
   //------------------------------
-  
+
   public ComputerDto() {
 
   }
-  
+
   //------------------------------
   //Getters & setters
   //------------------------------
@@ -68,7 +68,7 @@ public class ComputerDto {
   public void setCompanyName(final String companyName) {
     this.companyName = companyName;
   }
-  
+
   //------------------------------
   //hashcode & equals & toString
   //------------------------------
@@ -121,14 +121,15 @@ public class ComputerDto {
       return false;
     return true;
   }
-  
+
   @Override
   public String toString() {
-    return "ComputerDto [idComputer=" + idComputer + ", computerName=" + computerName
-        + ", introduced=" + introduced + ", discontinued=" + discontinued + ", idCompany="
-        + idCompany + ", companyName=" + companyName + "]";
+    return new StringBuilder("ComputerDto [idComputer=").append(idComputer)
+        .append(", computerName=").append(computerName).append(", introduced=").append(introduced)
+        .append(", discontinued=").append(discontinued).append(", idCompany=").append(idCompany)
+        .append(", companyName=").append(companyName).append("]").toString();
   }
-  
+
   //------------------------------
   //Builder
   //------------------------------

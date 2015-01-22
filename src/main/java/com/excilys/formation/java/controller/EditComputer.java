@@ -58,6 +58,7 @@ public class EditComputer extends HttpServlet {
 
     long id = 0;
     String idComputer = request.getParameter("id");
+    
     if (Validator.isID(idComputer)) {
       id = Long.valueOf(idComputer);
 

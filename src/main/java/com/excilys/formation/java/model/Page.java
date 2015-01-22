@@ -10,6 +10,8 @@ public class Page<T> {
   private int     nbResults;
   private int     nbTotalPage;
   private String  search;
+  private OrderBy order;
+  private SortBy  sort;
 
   //------------------------------
   //Constructors
@@ -17,6 +19,8 @@ public class Page<T> {
   public Page() {
     pageNumber = 1;
     nbResultsPerPage = 10;
+    sort=SortBy.ID;
+    order=OrderBy.ASC;
   }
 
   public Page(int pageNumber, List<T> list, int nbResultsPerPage, int nbResults) {
@@ -24,6 +28,8 @@ public class Page<T> {
     this.list = list;
     this.nbResultsPerPage = nbResultsPerPage;
     this.nbResults = nbResults;
+    sort=SortBy.ID;
+    order=OrderBy.ASC;
   }
 
   //------------------------------
@@ -70,10 +76,26 @@ public class Page<T> {
     this.search = search;
   }
 
+  public OrderBy getOrder() {
+    return order;
+  }
+
+  public void setOrder(OrderBy order) {
+    this.order = order;
+  }
+
+  public SortBy getSort() {
+    return sort;
+  }
+
+  public void setSort(SortBy sort) {
+    this.sort = sort;
+  }
+
   //------------------------------
   //hashcode & equals & toString
   //------------------------------
-
+  
   @Override
   public int hashCode() {
     final int prime = 31;
