@@ -6,7 +6,7 @@ pageEncoding="UTF-8"%>
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<t:pagination url="dashBoard" nbPages="${ nbPages }" pageNumber="${ page.pageNumber }" nbResultsPerPage="${ page.nbResultsPerPage }"></t:pagination>
+			<t:pagination url="dashBoard" nbPages="${ nbPages }" pageNumber="${ page.pageNumber }" nbResultsPerPage="${ page.nbResultsPerPage }" search="${page.search}"></t:pagination>
 		</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>

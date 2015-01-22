@@ -47,19 +47,19 @@ pageEncoding="UTF-8"%>
                         </th>
                         <!-- Table header for Computer name -->
                         <th>
-                        	<t:link url="dashBoard" nbResultsPerPage="${page.nbResultsPerPage}" order="name">Computer name</t:link>
+                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" order="name" search="${page.search}" >Computer name</t:link>
                         </th>
                         <!-- Table header for Introduced date -->
                         <th>
-                        	<t:link url="dashBoard" nbResultsPerPage="${page.nbResultsPerPage}" order="introduced">Introduced date</t:link>
+                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" order="introduced" search="${page.search}">Introduced date</t:link>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                        	<t:link url="dashBoard" nbResultsPerPage="${page.nbResultsPerPage}" order="discontinued">Discontinued date</t:link>
+                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" order="discontinued" search="${page.search}">Discontinued date</t:link>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                        	<t:link url="dashBoard" nbResultsPerPage="${page.nbResultsPerPage}" order="company">Company</t:link>
+                        	<t:link url="dashBoard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" order="company" search="${page.search}">Company</t:link>
                         </th>
 
                     </tr>

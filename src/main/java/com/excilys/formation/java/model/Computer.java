@@ -2,23 +2,26 @@ package com.excilys.formation.java.model;
 
 import java.time.LocalDate;
 
-public class Computer {
-  public Long      id;
-  public String    name;
-  public LocalDate introduced;
-  public LocalDate discontinued;
-  public Company   company;
+public class Computer implements Comparable {
+  private Long      id;
+  private String    name;
+  private LocalDate introduced;
+  private LocalDate discontinued;
+  private Company   company;
+  private String    comparison;
 
   //------------------------------
   //Constructors
   //------------------------------
   public Computer() {
     super();
+    this.comparison = "name";
   }
 
   public Computer(String name) {
     super();
     this.name = name;
+    this.comparison = "name";
   }
 
   public Computer(long id, String name, LocalDate introduced, LocalDate discontinued,
@@ -29,6 +32,7 @@ public class Computer {
     this.introduced = introduced;
     this.discontinued = discontinued;
     this.company = company;
+    this.comparison = "name";
   }
 
   //------------------------------
@@ -73,6 +77,49 @@ public class Computer {
 
   public void setCompany(Company company) {
     this.company = company;
+  }
+
+  public String getComparison() {
+    return comparison;
+  }
+
+  public void setComparison(String comparison) {
+    this.comparison = comparison;
+  }
+
+  //------------------------------
+  //Interface Comparable
+  //------------------------------
+  @Override
+  public int compareTo(Object o) {
+    //Compare by Company name
+    if (comparison.equals("company")) {
+      if(this.company!=null && ((Computer) o).getCompany() !=null)
+        return this.company.getName().compareTo(((Computer) o).getCompany().getName());
+      else if(this.company==null)
+        return -1;
+      else
+        return 1;
+     //Compare by introduced date
+    } else if (comparison.equals("introduced")) {
+      if(this.introduced!=null && ((Computer) o).getIntroduced() !=null)
+        return this.introduced.compareTo(((Computer) o).getIntroduced());
+      else if(this.introduced==null)
+        return -1;
+      else
+        return 1;
+      //Compare by discontinued date
+    } else if (comparison.equals("discontinued")) {
+      if(this.discontinued!=null && ((Computer) o).getDiscontinued() !=null)
+        return this.discontinued.compareTo(((Computer) o).getDiscontinued());
+      else if(this.discontinued==null)
+        return -1;
+      else
+        return 1;
+      //Compare by name (default)
+    } else {
+      return this.name.compareTo(((Computer) o).getName());
+    }
   }
 
   //------------------------------

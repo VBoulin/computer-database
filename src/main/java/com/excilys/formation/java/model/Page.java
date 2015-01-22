@@ -5,12 +5,11 @@ import java.util.List;
 public class Page<T> {
 
   private int     pageNumber;
-
   private List<T> list;
-
   private int     nbResultsPerPage;
-
   private int     nbResults;
+  private int     nbTotalPage;
+  private String  search;
 
   //------------------------------
   //Constructors
@@ -63,6 +62,14 @@ public class Page<T> {
     this.nbResults = nbResults;
   }
 
+  public String getSearch() {
+    return search;
+  }
+
+  public void setSearch(String search) {
+    this.search = search;
+  }
+
   //------------------------------
   //hashcode & equals & toString
   //------------------------------
@@ -106,11 +113,11 @@ public class Page<T> {
     return "Page [pageNumber=" + pageNumber + ", list=" + list + ", nbResultsPerPage="
         + nbResultsPerPage + ", nbResults=" + nbResults + "]";
   }
-  
+
   //------------------------------
   //Other functions
   //------------------------------
-  
+
   /**
    * Check if there is a next page
    * @return True : Page exist | False : otherwise
@@ -134,4 +141,19 @@ public class Page<T> {
     }
     return false;
   }
+
+  /**
+   * Calculate the total number of pages
+   * @return the total number of pages
+   */
+  public int getNbTotalPage() {
+    if (nbResultsPerPage != 0) {
+      nbTotalPage = nbResults / nbResultsPerPage;
+      if (nbResults % nbResultsPerPage != 0) {
+        nbTotalPage++;
+      }
+    }
+    return nbTotalPage;
+  }
+
 }

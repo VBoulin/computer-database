@@ -5,6 +5,8 @@
 <%@ attribute name="nbPages" required="true"%>
 <%@ attribute name="pageNumber" required="true"%>
 <%@ attribute name="nbResultsPerPage" required="true"%>
+<%@ attribute name="search" required="false"%>
+
 
 
 <ul class="pagination">
@@ -17,19 +19,19 @@
 
 	<c:if test="${pageNumber-3 > 0}">
 		<li>
-			<t:link url="${url}" pageNumber="${pageNumber-3}" nbResultsPerPage="${nbResultsPerPage}">${pageNumber-3}</t:link>
+			<t:link url="${url}" pageNumber="${pageNumber-3}" nbResultsPerPage="${nbResultsPerPage}" search="${search}">${pageNumber-3}</t:link>
 		</li>
 	</c:if>
 
 	<c:if test="${page.pageNumber-2 > 0}">
 		<li>
-			<t:link url="${url}" pageNumber="${pageNumber-2}" nbResultsPerPage="${nbResultsPerPage}">${pageNumber-2}</t:link>
+			<t:link url="${url}" pageNumber="${pageNumber-2}" nbResultsPerPage="${nbResultsPerPage}" search="${search}">${pageNumber-2}</t:link>
 		</li>
 	</c:if>
 
 	<c:if test="${page.pageNumber-1 > 0}">
 		<li>
-			<t:link url="${url}" pageNumber="${pageNumber-1}" nbResultsPerPage="${nbResultsPerPage}">${pageNumber-1}</t:link>
+			<t:link url="${url}" pageNumber="${pageNumber-1}" nbResultsPerPage="${nbResultsPerPage}" search="${search}">${pageNumber-1}</t:link>
 		</li>
 	</c:if>
 
@@ -39,12 +41,12 @@
 		<c:if test="${i <= nbPages}">
 			<c:if test="${pageNumber == i}">
 				<li>
-					<t:link url="${url}" pageNumber="${i}" nbResultsPerPage="${nbResultsPerPage}"><Strong>${i}</Strong></t:link>
+					<t:link url="${url}" pageNumber="${i}" nbResultsPerPage="${nbResultsPerPage}" search="${search}"><Strong>${i}</Strong></t:link>
 				</li>
 			</c:if>
 			<c:if test="${pageNumber != i}">
 				<li>
-					<t:link url="${url}" pageNumber="${i}" nbResultsPerPage="${nbResultsPerPage}">${i}</t:link>
+					<t:link url="${url}" pageNumber="${i}" nbResultsPerPage="${nbResultsPerPage}" search="${search}">${i}</t:link>
 				</li>
 			</c:if>
 		</c:if>
@@ -60,7 +62,7 @@
 </ul>
 
 <div class="btn-group btn-group-sm pull-right" role="group">
-	<t:link classes="btn btn-default" url="${url}" nbResultsPerPage="10">10</t:link>
-	<t:link classes="btn btn-default" url="${url}" nbResultsPerPage="50">50</t:link>
-	<t:link classes="btn btn-default" url="${url}" nbResultsPerPage="100">100</t:link>
+	<t:link classes="btn btn-default" url="${url}" nbResultsPerPage="10" search="${search}">10</t:link>
+	<t:link classes="btn btn-default" url="${url}" nbResultsPerPage="50" search="${search}">50</t:link>
+	<t:link classes="btn btn-default" url="${url}" nbResultsPerPage="100" search="${search}">100</t:link>
 </div>

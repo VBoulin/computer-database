@@ -1,6 +1,8 @@
 package com.excilys.formation.java.controller;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
-import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.service.ServiceFactory;
 import com.excilys.formation.java.validator.Validator;
@@ -30,6 +31,8 @@ public class DashBoard extends HttpServlet {
   private ServiceFactory           service;
 
   private Logger                   logger           = LoggerFactory.getLogger(DashBoard.class);
+
+  private Boolean                  orderAsc         = false;
 
   /**
    * Instantiation of the services
@@ -75,15 +78,23 @@ public class DashBoard extends HttpServlet {
       page.setNbResultsPerPage(nbResults);
     }
 
+    String search = request.getParameter("search");
+    if (search == null) {
+      page.setSearch("");
+    } else {
+      page.setSearch(search.trim());
+    }
+
     page = computerDBService.createPage(page);
 
     int nbPages = 0;
 
-    if (page.getNbResultsPerPage() != 0) {
-      nbPages = page.getNbResults() / page.getNbResultsPerPage();
-      if (page.getNbResults() % page.getNbResultsPerPage() != 0) {
-        nbPages++;
-      }
+    nbPages = page.getNbTotalPage();
+
+    String sortBy = request.getParameter("order");
+
+    if (sortBy != null) {
+      sortElement(page, sortBy);
     }
 
     logger.info("Page created with success");
@@ -95,6 +106,27 @@ public class DashBoard extends HttpServlet {
     RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 
     dispatcher.forward(request, response);
+  }
+
+  /**
+   * Sort the list of elements of a page
+   * @param page Page containing the list of elements
+   * @param order Parameter by which the list is sorted
+   */
+  public void sortElement(Page<Computer> page, String sortBy) {
+    List<Computer> list = page.getList();
+    for (Computer c : list) {
+      c.setComparison(sortBy);
+    }
+    Collections.sort(list);
+
+    orderAsc = !orderAsc;
+
+    if (!orderAsc) {
+      Collections.reverse(list);
+    }
+
+    logger.info("List of computer sorted with success");
   }
 
 }

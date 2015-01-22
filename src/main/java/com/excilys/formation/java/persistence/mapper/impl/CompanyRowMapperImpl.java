@@ -26,12 +26,10 @@ public class CompanyRowMapperImpl implements RowMapper<Company> {
       return null;
     }
     try {
-      while (rs.next()) {
         Long id = rs.getLong("id");
         String name = rs.getString("name");
         Company.Builder b = Company.builder();
         company = b.id(id).name(name).build();
-      }
     } catch (SQLException e) {
       logger.error("SQLException while mapping a company");
       throw new PersistenceException(e.getMessage(), e);
@@ -55,11 +53,7 @@ public class CompanyRowMapperImpl implements RowMapper<Company> {
     }
     try {
       while (rs.next()) {
-        Long id = rs.getLong("id");
-        String name = rs.getString("name");
-
-        Company.Builder b = Company.builder();
-        company = b.id(id).name(name).build();
+        company = mapRow(rs);
 
         companies.add(company);
       }

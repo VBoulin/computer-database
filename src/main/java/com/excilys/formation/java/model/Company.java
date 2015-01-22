@@ -1,8 +1,8 @@
 package com.excilys.formation.java.model;
 
 public class Company {
-  public Long   id;
-  public String name;
+  private Long   id;
+  private String name;
 
   //------------------------------
   //Constructors

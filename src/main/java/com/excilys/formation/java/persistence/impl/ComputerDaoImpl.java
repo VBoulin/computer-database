@@ -28,6 +28,7 @@ public enum ComputerDaoImpl implements ComputerDao {
    * Singleton : provide the access service to the database (company)
    */
   private ComputerDaoImpl() {}
+
   /**
    * Add one computer in the database
    * @param o : computer that needs to be added to the database
@@ -61,7 +62,7 @@ public enum ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with create()");
       throw new PersistenceException(e.getMessage(), e);
-    } catch (NullPointerException ne){
+    } catch (NullPointerException ne) {
       logger.error("NullError with create()");
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
@@ -95,7 +96,7 @@ public enum ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with getOne()");
       throw new PersistenceException(e.getMessage(), e);
-    } catch (NullPointerException ne){
+    } catch (NullPointerException ne) {
       logger.error("NullError with getOne()");
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
@@ -139,7 +140,7 @@ public enum ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with update()");
       throw new PersistenceException(e.getMessage(), e);
-    } catch (NullPointerException ne){
+    } catch (NullPointerException ne) {
       logger.error("NullError with update()");
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
@@ -166,7 +167,7 @@ public enum ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with delete()");
       throw new PersistenceException(e.getMessage(), e);
-    } catch (NullPointerException ne){
+    } catch (NullPointerException ne) {
       logger.error("NullError with delete()");
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
@@ -188,8 +189,9 @@ public enum ComputerDaoImpl implements ComputerDao {
     List<Computer> computers;
 
     String countQuery = "SELECT COUNT(id) as total FROM computer";
-    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id LIMIT ? OFFSET ? ;";
+    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.name LIKE ? OR cp.name LIKE ? LIMIT ? OFFSET ? ;";
 
+    StringBuilder search = new StringBuilder("%").append(page.getSearch()).append("%");
     try {
       conn = DaoFactory.INSTANCE.getConnection();
 
@@ -200,8 +202,10 @@ public enum ComputerDaoImpl implements ComputerDao {
       page.setNbResults(rs.getInt("total"));
 
       stmt = conn.prepareStatement(query);
-      stmt.setInt(1, page.getNbResultsPerPage());
-      stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
+      stmt.setString(1, search.toString());
+      stmt.setString(2, search.toString());
+      stmt.setInt(3, page.getNbResultsPerPage());
+      stmt.setInt(4, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
 
       rs = stmt.executeQuery();
 
@@ -213,7 +217,7 @@ public enum ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with createPage()");
       throw new PersistenceException(e.getMessage(), e);
-    } catch (NullPointerException ne){
+    } catch (NullPointerException ne) {
       logger.error("NullError with createPage()");
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
