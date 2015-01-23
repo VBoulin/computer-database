@@ -100,7 +100,7 @@ public class Validator {
     }
   }
 
-  public static boolean validComputerDTO(ComputerDto dto) {
+  public static boolean isComputerDTO(ComputerDto dto) {
     if (dto == null) {
       return false;
     }

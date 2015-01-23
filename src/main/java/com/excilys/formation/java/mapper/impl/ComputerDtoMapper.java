@@ -15,7 +15,7 @@ import com.excilys.formation.java.validator.Validator;
 public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
 
   public Computer fromDto(ComputerDto dto) {
-    if (!Validator.validComputerDTO(dto)) {
+    if (!Validator.isComputerDTO(dto)) {
       return null;
     }
 

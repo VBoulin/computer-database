@@ -16,10 +16,10 @@ import com.excilys.formation.java.validator.Validator;
 public class UserConsole {
 
   private ComputerDBService computerDBService;
-  private CompanyDBService companyDBService;
+  private CompanyDBService  companyDBService;
 
-  private boolean          stop = false;
-  private Scanner          scanner;
+  private boolean           stop = false;
+  private Scanner           scanner;
 
   /**
    * Constructor
@@ -99,12 +99,13 @@ public class UserConsole {
    * Display the content of the list
    * @param companies : list of company
    */
-  public void showComputerPage(List<Computer> computers){
-    for(int i=0;i<computers.size();i++){
-      System.out.println(new StringBuilder("Id : ").append(computers.get(i).getId()).append(" | Name : ")
-          .append(computers.get(i).getName()));
+  public void showComputerPage(List<Computer> computers) {
+    for (int i = 0; i < computers.size(); i++) {
+      System.out.println(new StringBuilder("Id : ").append(computers.get(i).getId())
+          .append(" | Name : ").append(computers.get(i).getName()));
     }
   }
+
   /**
    * Retrieve a list containing all the computers and display them in a page.
    */
@@ -148,12 +149,13 @@ public class UserConsole {
    * Display the content of the list
    * @param companies : list of company
    */
-  public void showCompanyPage(List<Company> companies){
-    for(int i=0;i<companies.size();i++){
-      System.out.println(new StringBuilder("Id : ").append(companies.get(i).getId()).append(" | Name : ")
-          .append(companies.get(i).getName()));
+  public void showCompanyPage(List<Company> companies) {
+    for (int i = 0; i < companies.size(); i++) {
+      System.out.println(new StringBuilder("Id : ").append(companies.get(i).getId())
+          .append(" | Name : ").append(companies.get(i).getName()));
     }
   }
+
   /**
    * Retrieve a list containing all the companies and display them in a page.
    */
@@ -166,7 +168,7 @@ public class UserConsole {
     //Show the content of the page
     System.out.println("Number of results found : " + page.getNbResults());
     showCompanyPage(page.getList());
-    
+
     do {
       do {
         System.out.print("<- Enter 1 | Enter 2 ->       Enter 0 to quit : ");
@@ -206,7 +208,7 @@ public class UserConsole {
     } while (!Validator.isID(input));
 
     Computer computer = computerDBService.getOne(Long.parseLong(input));
-    
+
     System.out.println(computer.toString());
   }
 
@@ -218,10 +220,10 @@ public class UserConsole {
     String input;
     Company company = null;
 
-    do{
+    do {
       System.out.print("Enter computer name : ");
       input = scanner.next().trim();
-    }while(!Validator.isName(input));
+    } while (!Validator.isName(input));
 
     //computer builder
     Computer.Builder b = Computer.builder(input);
@@ -250,8 +252,8 @@ public class UserConsole {
     } while (!input.equals("0") && !Validator.isID(input));
 
     if (!input.equals("0")) {
-      company=companyDBService.getOne(Long.parseLong(input));
-      if(company!=null)
+      company = companyDBService.getOne(Long.parseLong(input));
+      if (company != null)
         b.company(companyDBService.getOne(Long.parseLong(input)));
     }
 
@@ -278,7 +280,7 @@ public class UserConsole {
 
     id = Long.parseLong(input);
     Computer computer = computerDBService.getOne(id);
-    
+
     //Check if the computer exist in the database
     if (computer == null) {
       System.out.println("Computer not found.");
@@ -316,8 +318,8 @@ public class UserConsole {
       } while (!input.equals("0") && !Validator.isID(input));
 
       if (!input.equals("0")) {
-        company=companyDBService.getOne(Long.parseLong(input));
-        if(company!=null)
+        company = companyDBService.getOne(Long.parseLong(input));
+        if (company != null)
           b.company(companyDBService.getOne(Long.parseLong(input)));
       }
 
@@ -341,15 +343,15 @@ public class UserConsole {
       System.out.print("Enter computer id : ");
       input = scanner.next().trim();
     } while (!Validator.isID(input));
-    
-    id=Long.parseLong(input);
+
+    id = Long.parseLong(input);
     Computer computer = computerDBService.getOne(id);
 
-    if(computer != null){
+    if (computer != null) {
       //Delete the computer in the database
       computerDBService.delete(id);
       System.out.println("Computer deleted with success.");
-    }else{
+    } else {
       System.out.println("Computer not found.");
     }
   }
@@ -366,19 +368,20 @@ public class UserConsole {
       System.out.print("Enter company id : ");
       input = scanner.next().trim();
     } while (!Validator.isID(input));
-    
-    id=Long.parseLong(input);
+
+    id = Long.parseLong(input);
     Company company = companyDBService.getOne(id);
 
-    if(company != null){
+    if (company != null) {
       //Delete the computer in the database
       companyDBService.delete(id);
-      System.out.println("Company deleted with success. Computers associated with that company deleted with success.");
-    }else{
+      System.out
+          .println("Company deleted with success. Computers associated with that company deleted with success.");
+    } else {
       System.out.println("Company not found.");
     }
   }
-  
+
   /**
    * Main function
    * Instantiation of the console
