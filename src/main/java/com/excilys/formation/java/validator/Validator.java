@@ -1,5 +1,6 @@
 package com.excilys.formation.java.validator;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.excilys.formation.java.dto.ComputerDto;
@@ -110,16 +111,55 @@ public class Validator {
     if (!isName(dto.getName())) {
       return false;
     }
-    if (!isDate(dto.getIntroduced())) {
-      return false;
+    if (dto.getIntroduced() != null) {
+      if (!isDate(dto.getIntroduced())) {
+        return false;
+      }
     }
-    if (!isDate(dto.getDiscontinued())) {
-      return false;
+    if (dto.getDiscontinued() != null) {
+      if (!isDate(dto.getDiscontinued())) {
+        return false;
+      }
     }
-    if (dto.getIdCompany() < 0) {
-      return false;
+    if (dto.getIdCompany() != null) {
+      if (!isID(dto.getIdCompany())) {
+        return false;
+      }
     }
+
     return true;
+  }
+
+  public static boolean isComputerDTO(ComputerDto dto, Map<String, String> error) {
+    if (dto == null) {
+      return false;
+    }
+    if (dto.getId() < 0) {
+      return false;
+    }
+    if (!isName(dto.getName())) {
+      error.put("name", "Incorrect name : you must enter a name");
+    }
+    if (dto.getIntroduced() != null) {
+      if (!isDate(dto.getIntroduced())) {
+        error.put("introduced", "Incorrect date format : yyyy-mm-dd");
+      }
+    }
+    if (dto.getDiscontinued() != null) {
+      if (!isDate(dto.getDiscontinued())) {
+        error.put("discontinued", "Incorrect date format : yyyy-mm-dd");
+      }
+    }
+    if (dto.getIdCompany() != null) {
+      if (!isID(dto.getIdCompany())) {
+        error.put("companyId", "Incorrect Company identifier");
+      }
+    }
+
+    if (error.isEmpty())
+      return true;
+    else
+      return false;
   }
 
 }

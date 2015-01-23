@@ -15,37 +15,50 @@ import org.slf4j.LoggerFactory;
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.persistence.impl.CompanyDaoImpl;
 import com.excilys.formation.java.persistence.impl.ComputerDaoImpl;
+import com.jolbox.bonecp.BoneCP;
+import com.jolbox.bonecp.BoneCPConfig;
 
 public enum DaoFactory {
 
   INSTANCE;
 
-  private static final String URL;
-  private static final String USR;
-  private static final String PASSWORD;
+  private static Logger      logger = LoggerFactory.getLogger(DaoFactory.class);
 
-  private static Logger       logger = LoggerFactory.getLogger(DaoFactory.class);
+  private static CompanyDao  companyDao;
+  private static ComputerDao computerDao;
 
-  private static CompanyDao   companyDao;
-  private static ComputerDao  computerDao;
+  private static BoneCP      boneCp;
 
   static {
-    Properties prop = new Properties();
+    Properties properties = new Properties();
     InputStream stream = null;
     try {
       stream = DaoFactory.class.getClassLoader().getResourceAsStream("db.properties");
-      prop.load(stream);
+      properties.load(stream);
 
       //Load the Driver class
-      Class.forName(prop.getProperty("db.driver"));
-      URL = prop.getProperty("db.url");
-      USR = prop.getProperty("db.usr");
-      PASSWORD = prop.getProperty("db.password");
+      Class.forName(properties.getProperty("db.driver"));
+
+      BoneCPConfig connectionConfig = new BoneCPConfig();
+
+      connectionConfig.setJdbcUrl(properties.getProperty("db.url"));
+      connectionConfig.setUser(properties.getProperty("db.usr"));
+      connectionConfig.setPassword(properties.getProperty("db.password"));
+
+      connectionConfig.setMinConnectionsPerPartition(5);
+      connectionConfig.setMaxConnectionsPerPartition(15);
+
+      boneCp = new BoneCP(connectionConfig);
+
       logger.info("Properties loaded with success!");
     } catch (final IOException e) {
       logger.error("Couldn't load db.properties");
       throw new PersistenceException(e.getMessage(), e);
     } catch (ClassNotFoundException e) {
+      logger.error("Driver problems");
+      throw new PersistenceException(e.getMessage(), e);
+    } catch (SQLException e) {
+      logger.error("Connection problems");
       throw new PersistenceException(e.getMessage(), e);
     }
     companyDao = CompanyDaoImpl.INSTANCE;
@@ -75,7 +88,7 @@ public enum DaoFactory {
   public Connection getConnection() {
     Connection conn = null;
     try {
-      conn = DriverManager.getConnection(URL, USR, PASSWORD);
+      conn = boneCp.getConnection();
     } catch (SQLException e) {
       logger.error("SQLError while creating connection");
       throw new PersistenceException(e.getMessage(), e);

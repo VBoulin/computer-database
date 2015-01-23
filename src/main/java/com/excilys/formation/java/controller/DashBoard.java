@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.formation.java.dto.ComputerDto;
+import com.excilys.formation.java.mapper.DtoMapper;
+import com.excilys.formation.java.mapper.impl.ComputerDtoMapper;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.OrderBy;
 import com.excilys.formation.java.model.Page;
@@ -27,14 +30,15 @@ import com.excilys.formation.java.validator.Validator;
  */
 @WebServlet("/dashBoard")
 public class DashBoard extends HttpServlet {
-  private static final long        serialVersionUID = 1L;
+  private static final long                serialVersionUID = 1L;
 
-  private static ComputerDBService computerDBService;
-  private ServiceFactory           service;
+  private ComputerDBService                computerDBService;
+  private DtoMapper<ComputerDto, Computer> computerDtoMapper;
 
-  private Logger                   logger           = LoggerFactory.getLogger(DashBoard.class);
+  private ServiceFactory                   service;
 
-  private Boolean                  orderAsc         = false;
+  private Logger                           logger           = LoggerFactory
+                                                                .getLogger(DashBoard.class);
 
   /**
    * Instantiation of the services
@@ -44,6 +48,7 @@ public class DashBoard extends HttpServlet {
     super();
     service = ServiceFactory.getInstance();
     computerDBService = service.getComputerDBService();
+    computerDtoMapper = new ComputerDtoMapper();
   }
 
   /**
@@ -90,44 +95,44 @@ public class DashBoard extends HttpServlet {
     String sortBy = request.getParameter("sort");
 
     SortBy sort = SortBy.getInstance(sortBy);
-    
+
     if (sort == null) {
       sort = SortBy.ID;
     }
-    
+
     page.setSort(sort);
 
     String orderBy = request.getParameter("order");
-    
-    if(orderBy!=null){
-      orderBy=orderBy.toUpperCase();
+
+    if (orderBy != null) {
+      orderBy = orderBy.toUpperCase();
     }
 
     OrderBy order = OrderBy.getInstance(orderBy);
-    
-    if(OrderBy.getInstance("ASC").equals(order)){
+
+    if (OrderBy.getInstance("ASC").equals(order)) {
       order = OrderBy.DESC;
-    }else{
+    } else {
       order = OrderBy.ASC;
     }
-    
     if (order == null) {
       order = OrderBy.ASC;
     }
-    
+
     page.setOrder(order);
-    
+
     page = computerDBService.createPage(page);
+    logger.info("Page created with success");
 
     int nbPages = 0;
 
     nbPages = page.getNbTotalPage();
 
-    logger.info("Page created with success");
-
     request.setAttribute("nbPages", nbPages);
 
-    request.setAttribute("page", page);
+    Page<ComputerDto> pageDto = computerDtoMapper.toDto(page);
+
+    request.setAttribute("page", pageDto);
 
     RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 

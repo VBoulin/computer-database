@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.dto.ComputerDto;
+import com.excilys.formation.java.mapper.DtoMapper;
 import com.excilys.formation.java.mapper.impl.ComputerDtoMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
@@ -38,6 +39,8 @@ public class EditComputer extends HttpServlet {
   private ComputerDBService computerDBService;
   private CompanyDBService  companyDBService;
   private ServiceFactory    service;
+  
+  private DtoMapper<ComputerDto, Computer> computerDtoMapper;
 
   private Logger            logger           = LoggerFactory.getLogger(EditComputer.class);
 
@@ -49,6 +52,7 @@ public class EditComputer extends HttpServlet {
     service = ServiceFactory.getInstance();
     computerDBService = service.getComputerDBService();
     companyDBService = service.getCompanyDBService();
+    computerDtoMapper = new ComputerDtoMapper();
   }
 
   /**
@@ -66,8 +70,7 @@ public class EditComputer extends HttpServlet {
 
       Computer computer = computerDBService.getOne(id);
       
-      ComputerDtoMapper mapper = new ComputerDtoMapper();
-      ComputerDto computerDto = mapper.toDto(computer);
+      ComputerDto computerDto = computerDtoMapper.toDto(computer);
       
       request.setAttribute("computer", computerDto);
     }
@@ -127,48 +130,36 @@ public class EditComputer extends HttpServlet {
       return null;
     }
 
-    Computer.Builder builder = Computer.builder();
+    ComputerDto.Builder dtoBuilder = ComputerDto.builder();
 
-    String name = request.getParameter("name");
-    if (Validator.isName(name)) {
-      builder.name(name);
-    } else {
-      error.put("name", "Incorrect name : you must enter a name");
+    String name = request.getParameter("name").trim();
+    if(!name.trim().isEmpty()){
+      dtoBuilder.name(name);
     }
-
-    String introduced = request.getParameter("introduced");
-    if (!introduced.trim().isEmpty()) {
-      if (Validator.isDate(introduced)) {
-        builder.introduced(LocalDate.parse(introduced, DateTimeFormatter.ISO_LOCAL_DATE));
-      } else {
-        error.put("introduced", "Incorrect date format : yyyy-mm-dd");
-      }
+    String introduced = request.getParameter("introduced").trim();
+    if(!introduced.trim().isEmpty()){
+      dtoBuilder.introduced(introduced);
     }
-
-    String discontinued = request.getParameter("discontinued");
-    if (!discontinued.trim().isEmpty()) {
-      if (Validator.isDate(discontinued)) {
-        builder.discontinued(LocalDate.parse(discontinued, DateTimeFormatter.ISO_LOCAL_DATE));
-      } else {
-        error.put("discontinued", "Incorrect date format : yyyy-mm-dd");
-      }
+    String discontinued = request.getParameter("discontinued").trim();
+    if(!discontinued.trim().isEmpty()){
+      dtoBuilder.discontinued(discontinued);
     }
-
-    String companyId = request.getParameter("companyId");
-
-    if (!companyId.trim().equals("0") || !companyId.trim().isEmpty()) {
+    String companyId = request.getParameter("companyId").trim();
+    
+    ComputerDto computerDto = dtoBuilder.build();
+    
+    Company company = null;
+    if (!companyId.trim().equals("0") || companyId != null) {
       if (Validator.isID(companyId)) {
-        Company company = companyDBService.getOne(Long.valueOf(companyId));
-        if (company != null) {
-          builder.company(company);
-        }
+        company = companyDBService.getOne(Long.valueOf(companyId));
       } else {
         error.put("companyId", "Incorrect Company identifier");
       }
     }
 
-    if (error.isEmpty()) {
-      computer = builder.build();
+    if (Validator.isComputerDTO(computerDto, error)) {
+      computer = computerDtoMapper.fromDto(computerDto);
+      computer.setCompany(company);
     } else {
       request.setAttribute("error", error);
       return null;

@@ -82,7 +82,7 @@ pageEncoding="UTF-8"%>
 								${computer.discontinued}
 							</td>
 							<td>
-								${computer.company.name}
+								${computer.companyName}
 							</td>
 						</tr>
 					</c:forEach>

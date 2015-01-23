@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.formation.java.dto.ComputerDto;
+import com.excilys.formation.java.dto.ComputerDto.Builder;
+import com.excilys.formation.java.mapper.DtoMapper;
+import com.excilys.formation.java.mapper.impl.ComputerDtoMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.service.CompanyDBService;
@@ -29,13 +33,15 @@ import com.excilys.formation.java.validator.Validator;
  */
 @WebServlet("/addComputer")
 public class AddComputer extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+  private static final long                serialVersionUID = 1L;
 
-  private ComputerDBService computerDBService;
-  private CompanyDBService  companyDBService;
-  private ServiceFactory    service;
+  private ComputerDBService                computerDBService;
+  private CompanyDBService                 companyDBService;
+  private ServiceFactory                   service;
+  private DtoMapper<ComputerDto, Computer> computerDtoMapper;
 
-  private Logger            logger           = LoggerFactory.getLogger(AddComputer.class);
+  private Logger                           logger           = LoggerFactory
+                                                                .getLogger(AddComputer.class);
 
   /**
    * Instantiation of the services 
@@ -46,6 +52,7 @@ public class AddComputer extends HttpServlet {
     service = ServiceFactory.getInstance();
     companyDBService = service.getCompanyDBService();
     computerDBService = service.getComputerDBService();
+    computerDtoMapper = new ComputerDtoMapper();
   }
 
   /**
@@ -95,53 +102,39 @@ public class AddComputer extends HttpServlet {
    * @return A computer or null if there was an error
    */
   public Computer addComputer(HttpServletRequest request) {
-    Computer.Builder b = Computer.builder();
+    ComputerDto.Builder dtoBuilder = ComputerDto.builder();
 
     Map<String, String> error = new HashMap<String, String>();
 
-    String name = request.getParameter("name");
-
-    if (Validator.isName(name)) {
-      b.name(name);
-    } else {
-      error.put("name", "Incorrect name : you must enter a name");
+    String name = request.getParameter("name").trim();
+    if (!name.trim().isEmpty()) {
+      dtoBuilder.name(name);
     }
-
-    String introduced = request.getParameter("introduced");
-
+    String introduced = request.getParameter("introduced").trim();
     if (!introduced.trim().isEmpty()) {
-      if (Validator.isDate(introduced)) {
-        b.introduced(LocalDate.parse(introduced, DateTimeFormatter.ISO_LOCAL_DATE));
-      } else {
-        error.put("introduced", "Incorrect date format : yyyy-mm-dd");
-      }
+      dtoBuilder.introduced(introduced);
     }
-
-    String discontinued = request.getParameter("discontinued");
-
+    String discontinued = request.getParameter("discontinued").trim();
     if (!discontinued.trim().isEmpty()) {
-      if (Validator.isDate(discontinued)) {
-        b.discontinued(LocalDate.parse(discontinued, DateTimeFormatter.ISO_LOCAL_DATE));
-      } else {
-        error.put("discontinued", "Incorrect date format : yyyy-mm-dd");
-      }
+      dtoBuilder.discontinued(discontinued);
     }
+    String companyId = request.getParameter("companyId").trim();
 
-    String companyId = request.getParameter("companyId");
+    ComputerDto computerDto = dtoBuilder.build();
 
-    if (!companyId.trim().equals("0") || !companyId.trim().isEmpty()) {
+    Company company = null;
+    if (!companyId.trim().equals("0") || companyId != null) {
       if (Validator.isID(companyId)) {
-        Company company = companyDBService.getOne(Long.valueOf(companyId));
-        if (company != null) {
-          b.company(company);
-        }
+        company = companyDBService.getOne(Long.valueOf(companyId));
       } else {
         error.put("companyId", "Incorrect Company identifier");
       }
     }
 
-    if (error.isEmpty()) {
-      return b.build();
+    if (Validator.isComputerDTO(computerDto, error)) {
+      Computer computer = computerDtoMapper.fromDto(computerDto);
+      computer.setCompany(company);
+      return computer;
     } else {
       request.setAttribute("error", error);
       return null;

@@ -2,11 +2,11 @@ package com.excilys.formation.java.dto;
 
 public class ComputerDto {
 
-  private Long   id;
+  private long   id;
   private String name;
   private String introduced;
   private String discontinued;
-  private Long   idCompany;
+  private String idCompany;
   private String companyName;
 
   //------------------------------
@@ -25,7 +25,7 @@ public class ComputerDto {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -53,11 +53,11 @@ public class ComputerDto {
     this.discontinued = discontinued;
   }
 
-  public long getIdCompany() {
+  public String getIdCompany() {
     return idCompany;
   }
 
-  public void setIdCompany(long company) {
+  public void setIdCompany(String company) {
     this.idCompany = company;
   }
 
@@ -78,11 +78,11 @@ public class ComputerDto {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((companyName == null) ? 0 : companyName.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
-    result = prime * result + (int) (idCompany ^ (idCompany >>> 32));
     result = prime * result + (int) (id ^ (id >>> 32));
+    result = prime * result + ((idCompany == null) ? 0 : idCompany.hashCode());
     result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
   }
 
@@ -100,34 +100,37 @@ public class ComputerDto {
         return false;
     } else if (!companyName.equals(other.companyName))
       return false;
-    if (name == null) {
-      if (other.name != null)
-        return false;
-    } else if (!name.equals(other.name))
-      return false;
     if (discontinued == null) {
       if (other.discontinued != null)
         return false;
     } else if (!discontinued.equals(other.discontinued))
       return false;
-    if (idCompany != other.idCompany)
-      return false;
     if (id != other.id)
+      return false;
+    if (idCompany == null) {
+      if (other.idCompany != null)
+        return false;
+    } else if (!idCompany.equals(other.idCompany))
       return false;
     if (introduced == null) {
       if (other.introduced != null)
         return false;
     } else if (!introduced.equals(other.introduced))
       return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
     return true;
   }
 
   @Override
   public String toString() {
-    return new StringBuilder("ComputerDto [idComputer=").append(id)
-        .append(", computerName=").append(name).append(", introduced=").append(introduced)
-        .append(", discontinued=").append(discontinued).append(", idCompany=").append(idCompany)
-        .append(", companyName=").append(companyName).append("]").toString();
+    return new StringBuilder("ComputerDto [idComputer=").append(id).append(", computerName=")
+        .append(name).append(", introduced=").append(introduced).append(", discontinued=")
+        .append(discontinued).append(", idCompany=").append(idCompany).append(", companyName=")
+        .append(companyName).append("]").toString();
   }
 
   //------------------------------
@@ -165,7 +168,7 @@ public class ComputerDto {
       return this;
     }
 
-    public Builder idCompany(Long idCompany) {
+    public Builder idCompany(String idCompany) {
       computerDTO.idCompany = idCompany;
       return this;
     }
