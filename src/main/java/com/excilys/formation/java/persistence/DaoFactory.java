@@ -100,12 +100,16 @@ public enum DaoFactory {
     }
   }
 
+  /**
+   * RollBack
+   * @param conn
+   */
   public void rollback(Connection conn) {
     if (conn != null) {
       try {
         conn.rollback();
       } catch (SQLException e) {
-        logger.warn("Couldn't Rollback");
+        logger.error("Couldn't Rollback");
         throw new PersistenceException(e.getMessage(), e);
       }
     }

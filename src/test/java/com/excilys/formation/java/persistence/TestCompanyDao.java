@@ -17,11 +17,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
+import com.excilys.formation.java.mapper.impl.CompanyRowMapperImpl;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
-import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestCompanyDao {

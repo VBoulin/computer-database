@@ -1,10 +1,11 @@
 <%@ tag language="java" pageEncoding="UTF-8" description="Pagination"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
 <%@ attribute name="url" required="true"%>
 <%@ attribute name="nbPages" type="java.lang.Integer" required="true"%>
 <%@ attribute name="pageNumber" type="java.lang.Integer" required="true"%>
-<%@ attribute name="nbResultsPerPage" type="java.lang.Integer" required="true"%>
+<%@ attribute name="nbResultsPerPage" required="true"%>
 <%@ attribute name="search" required="false"%>
 <%@ attribute name="sort" required="false"%>
 <%@ attribute name="order" required="false"%>
@@ -12,7 +13,7 @@
 
 
 <ul class="pagination">
-	<c:if test="${pageNumber != 1}">
+	<c:if test="${pageNumber > 1}">
 		<li>
 			<t:link url="${url}" pageNumber="${pageNumber-1}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}"><span aria-hidden="true">&laquo;</span></t:link>
 		</li>
@@ -36,8 +37,7 @@
 		</li>
 	</c:if>
 
-	<c:forEach begin="${pageNumber}" end="${pageNumber+3}"
-		var="i">
+	<c:forEach begin="${pageNumber}" end="${pageNumber+3}" var="i">
 
 		<c:if test="${i <= nbPages}">
 			<c:if test="${pageNumber == i}">
@@ -54,7 +54,7 @@
 
 	</c:forEach>
 
-	<c:if test="${pageNumber != nbPages}">
+	<c:if test="${pageNumber < nbPages}">
 		<li>
 			<t:link url="${url}" pageNumber="${pageNumber+1}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}"><span aria-hidden="true">&raquo;</span></t:link>
 		</li>

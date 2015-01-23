@@ -1,5 +1,6 @@
 package com.excilys.formation.java.persistence;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.formation.java.model.Company;
@@ -26,4 +27,9 @@ public interface CompanyDao {
    * @return page Next page requested containing all the necessary informations
    */
   Page<Company> createPage(Page<Company> page);
+  
+  /**
+   * Delete a company based on her id
+   */
+  void delete(Long id, Connection connection);
 }

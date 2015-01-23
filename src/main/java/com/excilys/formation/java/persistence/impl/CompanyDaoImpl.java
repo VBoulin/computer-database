@@ -11,18 +11,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
+import com.excilys.formation.java.mapper.impl.CompanyRowMapperImpl;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.DaoFactory;
-import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
 
 public enum CompanyDaoImpl implements CompanyDao {
 
   INSTANCE;
 
-  private Logger logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
-  
+  private Logger               logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
+
   private CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
 
   /**
@@ -30,10 +30,10 @@ public enum CompanyDaoImpl implements CompanyDao {
    */
   private CompanyDaoImpl() {}
 
+  private static final String SELECT_ONE_COMPANY_QUERY = "SELECT * FROM company WHERE id = ?;";
+
   /**
-   * retrieve one company from the database
-   * @param id Id of the company
-   * @return The company requested or null
+   * {@inheritDoc}
    */
   public Company getOne(Long id) {
     Connection conn = null;
@@ -41,11 +41,9 @@ public enum CompanyDaoImpl implements CompanyDao {
     ResultSet rs = null;
     Company company = null;
 
-    String query = "SELECT * FROM company WHERE id = ?;";
-
     try {
       conn = DaoFactory.INSTANCE.getConnection();
-      stmt = conn.prepareStatement(query);
+      stmt = conn.prepareStatement(SELECT_ONE_COMPANY_QUERY);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
 
@@ -66,10 +64,11 @@ public enum CompanyDaoImpl implements CompanyDao {
     return company;
   }
 
+  private static final String COUNT_QUERY     = "SELECT COUNT(id) AS total FROM company";
+  private static final String PAGE_LIST_QUERY = "SELECT * FROM company LIMIT ? OFFSET ? ;";
+
   /**
-   * Create one page by requesting the necessary informations
-   * @param page Previous page
-   * @return page Next page requested containing all the necessary informations
+   * {@inheritDoc}
    */
   public Page<Company> createPage(Page<Company> page) {
 
@@ -79,19 +78,16 @@ public enum CompanyDaoImpl implements CompanyDao {
     ResultSet rs = null;
     List<Company> companies;
 
-    String countQuery = "SELECT COUNT(id) AS total FROM company";
-    String query = "SELECT * FROM company LIMIT ? OFFSET ? ;";
-
     try {
       conn = DaoFactory.INSTANCE.getConnection();
 
       countStmt = conn.createStatement();
 
-      rs = countStmt.executeQuery(countQuery);
+      rs = countStmt.executeQuery(COUNT_QUERY);
       rs.next();
       page.setNbResults(rs.getInt("total"));
 
-      stmt = conn.prepareStatement(query);
+      stmt = conn.prepareStatement(PAGE_LIST_QUERY);
       stmt.setInt(1, page.getNbResultsPerPage());
       stmt.setInt(2, (page.getPageNumber() - 1) * page.getNbResultsPerPage());
 
@@ -114,6 +110,11 @@ public enum CompanyDaoImpl implements CompanyDao {
     return page;
   }
 
+  private static final String SELECT_ALL_COMPANIES_QUERY = "SELECT * FROM company;";
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<Company> getAll() {
     Connection conn = null;
@@ -121,16 +122,13 @@ public enum CompanyDaoImpl implements CompanyDao {
     ResultSet rs = null;
     List<Company> companies;
 
-    String query = "SELECT * FROM company;";
-
     try {
       conn = DaoFactory.INSTANCE.getConnection();
 
       stmt = conn.createStatement();
 
-      rs = stmt.executeQuery(query);
+      rs = stmt.executeQuery(SELECT_ALL_COMPANIES_QUERY);
 
-      CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
       companies = mapper.mapRowList(rs);
 
     } catch (SQLException e) {
@@ -141,6 +139,25 @@ public enum CompanyDaoImpl implements CompanyDao {
       DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
     }
     return companies;
+  }
+
+  private static final String DELETE_QUERY = "DELETE company FROM company WHERE id = ?";
+
+  /**
+   * {@inheritDoc}
+   */
+  public void delete(Long id, Connection connection) {
+    PreparedStatement statement = null;
+    try {
+      statement = connection.prepareStatement(DELETE_QUERY);
+      statement.setLong(1, id);
+      statement.executeUpdate();
+    } catch (final SQLException e) {
+      logger.error("SQLError with delete()");
+      throw new PersistenceException(e.getMessage(), e);
+    } finally {
+      DaoFactory.INSTANCE.closeConnection(null, statement, null);
+    }
   }
 
 }

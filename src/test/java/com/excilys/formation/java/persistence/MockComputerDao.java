@@ -263,4 +263,10 @@ public class MockComputerDao implements ComputerDao {
     return computers;
   }
 
+  @Override
+  public void deleteByCompany(Long id, Connection conn) {
+    // TODO Auto-generated method stub
+    
+  }
+
 }

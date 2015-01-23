@@ -1,4 +1,4 @@
-package com.excilys.formation.java.persistence.mapper.impl;
+package com.excilys.formation.java.mapper.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,10 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
+import com.excilys.formation.java.mapper.RowMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.persistence.DaoFactory;
-import com.excilys.formation.java.persistence.mapper.RowMapper;
 
 public class ComputerRowMapperImpl implements RowMapper<Computer> {
 

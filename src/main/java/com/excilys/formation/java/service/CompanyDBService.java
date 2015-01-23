@@ -26,5 +26,11 @@ public interface CompanyDBService {
    * @return Page with a list
    */
   Page<Company> createPage(Page<Company> page);
+  
+  /**
+   * Delete a company and all the computer referencing that company
+   * @param id id of the company
+   */
+  void delete(Long id);
 
 }

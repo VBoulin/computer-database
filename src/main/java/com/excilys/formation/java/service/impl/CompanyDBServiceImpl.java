@@ -1,26 +1,31 @@
 package com.excilys.formation.java.service.impl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
+import com.excilys.formation.java.persistence.ComputerDao;
 import com.excilys.formation.java.persistence.DaoFactory;
 import com.excilys.formation.java.service.CompanyDBService;
 
 public enum CompanyDBServiceImpl implements CompanyDBService {
-  
+
   INSTANCE;
 
-  private CompanyDao                        companyDao;
+  private CompanyDao  companyDao;
+  private ComputerDao computerDao;
 
-  private Logger logger = LoggerFactory.getLogger(CompanyDBServiceImpl.class);
-  
-  private DaoFactory                        daoFactory;
+  private Logger      logger = LoggerFactory.getLogger(CompanyDBServiceImpl.class);
+
+  private DaoFactory  daoFactory;
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -29,10 +34,11 @@ public enum CompanyDBServiceImpl implements CompanyDBService {
     daoFactory = DaoFactory.INSTANCE;
 
     companyDao = daoFactory.getCompanyDao();
+    computerDao = daoFactory.getComputerDao();
   }
 
   /**
-   * return one company
+   * {@inheritDoc}
    */
   @Override
   public Company getOne(Long id) {
@@ -44,7 +50,7 @@ public enum CompanyDBServiceImpl implements CompanyDBService {
   }
 
   /**
-   * Return a page containing 10 companies
+   * {@inheritDoc}
    */
   @Override
   public Page<Company> createPage(Page<Company> page) {
@@ -56,11 +62,31 @@ public enum CompanyDBServiceImpl implements CompanyDBService {
   }
 
   /**
-   * return a list containing all the companies
+   * {@inheritDoc}
    */
   @Override
   public List<Company> getAll() {
     return companyDao.getAll();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void delete(Long id) {
+    Connection conn = null;
+    try {
+      conn = DaoFactory.INSTANCE.getConnection();
+      conn.setAutoCommit(false);
+      computerDao.deleteByCompany(id, conn);
+      companyDao.delete(id, conn);
+      conn.commit();
+    } catch (PersistenceException | SQLException e) {
+      logger.error("Error with delete()");
+      daoFactory.rollback(conn);
+      throw new PersistenceException(e.getMessage(), e);
+    } finally {
+      daoFactory.closeConnection(conn, null, null);
+    }
   }
 
 }

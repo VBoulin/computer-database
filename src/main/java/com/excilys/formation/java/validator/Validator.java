@@ -2,6 +2,8 @@ package com.excilys.formation.java.validator;
 
 import java.util.regex.Pattern;
 
+import com.excilys.formation.java.dto.ComputerDto;
+
 public class Validator {
 
   private static final String DATE_REGEX = "^[1-2][0-9]{3}-([0][1-9]|1[0-2])-([0-2][1-9]|3[0-1])$";
@@ -78,17 +80,17 @@ public class Validator {
    * @return true if the format is correct
    */
   public static boolean isName(String input) {
-    
+
     if (input == null || input.trim().isEmpty()) {
       return false;
     }
 
     return true;
   }
-  
-  public static boolean isInt(String input){
+
+  public static boolean isInt(String input) {
     if (input == null || input.trim().isEmpty()) {
-        return false;
+      return false;
     }
     Pattern regex = Pattern.compile(ID_REGEX);
     if (regex.matcher(input).find()) {
@@ -96,6 +98,28 @@ public class Validator {
     } else {
       return false;
     }
+  }
+
+  public static boolean validComputerDTO(ComputerDto dto) {
+    if (dto == null) {
+      return false;
+    }
+    if (dto.getIdComputer() < 0) {
+      return false;
+    }
+    if (!isName(dto.getComputerName())) {
+      return false;
+    }
+    if (!isDate(dto.getIntroduced())) {
+      return false;
+    }
+    if (!isDate(dto.getDiscontinued())) {
+      return false;
+    }
+    if (dto.getIdCompany() < 0) {
+      return false;
+    }
+    return true;
   }
 
 }

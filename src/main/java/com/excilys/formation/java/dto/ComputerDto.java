@@ -25,7 +25,7 @@ public class ComputerDto {
     return idComputer;
   }
 
-  public void setIdComputer(final long id) {
+  public void setIdComputer(Long id) {
     this.idComputer = id;
   }
 
@@ -33,7 +33,7 @@ public class ComputerDto {
     return computerName;
   }
 
-  public void setComputerName(final String name) {
+  public void setComputerName(String name) {
     this.computerName = name;
   }
 
@@ -41,7 +41,7 @@ public class ComputerDto {
     return introduced;
   }
 
-  public void setIntroduced(final String introduced) {
+  public void setIntroduced(String introduced) {
     this.introduced = introduced;
   }
 
@@ -49,7 +49,7 @@ public class ComputerDto {
     return discontinued;
   }
 
-  public void setDiscontinued(final String discontinued) {
+  public void setDiscontinued(String discontinued) {
     this.discontinued = discontinued;
   }
 
@@ -57,7 +57,7 @@ public class ComputerDto {
     return idCompany;
   }
 
-  public void setIdCompany(final long company) {
+  public void setIdCompany(Long company) {
     this.idCompany = company;
   }
 
@@ -65,7 +65,7 @@ public class ComputerDto {
     return companyName;
   }
 
-  public void setCompanyName(final String companyName) {
+  public void setCompanyName(String companyName) {
     this.companyName = companyName;
   }
 
@@ -145,7 +145,7 @@ public class ComputerDto {
       computerDTO = new ComputerDto();
     }
 
-    public Builder id(long id) {
+    public Builder id(Long id) {
       computerDTO.idComputer = id;
       return this;
     }
@@ -165,7 +165,7 @@ public class ComputerDto {
       return this;
     }
 
-    public Builder idCompany(long idCompany) {
+    public Builder idCompany(Long idCompany) {
       computerDTO.idCompany = idCompany;
       return this;
     }

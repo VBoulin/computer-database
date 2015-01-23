@@ -1,5 +1,6 @@
 package com.excilys.formation.java.persistence;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.formation.java.model.Computer;
@@ -44,4 +45,9 @@ public interface ComputerDao {
    * @return page Next page requested containing all the necessary informations
    */
   Page<Computer> createPage(Page<Computer> page);
+  
+  /**
+   * Delete a computer based on his company ID
+   */
+  void deleteByCompany(Long id, Connection conn);
 }

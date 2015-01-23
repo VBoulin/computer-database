@@ -12,10 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
+import com.excilys.formation.java.mapper.impl.CompanyRowMapperImpl;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
-import com.excilys.formation.java.persistence.mapper.impl.CompanyRowMapperImpl;
 
 public class MockCompanyDao implements CompanyDao {
 
@@ -139,6 +139,12 @@ public class MockCompanyDao implements CompanyDao {
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
     return companies;
+  }
+
+  @Override
+  public void delete(Long id, Connection connection) {
+    // TODO Auto-generated method stub
+    
   }
 
 }

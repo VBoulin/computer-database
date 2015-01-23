@@ -12,11 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
+import com.excilys.formation.java.mapper.impl.ComputerRowMapperImpl;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.ComputerDao;
 import com.excilys.formation.java.persistence.DaoFactory;
-import com.excilys.formation.java.persistence.mapper.impl.ComputerRowMapperImpl;
 
 public enum ComputerDaoImpl implements ComputerDao {
 
@@ -31,19 +31,18 @@ public enum ComputerDaoImpl implements ComputerDao {
    */
   private ComputerDaoImpl() {}
 
+  private static final String CREATE_QUERY = "INSERT INTO computer(name, introduced, discontinued, company_id)  VALUE (?, ?, ?, ?);";
+
   /**
-   * Add one computer in the database
-   * @param o : computer that needs to be added to the database
+   * {@inheritDoc}
    */
   public void create(Computer o) {
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    String query = "INSERT INTO computer(name, introduced, discontinued, company_id)  VALUE (?, ?, ?, ?);";
-
     try {
       conn = DaoFactory.INSTANCE.getConnection();
-      stmt = conn.prepareStatement(query);
+      stmt = conn.prepareStatement(CREATE_QUERY);
       stmt.setString(1, o.getName());
       if (o.getIntroduced() == null) {
         stmt.setTimestamp(2, null);
@@ -73,10 +72,10 @@ public enum ComputerDaoImpl implements ComputerDao {
     }
   }
 
+  private static final String SELECT_ONE_COMPUTER_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.id = ?";
+
   /**
-   * Retrieve one computer from the database
-   * @param id Id of the computer
-   * @return the computer asked or null
+   * {@inheritDoc}
    */
   public Computer getOne(Long id) {
     Connection conn = null;
@@ -84,14 +83,12 @@ public enum ComputerDaoImpl implements ComputerDao {
     ResultSet rs = null;
     Computer computer = null;
 
-    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.id = ?";
-
     try {
       conn = DaoFactory.INSTANCE.getConnection();
-      stmt = conn.prepareStatement(query);
+      stmt = conn.prepareStatement(SELECT_ONE_COMPUTER_QUERY);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
-      
+
       if (rs.next()) {
         computer = mapper.mapRow(rs);
       }
@@ -109,19 +106,18 @@ public enum ComputerDaoImpl implements ComputerDao {
     return computer;
   }
 
+  private static final String UPDATE_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
+
   /**
-   * Update one computer
-   * @param o computer that needs to be updated in the database
+   * {@inheritDoc}
    */
   public void update(Computer o) {
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    String query = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
-
     try {
       conn = DaoFactory.INSTANCE.getConnection();
-      stmt = conn.prepareStatement(query);
+      stmt = conn.prepareStatement(UPDATE_QUERY);
       stmt.setString(1, o.getName());
       if (o.getIntroduced() == null) {
         stmt.setTimestamp(2, null);
@@ -152,19 +148,18 @@ public enum ComputerDaoImpl implements ComputerDao {
     }
   }
 
+  private static final String DELETE_QUERY = "DELETE FROM computer WHERE id = ?;";
+
   /**
-   * Delete one computer
-   * @param id Id of the computer that needs to be deleted
+   * {@inheritDoc}
    */
   public void delete(Long id) {
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    String query = "DELETE FROM computer WHERE id = ?;";
-
     try {
       conn = DaoFactory.INSTANCE.getConnection();
-      stmt = conn.prepareStatement(query);
+      stmt = conn.prepareStatement(DELETE_QUERY);
       stmt.setLong(1, id);
       stmt.executeUpdate();
     } catch (SQLException e) {
@@ -179,10 +174,10 @@ public enum ComputerDaoImpl implements ComputerDao {
     }
   }
 
+  private static final String COUNT_QUERY = "SELECT COUNT(id) as total FROM computer";
+
   /**
-   * Create one page by requesting the necessary informations
-   * @param page Previous page
-   * @return page Next page requested containing all the necessary informations
+   * {@inheritDoc}
    */
   public Page<Computer> createPage(Page<Computer> page) {
     Connection conn = null;
@@ -191,9 +186,8 @@ public enum ComputerDaoImpl implements ComputerDao {
     ResultSet rs = null;
     List<Computer> computers;
 
-    String countQuery = "SELECT COUNT(id) as total FROM computer";
-    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.name LIKE ? OR cp.name LIKE ? ORDER BY " 
-          +page.getSort().getColumn()+" "+page.getOrder().getOrder()+" LIMIT ? OFFSET ? ;";
+    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.name LIKE ? OR cp.name LIKE ? ORDER BY "
+        + page.getSort().getColumn() + " " + page.getOrder().getOrder() + " LIMIT ? OFFSET ? ;";
 
     StringBuilder search = new StringBuilder("%").append(page.getSearch()).append("%");
     try {
@@ -201,7 +195,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 
       countStmt = conn.createStatement();
 
-      rs = countStmt.executeQuery(countQuery);
+      rs = countStmt.executeQuery(COUNT_QUERY);
       rs.next();
       page.setNbResults(rs.getInt("total"));
 
@@ -230,6 +224,11 @@ public enum ComputerDaoImpl implements ComputerDao {
     return page;
   }
 
+  private static final String SELECT_ALL_COMPUTERS = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id ;";
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<Computer> getAll() {
     // TODO Auto-generated method stub
@@ -238,16 +237,13 @@ public enum ComputerDaoImpl implements ComputerDao {
     ResultSet rs = null;
     List<Computer> computers;
 
-    String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id ;";
-
     try {
       conn = DaoFactory.INSTANCE.getConnection();
 
-      stmt = conn.prepareStatement(query);
+      stmt = conn.prepareStatement(SELECT_ALL_COMPUTERS);
 
       rs = stmt.executeQuery();
 
-      ComputerRowMapperImpl mapper = new ComputerRowMapperImpl();
       computers = mapper.mapRowList(rs);
 
     } catch (SQLException e) {
@@ -258,6 +254,26 @@ public enum ComputerDaoImpl implements ComputerDao {
       DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
     }
     return computers;
+  }
+
+  private static final String DELETE_COMPANY_QUERY = "DELETE computer FROM computer WHERE computer.company_id = ?";
+
+  /**
+   * {@inheritDoc}
+   */
+  public void deleteByCompany(Long id, Connection conn) {
+    PreparedStatement stmt = null;
+    try {
+      stmt = conn.prepareStatement(DELETE_COMPANY_QUERY);
+      stmt.setLong(1, id);
+      stmt.executeUpdate();
+    } catch (final SQLException e) {
+      logger.error("SQLError with deleteByCompany()");
+      throw new PersistenceException(e.getMessage(), e);
+    } finally {
+      DaoFactory.INSTANCE.closeConnection(null, stmt, null);
+    }
+
   }
 
 }

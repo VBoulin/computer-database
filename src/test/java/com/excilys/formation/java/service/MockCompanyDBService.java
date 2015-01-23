@@ -43,4 +43,9 @@ public class MockCompanyDBService implements CompanyDBService {
   public List<Company> getAll() {
     return companyDao.getAll();
   }
+
+  @Override
+  public void delete(Long id) {
+    
+  }
 }

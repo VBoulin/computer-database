@@ -31,7 +31,7 @@ public enum ComputerDBServiceImpl implements ComputerDBService {
   }
 
   /**
-   * Return one computer
+   * {@inheritDoc}
    */
   @Override
   public Computer getOne(Long id) {
@@ -43,7 +43,7 @@ public enum ComputerDBServiceImpl implements ComputerDBService {
   }
 
   /**
-   * Create one computer
+   * {@inheritDoc}
    */
   @Override
   public void create(Computer c) {
@@ -55,7 +55,7 @@ public enum ComputerDBServiceImpl implements ComputerDBService {
   }
 
   /**
-   * update one computer
+   * {@inheritDoc}
    */
   @Override
   public void update(Computer c) {
@@ -67,7 +67,7 @@ public enum ComputerDBServiceImpl implements ComputerDBService {
   }
 
   /**
-   * delete one computer 
+   * {@inheritDoc}
    */
   @Override
   public void delete(Long id) {
@@ -79,7 +79,7 @@ public enum ComputerDBServiceImpl implements ComputerDBService {
   }
 
   /**
-   * return a page containing 10 computers
+   * {@inheritDoc}
    */
   @Override
   public Page<Computer> createPage(Page<Computer> page) {
@@ -91,7 +91,7 @@ public enum ComputerDBServiceImpl implements ComputerDBService {
   }
 
   /**
-   * return a list containing all the computers
+   * {@inheritDoc}
    */
   @Override
   public List<Computer> getAll() {

@@ -45,7 +45,8 @@ public class UserConsole {
       System.out.println("[4] : Create a computer");
       System.out.println("[5] : Update a computer");
       System.out.println("[6] : Delete a computer");
-      System.out.println("[7] : Quit");
+      System.out.println("[7] : Delete a company");
+      System.out.println("[8] : Quit");
       chooseOption();
     }
   }
@@ -57,10 +58,10 @@ public class UserConsole {
     String input;
 
     //Check the input and send to the corresponding function.
-    Pattern regex = Pattern.compile("^[1-7]$");
+    Pattern regex = Pattern.compile("^[1-8]$");
 
     do {
-      System.out.print("Choose an option [1-7]: ");
+      System.out.print("Choose an option [1-8]: ");
       input = scanner.next();
     } while (!regex.matcher(input).find());
 
@@ -84,6 +85,9 @@ public class UserConsole {
         deleteComputer();
         break;
       case "7":
+        deleteCompany();
+        break;
+      case "8":
         //close the scanner and stop the loop
         scanner.close();
         stop = true;
@@ -348,9 +352,33 @@ public class UserConsole {
     }else{
       System.out.println("Computer not found.");
     }
-
   }
 
+  /**
+   * Delete a computer
+   */
+  public void deleteCompany() {
+    System.out.println("[7] : Delete a company :");
+    String input;
+    Long id;
+
+    do {
+      System.out.print("Enter company id : ");
+      input = scanner.next().trim();
+    } while (!Validator.isID(input));
+    
+    id=Long.parseLong(input);
+    Company company = companyDBService.getOne(id);
+
+    if(company != null){
+      //Delete the computer in the database
+      companyDBService.delete(id);
+      System.out.println("Company deleted with success. Computers associated with that company deleted with success.");
+    }else{
+      System.out.println("Company not found.");
+    }
+  }
+  
   /**
    * Main function
    * Instantiation of the console
