@@ -104,7 +104,7 @@ public enum DaoFactory {
    * RollBack
    * @param conn
    */
-  public void rollback(Connection conn) {
+  public void doRollback(Connection conn) {
     if (conn != null) {
       try {
         conn.rollback();

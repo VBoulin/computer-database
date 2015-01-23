@@ -104,10 +104,10 @@ public class Validator {
     if (dto == null) {
       return false;
     }
-    if (dto.getIdComputer() < 0) {
+    if (dto.getId() < 0) {
       return false;
     }
-    if (!isName(dto.getComputerName())) {
+    if (!isName(dto.getName())) {
       return false;
     }
     if (!isDate(dto.getIntroduced())) {

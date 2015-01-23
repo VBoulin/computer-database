@@ -141,14 +141,10 @@ public class AddComputer extends HttpServlet {
     }
 
     if (error.isEmpty()) {
-
       return b.build();
-
     } else {
-
       request.setAttribute("error", error);
       return null;
-
     }
 
   }

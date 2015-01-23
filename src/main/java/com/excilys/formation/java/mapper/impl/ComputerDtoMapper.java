@@ -20,7 +20,7 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
     }
 
     Computer.Builder builder = Computer.builder();
-    builder.id(dto.getIdComputer()).name(dto.getComputerName());
+    builder.id(dto.getId()).name(dto.getName());
 
     if (dto.getIntroduced() != null) {
       builder.introduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
@@ -40,8 +40,9 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
       Computer computer = fromDto(dto);
       if (computer != null) {
         return computer;
+      } else {
+        return null;
       }
-      return null;
     }).collect(Collectors.toList());
     return computers;
   }
@@ -71,8 +72,9 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
       ComputerDto dto = toDto(computer);
       if (dto != null) {
         return dto;
+      } else {
+        return null;
       }
-      return null;
     }).collect(Collectors.toList());
     return dtos;
   }

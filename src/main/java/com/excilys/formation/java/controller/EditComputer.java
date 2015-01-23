@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.formation.java.dto.ComputerDto;
+import com.excilys.formation.java.mapper.impl.ComputerDtoMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.service.CompanyDBService;
@@ -63,7 +65,11 @@ public class EditComputer extends HttpServlet {
       id = Long.valueOf(idComputer);
 
       Computer computer = computerDBService.getOne(id);
-      request.setAttribute("computer", computer);
+      
+      ComputerDtoMapper mapper = new ComputerDtoMapper();
+      ComputerDto computerDto = mapper.toDto(computer);
+      
+      request.setAttribute("computer", computerDto);
     }
 
     List<Company> companies = companyDBService.getAll();

@@ -38,11 +38,11 @@ pageEncoding="UTF-8"%>
                                     
                                     <c:forEach items="${companies}" var="company">
                                     
-	                                   	<c:if test="${company.id == computer.company.id}">
+	                                   	<c:if test="${company.id == computer.idCompany}">
 	                                   		<option value="${company.id}" selected="selected">${company.name}</option>
 	                                   	</c:if>
 	                                   	
-	                                   	<c:if test="${company.id != computer.company.id}">
+	                                   	<c:if test="${company.id != computer.idCompany}">
 	                                   		<option value="${company.id}">${company.name}</option>
 	                                   	</c:if>
 	                                   	

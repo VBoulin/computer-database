@@ -82,7 +82,7 @@ public enum CompanyDBServiceImpl implements CompanyDBService {
       conn.commit();
     } catch (PersistenceException | SQLException e) {
       logger.error("Error with delete()");
-      daoFactory.rollback(conn);
+      daoFactory.doRollback(conn);
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       daoFactory.closeConnection(conn, null, null);

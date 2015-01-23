@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
+import com.excilys.formation.java.mapper.RowMapper;
 import com.excilys.formation.java.mapper.impl.ComputerRowMapperImpl;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
@@ -22,9 +23,9 @@ public enum ComputerDaoImpl implements ComputerDao {
 
   INSTANCE;
 
-  private ComputerRowMapperImpl mapper = new ComputerRowMapperImpl();
+  private RowMapper<Computer> mapper = new ComputerRowMapperImpl();
 
-  private Logger                logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
+  private Logger              logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
   /**
    * Singleton : provide the access service to the database (company)
