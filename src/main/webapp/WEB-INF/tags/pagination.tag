@@ -13,25 +13,25 @@
 
 
 <ul class="pagination">
-	<c:if test="${pageNumber > 1}">
+	<c:if test="${pageNumber gt 1}">
 		<li>
 			<t:link url="${url}" pageNumber="${pageNumber-1}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}"><span aria-hidden="true">&laquo;</span></t:link>
 		</li>
 	</c:if>
 
-	<c:if test="${pageNumber-3 > 0}">
+	<c:if test="${pageNumber-3 gt 0}">
 		<li>
 			<t:link url="${url}" pageNumber="${pageNumber-3}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}">${pageNumber-3}</t:link>
 		</li>
 	</c:if>
 
-	<c:if test="${page.pageNumber-2 > 0}">
+	<c:if test="${page.pageNumber-2 gt 0}">
 		<li>
 			<t:link url="${url}" pageNumber="${pageNumber-2}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}">${pageNumber-2}</t:link>
 		</li>
 	</c:if>
 
-	<c:if test="${page.pageNumber-1 > 0}">
+	<c:if test="${page.pageNumber-1 gt 0}">
 		<li>
 			<t:link url="${url}" pageNumber="${pageNumber-1}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}">${pageNumber-1}</t:link>
 		</li>
@@ -40,12 +40,12 @@
 	<c:forEach begin="${pageNumber}" end="${pageNumber+3}" var="i">
 
 		<c:if test="${i <= nbPages}">
-			<c:if test="${pageNumber == i}">
+			<c:if test="${pageNumber eq i}">
 				<li>
 					<t:link url="${url}" pageNumber="${i}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}"><Strong>${i}</Strong></t:link>
 				</li>
 			</c:if>
-			<c:if test="${pageNumber != i}">
+			<c:if test="${pageNumber ne i}">
 				<li>
 					<t:link url="${url}" pageNumber="${i}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}">${i}</t:link>
 				</li>
@@ -54,7 +54,7 @@
 
 	</c:forEach>
 
-	<c:if test="${pageNumber < nbPages}">
+	<c:if test="${pageNumber lt nbPages}">
 		<li>
 			<t:link url="${url}" pageNumber="${pageNumber+1}" nbResultsPerPage="${nbResultsPerPage}" sort="${sort}" order="${order}" search="${search}"><span aria-hidden="true">&raquo;</span></t:link>
 		</li>

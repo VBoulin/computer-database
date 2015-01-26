@@ -21,6 +21,13 @@ public class TestDashBoard {
     driver.get("http://localhost:8080/computer-database/dashBoard?page=1&nbResults=10");
 
   }
+  
+  @Test
+  public void pagination() {
+    int x = 50;
+    driver.get("http://localhost:8080/computer-database/dashboard?nbResults=" + x);
+    Assert.assertEquals(x, driver.findElements(By.cssSelector("#results tr")).size());
+}
 
   @After
   public void tearDown() {
