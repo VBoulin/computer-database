@@ -116,6 +116,11 @@ public class Validator {
     }
   }
 
+  /**
+   * Check if the computerDto is valid
+   * @param dto Dto to validate
+   * @return True if valid, false otherwise
+   */
   public static boolean isComputerDTO(ComputerDto dto) {
     if (dto == null) {
       return false;
@@ -145,6 +150,12 @@ public class Validator {
     return true;
   }
 
+  /**
+   * Check if the computerDto is valid and fill an error-map when not valid
+   * @param dto Dto to validate
+   * @param error
+   * @return True if the dto is valid, false otherwise
+   */
   public static boolean isComputerDTO(ComputerDto dto, Map<String, String> error) {
     if (dto == null) {
       return false;

@@ -9,6 +9,7 @@ pageEncoding="UTF-8"%>
 			<t:pagination url="dashBoard" nbPages="${ nbPages }" pageNumber="${ page.pageNumber }" nbResultsPerPage="${ page.nbResultsPerPage }" sort="${page.sort.column}" order="${page.order.order}" search="${page.search}"></t:pagination>
 		</div>
 	</footer>
+	
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>

@@ -148,7 +148,7 @@ public class ComputerDto {
       computerDTO = new ComputerDto();
     }
 
-    public Builder id(Long id) {
+    public Builder id(long id) {
       computerDTO.id = id;
       return this;
     }

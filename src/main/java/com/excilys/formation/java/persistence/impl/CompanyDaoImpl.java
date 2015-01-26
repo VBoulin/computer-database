@@ -25,6 +25,8 @@ public enum CompanyDaoImpl implements CompanyDao {
 
   private CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
 
+  private DaoFactory daoFactory = DaoFactory.INSTANCE;
+  
   /**
    * Singleton : provide the access service to the database (company)
    */
@@ -41,8 +43,13 @@ public enum CompanyDaoImpl implements CompanyDao {
     ResultSet rs = null;
     Company company = null;
 
+    if (id == null || id < 0) {
+      logger.warn("getOne : Param id cannot be null or negative.");
+      return null;
+    }
+
     try {
-      conn = DaoFactory.INSTANCE.getConnection();
+      conn = daoFactory.getConnection();
       stmt = conn.prepareStatement(SELECT_ONE_COMPANY_QUERY);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
@@ -59,7 +66,7 @@ public enum CompanyDaoImpl implements CompanyDao {
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, rs);
+      daoFactory.closeConnection(conn, stmt, rs);
     }
     return company;
   }
@@ -78,8 +85,13 @@ public enum CompanyDaoImpl implements CompanyDao {
     ResultSet rs = null;
     List<Company> companies;
 
+    if (page == null) {
+      logger.warn("createPage : Param page cannot be null.");
+      return null;
+    }
+
     try {
-      conn = DaoFactory.INSTANCE.getConnection();
+      conn = daoFactory.getConnection();
 
       countStmt = conn.createStatement();
 
@@ -105,7 +117,7 @@ public enum CompanyDaoImpl implements CompanyDao {
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
+      daoFactory.closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -123,7 +135,7 @@ public enum CompanyDaoImpl implements CompanyDao {
     List<Company> companies;
 
     try {
-      conn = DaoFactory.INSTANCE.getConnection();
+      conn = daoFactory.getConnection();
 
       stmt = conn.createStatement();
 
@@ -136,7 +148,7 @@ public enum CompanyDaoImpl implements CompanyDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
+      daoFactory.closeConnection(conn, stmt, null);
     }
     return companies;
   }
@@ -146,17 +158,24 @@ public enum CompanyDaoImpl implements CompanyDao {
   /**
    * {@inheritDoc}
    */
-  public void delete(Long id, Connection connection) {
+  public void delete(Long id) {
     PreparedStatement statement = null;
-    try {
-      statement = connection.prepareStatement(DELETE_QUERY);
-      statement.setLong(1, id);
-      statement.executeUpdate();
-    } catch (final SQLException e) {
-      logger.error("SQLError with delete()");
-      throw new PersistenceException(e.getMessage(), e);
-    } finally {
-      DaoFactory.INSTANCE.closeConnection(null, statement, null);
+    Connection conn = null;
+    if (id == null || id < 0) {
+      logger.warn("delete : Param id cannot be null or negative.");
+    } else {
+      conn = daoFactory.getTransactionnalConnection();
+      try {
+        statement = conn.prepareStatement(DELETE_QUERY);
+        statement.setLong(1, id);
+        statement.executeUpdate();
+      } catch (final SQLException e) {
+        logger.error("SQLError with delete()");
+        daoFactory.doRollback(conn);
+        throw new PersistenceException(e.getMessage(), e);
+      } finally {
+        daoFactory.closeConnection(null, statement, null);
+      }
     }
   }
 

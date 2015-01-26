@@ -31,5 +31,5 @@ public interface CompanyDao {
   /**
    * Delete a company based on her id
    */
-  void delete(Long id, Connection connection);
+  void delete(Long id);
 }

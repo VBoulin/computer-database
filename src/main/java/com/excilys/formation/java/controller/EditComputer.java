@@ -37,6 +37,7 @@ public class EditComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   private ComputerDBService computerDBService;
+  
   private CompanyDBService  companyDBService;
   private ServiceFactory    service;
   

@@ -73,19 +73,19 @@ public enum CompanyDBServiceImpl implements CompanyDBService {
    * {@inheritDoc}
    */
   public void delete(Long id) {
-    Connection conn = null;
+    if (id == null || id < 1) {
+      logger.error("Error with delete.");
+      throw new IllegalArgumentException("id cannot be null or negative");
+    }
     try {
-      conn = DaoFactory.INSTANCE.getConnection();
-      conn.setAutoCommit(false);
-      computerDao.deleteByCompany(id, conn);
-      companyDao.delete(id, conn);
-      conn.commit();
-    } catch (PersistenceException | SQLException e) {
-      logger.error("Error with delete()");
-      daoFactory.doRollback(conn);
-      throw new PersistenceException(e.getMessage(), e);
+      daoFactory.startTransactionalConnection();
+      
+      computerDao.deleteByCompany(id);
+      companyDao.delete(id);
+      
+      daoFactory.commitTransactionalConnection();
     } finally {
-      daoFactory.closeConnection(conn, null, null);
+      daoFactory.closeTransactionalConnection();
     }
   }
 

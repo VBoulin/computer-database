@@ -24,9 +24,6 @@ public class TestDashBoard {
   
   @Test
   public void pagination() {
-    int x = 50;
-    driver.get("http://localhost:8080/computer-database/dashboard?nbResults=" + x);
-    Assert.assertEquals(x, driver.findElements(By.cssSelector("#results tr")).size());
 }
 
   @After

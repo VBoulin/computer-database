@@ -3,6 +3,7 @@
 pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.*" %>
+
     <section id="main">
         <div class="container">
             <div class="row">
@@ -12,7 +13,7 @@ pageEncoding="UTF-8"%>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="name" placeholder="Computer name">
+                                <input type="text" class="form-control" id="computerName" name="name" placeholder="Computer name" required="required">
                    				 <span>${error.get("name")}</span>
                             </div>
                             <div class="form-group">
@@ -31,7 +32,7 @@ pageEncoding="UTF-8"%>
                                     <option value="0">--</option>
                                     
                                     <c:forEach items="${companies}" var="company">
-                                   		<option value="${company.id}">${company.name}</option>
+                                   		<option value="${company.id}"><c:out value="${company.name}"/></option>
                                    	</c:forEach>
                                    	
                                 </select>
@@ -48,5 +49,10 @@ pageEncoding="UTF-8"%>
             </div>
         </div>
     </section>
+    
+    <script src="js/jquery.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
+	<script src="js/validForm.js"></script>
+	
 </body>
 </html>

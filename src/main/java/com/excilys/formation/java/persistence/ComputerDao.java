@@ -49,5 +49,5 @@ public interface ComputerDao {
   /**
    * Delete a computer based on his company ID
    */
-  void deleteByCompany(Long id, Connection conn);
+  void deleteByCompany(Long id);
 }

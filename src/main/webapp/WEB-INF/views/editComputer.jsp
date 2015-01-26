@@ -18,7 +18,7 @@ pageEncoding="UTF-8"%>
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="name" placeholder="Computer name" value="${computer.name}">
+                                <input type="text" class="form-control" id="computerName" name="name" placeholder="Computer name" value="${computer.name}" required="required">
 								<span>${error.get("name")}</span>
                             </div>
                             <div class="form-group">
@@ -39,11 +39,11 @@ pageEncoding="UTF-8"%>
                                     <c:forEach items="${companies}" var="company">
                                     
 	                                   	<c:if test="${company.id == computer.idCompany}">
-	                                   		<option value="${company.id}" selected="selected">${company.name}</option>
+	                                   		<option value="${company.id}" selected="selected"><c:out value="${company.name}"/></option>
 	                                   	</c:if>
 	                                   	
 	                                   	<c:if test="${company.id != computer.idCompany}">
-	                                   		<option value="${company.id}">${company.name}</option>
+	                                   		<option value="${company.id}"><c:out value="${company.name}"/></option>
 	                                   	</c:if>
 	                                   	
                                    	</c:forEach>
@@ -62,5 +62,10 @@ pageEncoding="UTF-8"%>
             </div>
         </div>
     </section>
+    
+    <script src="js/jquery.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
+	<script src="js/validForm.js"></script>
+	
 </body>
 </html>

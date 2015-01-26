@@ -3,7 +3,6 @@ package com.excilys.formation.java.persistence;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,12 +21,14 @@ public enum DaoFactory {
 
   INSTANCE;
 
-  private static Logger      logger = LoggerFactory.getLogger(DaoFactory.class);
+  private static Logger           logger = LoggerFactory.getLogger(DaoFactory.class);
 
-  private static CompanyDao  companyDao;
-  private static ComputerDao computerDao;
+  private static CompanyDao       companyDao;
+  private static ComputerDao      computerDao;
 
-  private static BoneCP      boneCp;
+  private static BoneCP           boneCpPool;
+
+  private ThreadLocal<Connection> ThreadLocalConnection;
 
   static {
     Properties properties = new Properties();
@@ -48,7 +49,7 @@ public enum DaoFactory {
       connectionConfig.setMinConnectionsPerPartition(5);
       connectionConfig.setMaxConnectionsPerPartition(15);
 
-      boneCp = new BoneCP(connectionConfig);
+      boneCpPool = new BoneCP(connectionConfig);
 
       logger.info("Properties loaded with success!");
     } catch (final IOException e) {
@@ -88,9 +89,9 @@ public enum DaoFactory {
   public Connection getConnection() {
     Connection conn = null;
     try {
-      conn = boneCp.getConnection();
+      conn = boneCpPool.getConnection();
     } catch (SQLException e) {
-      logger.error("SQLError while creating connection");
+      logger.error("SQLError while getting connection");
       throw new PersistenceException(e.getMessage(), e);
     }
     return conn;
@@ -123,6 +124,61 @@ public enum DaoFactory {
         conn.rollback();
       } catch (SQLException e) {
         logger.error("Couldn't Rollback");
+        throw new PersistenceException(e.getMessage(), e);
+      }
+    }
+  }
+
+  /**
+   * Start a transaction
+   */
+  public void startTransactionalConnection() {
+    try {
+      Connection conn = boneCpPool.getConnection();
+      conn.setAutoCommit(false);
+      ThreadLocalConnection = new ThreadLocal<Connection>();
+      ThreadLocalConnection.set(conn);
+    } catch (SQLException e) {
+      logger.error("Couldn't connect to the database");
+      throw new PersistenceException(e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Return the connection to the database for a transaction
+   * @return A connection
+   */
+  public Connection getTransactionnalConnection() {
+    if (ThreadLocalConnection != null) {
+      return ThreadLocalConnection.get();
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Commit
+   */
+  public void commitTransactionalConnection() {
+    if (ThreadLocalConnection != null) {
+      try {
+        ThreadLocalConnection.get().commit();
+      } catch (final SQLException e) {
+        logger.warn("Couldn't Commit the connection");
+        throw new PersistenceException(e.getMessage(), e);
+      }
+    }
+  }
+
+  /**
+   * Close the connection
+   */
+  public void closeTransactionalConnection() {
+    if (ThreadLocalConnection != null) {
+      try {
+        ThreadLocalConnection.get().close();
+      } catch (final SQLException e) {
+        logger.warn("Couldn't Commit the connection");
         throw new PersistenceException(e.getMessage(), e);
       }
     }

@@ -142,7 +142,7 @@ public class MockCompanyDao implements CompanyDao {
   }
 
   @Override
-  public void delete(Long id, Connection connection) {
+  public void delete(Long id) {
     // TODO Auto-generated method stub
     
   }

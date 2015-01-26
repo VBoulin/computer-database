@@ -26,6 +26,8 @@ public enum ComputerDaoImpl implements ComputerDao {
   private RowMapper<Computer> mapper = new ComputerRowMapperImpl();
 
   private Logger              logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
+  
+  private DaoFactory daoFactory = DaoFactory.INSTANCE;
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -41,35 +43,39 @@ public enum ComputerDaoImpl implements ComputerDao {
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    try {
-      conn = DaoFactory.INSTANCE.getConnection();
-      stmt = conn.prepareStatement(CREATE_QUERY);
-      stmt.setString(1, o.getName());
-      if (o.getIntroduced() == null) {
-        stmt.setTimestamp(2, null);
-      } else {
-        stmt.setTimestamp(2, Timestamp.valueOf(o.getIntroduced().atStartOfDay()));
+    if (o == null) {
+      logger.warn("create : Param computer o cannot be null.");
+    } else {
+      try {
+        conn = daoFactory.getConnection();
+        stmt = conn.prepareStatement(CREATE_QUERY);
+        stmt.setString(1, o.getName());
+        if (o.getIntroduced() == null) {
+          stmt.setTimestamp(2, null);
+        } else {
+          stmt.setTimestamp(2, Timestamp.valueOf(o.getIntroduced().atStartOfDay()));
+        }
+        if (o.getDiscontinued() == null) {
+          stmt.setTimestamp(3, null);
+        } else {
+          stmt.setTimestamp(3, Timestamp.valueOf(o.getDiscontinued().atStartOfDay()));
+        }
+        if (o.getCompany() == null) {
+          stmt.setString(4, null);
+        } else {
+          stmt.setLong(4, o.getCompany().getId());
+        }
+        stmt.executeUpdate();
+      } catch (SQLException e) {
+        logger.error("SQLError with create()");
+        throw new PersistenceException(e.getMessage(), e);
+      } catch (NullPointerException ne) {
+        logger.error("NullError with create()");
+        throw new PersistenceException(ne.getMessage(), ne);
+      } finally {
+        //Close the connection
+        daoFactory.closeConnection(conn, stmt, null);
       }
-      if (o.getDiscontinued() == null) {
-        stmt.setTimestamp(3, null);
-      } else {
-        stmt.setTimestamp(3, Timestamp.valueOf(o.getDiscontinued().atStartOfDay()));
-      }
-      if (o.getCompany() == null) {
-        stmt.setString(4, null);
-      } else {
-        stmt.setLong(4, o.getCompany().getId());
-      }
-      stmt.executeUpdate();
-    } catch (SQLException e) {
-      logger.error("SQLError with create()");
-      throw new PersistenceException(e.getMessage(), e);
-    } catch (NullPointerException ne) {
-      logger.error("NullError with create()");
-      throw new PersistenceException(ne.getMessage(), ne);
-    } finally {
-      //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
     }
   }
 
@@ -84,8 +90,13 @@ public enum ComputerDaoImpl implements ComputerDao {
     ResultSet rs = null;
     Computer computer = null;
 
+    if (id == null || id < 0) {
+      logger.warn("getOne : Param id cannot be null or negative.");
+      return null;
+    }
+
     try {
-      conn = DaoFactory.INSTANCE.getConnection();
+      conn = daoFactory.getConnection();
       stmt = conn.prepareStatement(SELECT_ONE_COMPUTER_QUERY);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
@@ -102,7 +113,7 @@ public enum ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, rs);
+      daoFactory.closeConnection(conn, stmt, rs);
     }
     return computer;
   }
@@ -116,36 +127,40 @@ public enum ComputerDaoImpl implements ComputerDao {
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    try {
-      conn = DaoFactory.INSTANCE.getConnection();
-      stmt = conn.prepareStatement(UPDATE_QUERY);
-      stmt.setString(1, o.getName());
-      if (o.getIntroduced() == null) {
-        stmt.setTimestamp(2, null);
-      } else {
-        stmt.setTimestamp(2, Timestamp.valueOf(o.getIntroduced().atStartOfDay()));
+    if (o == null) {
+      logger.warn("update : Param computer o cannot be null.");
+    } else {
+      try {
+        conn = daoFactory.getConnection();
+        stmt = conn.prepareStatement(UPDATE_QUERY);
+        stmt.setString(1, o.getName());
+        if (o.getIntroduced() == null) {
+          stmt.setTimestamp(2, null);
+        } else {
+          stmt.setTimestamp(2, Timestamp.valueOf(o.getIntroduced().atStartOfDay()));
+        }
+        if (o.getDiscontinued() == null) {
+          stmt.setTimestamp(3, null);
+        } else {
+          stmt.setTimestamp(3, Timestamp.valueOf(o.getDiscontinued().atStartOfDay()));
+        }
+        if (o.getCompany() == null) {
+          stmt.setString(4, null);
+        } else {
+          stmt.setLong(4, o.getCompany().getId());
+        }
+        stmt.setLong(5, o.getId());
+        stmt.executeUpdate();
+      } catch (SQLException e) {
+        logger.error("SQLError with update()");
+        throw new PersistenceException(e.getMessage(), e);
+      } catch (NullPointerException ne) {
+        logger.error("NullError with update()");
+        throw new PersistenceException(ne.getMessage(), ne);
+      } finally {
+        //Close the connection
+        daoFactory.closeConnection(conn, stmt, null);
       }
-      if (o.getDiscontinued() == null) {
-        stmt.setTimestamp(3, null);
-      } else {
-        stmt.setTimestamp(3, Timestamp.valueOf(o.getDiscontinued().atStartOfDay()));
-      }
-      if (o.getCompany() == null) {
-        stmt.setString(4, null);
-      } else {
-        stmt.setLong(4, o.getCompany().getId());
-      }
-      stmt.setLong(5, o.getId());
-      stmt.executeUpdate();
-    } catch (SQLException e) {
-      logger.error("SQLError with update()");
-      throw new PersistenceException(e.getMessage(), e);
-    } catch (NullPointerException ne) {
-      logger.error("NullError with update()");
-      throw new PersistenceException(ne.getMessage(), ne);
-    } finally {
-      //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
     }
   }
 
@@ -158,20 +173,24 @@ public enum ComputerDaoImpl implements ComputerDao {
     Connection conn = null;
     PreparedStatement stmt = null;
 
-    try {
-      conn = DaoFactory.INSTANCE.getConnection();
-      stmt = conn.prepareStatement(DELETE_QUERY);
-      stmt.setLong(1, id);
-      stmt.executeUpdate();
-    } catch (SQLException e) {
-      logger.error("SQLError with delete()");
-      throw new PersistenceException(e.getMessage(), e);
-    } catch (NullPointerException ne) {
-      logger.error("NullError with delete()");
-      throw new PersistenceException(ne.getMessage(), ne);
-    } finally {
-      //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
+    if (id == null || id < 0) {
+      logger.warn("getOne : Param id cannot be null or negative.");
+    } else {
+      try {
+        conn = daoFactory.getConnection();
+        stmt = conn.prepareStatement(DELETE_QUERY);
+        stmt.setLong(1, id);
+        stmt.executeUpdate();
+      } catch (SQLException e) {
+        logger.error("SQLError with delete()");
+        throw new PersistenceException(e.getMessage(), e);
+      } catch (NullPointerException ne) {
+        logger.error("NullError with delete()");
+        throw new PersistenceException(ne.getMessage(), ne);
+      } finally {
+        //Close the connection
+        daoFactory.closeConnection(conn, stmt, null);
+      }
     }
   }
 
@@ -187,12 +206,17 @@ public enum ComputerDaoImpl implements ComputerDao {
     ResultSet rs = null;
     List<Computer> computers;
 
+    if (page == null) {
+      logger.warn("createpage : Param page cannot be null.");
+      return null;
+    }
+
     String query = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.name LIKE ? OR cp.name LIKE ? ORDER BY "
         + page.getSort().getColumn() + " " + page.getOrder().getOrder() + " LIMIT ? OFFSET ? ;";
 
     StringBuilder search = new StringBuilder("%").append(page.getSearch()).append("%");
     try {
-      conn = DaoFactory.INSTANCE.getConnection();
+      conn = daoFactory.getConnection();
 
       countStmt = conn.createStatement();
 
@@ -220,7 +244,7 @@ public enum ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(ne.getMessage(), ne);
     } finally {
       //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
+      daoFactory.closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -239,7 +263,7 @@ public enum ComputerDaoImpl implements ComputerDao {
     List<Computer> computers;
 
     try {
-      conn = DaoFactory.INSTANCE.getConnection();
+      conn = daoFactory.getConnection();
 
       stmt = conn.prepareStatement(SELECT_ALL_COMPUTERS);
 
@@ -252,7 +276,7 @@ public enum ComputerDaoImpl implements ComputerDao {
       throw new PersistenceException(e.getMessage(), e);
     } finally {
       //Close the connection
-      DaoFactory.INSTANCE.closeConnection(conn, stmt, null);
+      daoFactory.closeConnection(conn, stmt, null);
     }
     return computers;
   }
@@ -262,19 +286,25 @@ public enum ComputerDaoImpl implements ComputerDao {
   /**
    * {@inheritDoc}
    */
-  public void deleteByCompany(Long id, Connection conn) {
+  public void deleteByCompany(Long id) {
     PreparedStatement stmt = null;
-    try {
-      stmt = conn.prepareStatement(DELETE_COMPANY_QUERY);
-      stmt.setLong(1, id);
-      stmt.executeUpdate();
-    } catch (final SQLException e) {
-      logger.error("SQLError with deleteByCompany()");
-      throw new PersistenceException(e.getMessage(), e);
-    } finally {
-      DaoFactory.INSTANCE.closeConnection(null, stmt, null);
+    Connection conn = null;
+    if (id == null || id < 0) {
+      logger.warn("deleteByCompany : Param id cannot be null or negative.");
+    } else {
+      conn = daoFactory.getTransactionnalConnection();
+      try {
+        stmt = conn.prepareStatement(DELETE_COMPANY_QUERY);
+        stmt.setLong(1, id);
+        stmt.executeUpdate();
+      } catch (final SQLException e) {
+        logger.error("SQLError with deleteByCompany()");
+        daoFactory.doRollback(conn);
+        throw new PersistenceException(e.getMessage(), e);
+      } finally {
+        daoFactory.closeConnection(null, stmt, null);
+      }
     }
-
   }
 
 }
