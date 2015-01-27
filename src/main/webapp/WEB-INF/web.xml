@@ -4,6 +4,11 @@
   <welcome-file-list>
     <welcome-file>dashBoard</welcome-file>
   </welcome-file-list>
+  
+  <listener>
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  
   <error-page>
     <error-code>403</error-code>
     <location>/WEB-INF/views/403.html</location>

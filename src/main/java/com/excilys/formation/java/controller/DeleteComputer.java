@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.service.ServiceFactory;
@@ -23,7 +26,9 @@ import com.excilys.formation.java.service.ServiceFactory;
 public class DeleteComputer extends HttpServlet {
   private static final long    serialVersionUID = 1L;
 
+  @Autowired
   private ComputerDBService    computerDBService;
+  @Autowired
   private ServiceFactory       service;
 
   private static final Pattern PATTERN          = Pattern.compile("\\d{1,19}");
@@ -35,8 +40,12 @@ public class DeleteComputer extends HttpServlet {
    */
   public DeleteComputer() {
     super();
-    service = ServiceFactory.INSTANCE;
-    computerDBService = service.getComputerDBService();
+  }
+  
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
   }
 
   /**

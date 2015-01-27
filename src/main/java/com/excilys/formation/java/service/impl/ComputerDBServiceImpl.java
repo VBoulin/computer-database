@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
@@ -11,23 +13,20 @@ import com.excilys.formation.java.persistence.ComputerDao;
 import com.excilys.formation.java.persistence.DaoFactory;
 import com.excilys.formation.java.service.ComputerDBService;
 
-public enum ComputerDBServiceImpl implements ComputerDBService {
-
-  INSTANCE;
+@Service
+public class ComputerDBServiceImpl implements ComputerDBService {
 
   private Logger      logger = LoggerFactory.getLogger(ComputerDBServiceImpl.class);
 
+  @Autowired
   private ComputerDao computerDao;
-
+  @Autowired
   private DaoFactory  daoFactory;
 
   /**
    * Singleton : provide the access service to the database
    */
-  private ComputerDBServiceImpl() {
-    daoFactory = DaoFactory.INSTANCE;
-
-    computerDao = daoFactory.getComputerDao();
+  public ComputerDBServiceImpl() {
   }
 
   /**

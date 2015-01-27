@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.mapper.impl.CompanyRowMapperImpl;
@@ -17,20 +19,20 @@ import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.DaoFactory;
 
-public enum CompanyDaoImpl implements CompanyDao {
-
-  INSTANCE;
+@Repository
+public class CompanyDaoImpl implements CompanyDao {
 
   private Logger               logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
   private CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
 
-  private DaoFactory daoFactory = DaoFactory.INSTANCE;
+  @Autowired
+  private DaoFactory daoFactory;
   
   /**
    * Singleton : provide the access service to the database (company)
    */
-  private CompanyDaoImpl() {}
+  public CompanyDaoImpl() {}
 
   private static final String SELECT_ONE_COMPANY_QUERY = "SELECT * FROM company WHERE id = ?;";
 

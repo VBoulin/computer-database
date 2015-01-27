@@ -17,14 +17,20 @@ public class TestDashBoard {
   }
 
   @Test
-  public void editComputer() {
+  public void validInformations() {
     driver.get("http://localhost:8080/computer-database/dashBoard?page=1&nbResults=10");
 
   }
   
   @Test
-  public void pagination() {
-}
+  public void negativePage() {
+    driver.get("http://localhost:8080/computer-database/dashBoard?page=-1&nbResults=10");
+  }
+  
+  @Test
+  public void negativeResults() {
+    driver.get("http://localhost:8080/computer-database/dashBoard?page=1&nbResults=-15");
+  }
 
   @After
   public void tearDown() {

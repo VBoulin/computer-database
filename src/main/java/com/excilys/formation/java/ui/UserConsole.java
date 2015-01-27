@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
@@ -13,9 +16,12 @@ import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.service.ServiceFactory;
 import com.excilys.formation.java.validator.Validator;
 
+@Component
 public class UserConsole {
 
+  @Autowired
   private ComputerDBService computerDBService;
+  @Autowired
   private CompanyDBService  companyDBService;
 
   private boolean           stop = false;
@@ -26,8 +32,6 @@ public class UserConsole {
    * Instantiation of the scanner, the service and the validators
    */
   public UserConsole() {
-    computerDBService = ServiceFactory.getInstance().getComputerDBService();
-    companyDBService = ServiceFactory.getInstance().getCompanyDBService();
     scanner = new Scanner(System.in);
   }
 

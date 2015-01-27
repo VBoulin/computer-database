@@ -1,40 +1,36 @@
 package com.excilys.formation.java.service.impl;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.ComputerDao;
 import com.excilys.formation.java.persistence.DaoFactory;
 import com.excilys.formation.java.service.CompanyDBService;
 
-public enum CompanyDBServiceImpl implements CompanyDBService {
+@Service
+public class CompanyDBServiceImpl implements CompanyDBService {
 
-  INSTANCE;
-
+  @Autowired
   private CompanyDao  companyDao;
+  @Autowired
   private ComputerDao computerDao;
 
   private Logger      logger = LoggerFactory.getLogger(CompanyDBServiceImpl.class);
 
+  @Autowired
   private DaoFactory  daoFactory;
 
   /**
    * Singleton : provide the access service to the database (company)
    */
-  private CompanyDBServiceImpl() {
-    daoFactory = DaoFactory.INSTANCE;
-
-    companyDao = daoFactory.getCompanyDao();
-    computerDao = daoFactory.getComputerDao();
+  public CompanyDBServiceImpl() {
   }
 
   /**

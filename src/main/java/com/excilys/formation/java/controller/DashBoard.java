@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.mapper.DtoMapper;
@@ -32,10 +35,12 @@ import com.excilys.formation.java.validator.Validator;
 public class DashBoard extends HttpServlet {
   private static final long                serialVersionUID = 1L;
 
+  @Autowired
   private ComputerDBService                computerDBService;
-  private DtoMapper<ComputerDto, Computer> computerDtoMapper;
-
+  @Autowired
   private ServiceFactory                   service;
+  
+  private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
 
   private Logger                           logger           = LoggerFactory
                                                                 .getLogger(DashBoard.class);
@@ -46,11 +51,14 @@ public class DashBoard extends HttpServlet {
    */
   public DashBoard() {
     super();
-    service = ServiceFactory.getInstance();
-    computerDBService = service.getComputerDBService();
-    computerDtoMapper = new ComputerDtoMapper();
   }
 
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+  }
+  
   /**
    * Creation of a page based on the request
    * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

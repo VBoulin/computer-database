@@ -1,22 +1,20 @@
 package com.excilys.formation.java.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.formation.java.service.impl.CompanyDBServiceImpl;
 import com.excilys.formation.java.service.impl.ComputerDBServiceImpl;
 
-public enum ServiceFactory {
-  
-  INSTANCE;
+@Component
+public class ServiceFactory {
 
+  @Autowired
   CompanyDBService companyDBService;
+  @Autowired
   ComputerDBService computerDBService;
 
-  private ServiceFactory() {
-    companyDBService = CompanyDBServiceImpl.INSTANCE;
-    computerDBService = ComputerDBServiceImpl.INSTANCE;
-  }
-
-  public static ServiceFactory getInstance() {
-    return INSTANCE;
+  public ServiceFactory() {
   }
 
   /**

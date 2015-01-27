@@ -10,6 +10,8 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.persistence.impl.CompanyDaoImpl;
@@ -17,20 +19,24 @@ import com.excilys.formation.java.persistence.impl.ComputerDaoImpl;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
-public enum DaoFactory {
-
-  INSTANCE;
+@Component
+public class DaoFactory {
 
   private static Logger           logger = LoggerFactory.getLogger(DaoFactory.class);
 
+  @Autowired
   private static CompanyDao       companyDao;
+  @Autowired
   private static ComputerDao      computerDao;
 
   private static BoneCP           boneCpPool;
 
   private ThreadLocal<Connection> ThreadLocalConnection;
 
-  static {
+  /**
+   * Singleton : DAO
+   */
+  public DaoFactory() {
     Properties properties = new Properties();
     InputStream stream = null;
     try {
@@ -62,14 +68,7 @@ public enum DaoFactory {
       logger.error("Connection problems");
       throw new PersistenceException(e.getMessage(), e);
     }
-    companyDao = CompanyDaoImpl.INSTANCE;
-    computerDao = ComputerDaoImpl.INSTANCE;
   }
-
-  /**
-   * Singleton : DAO
-   */
-  private DaoFactory() {}
 
   public CompanyDao getCompanyDao() {
     return companyDao;
