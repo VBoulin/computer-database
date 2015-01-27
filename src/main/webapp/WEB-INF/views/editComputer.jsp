@@ -13,7 +13,7 @@ pageEncoding="UTF-8"%>
                     </div>
                     <h1>Edit Computer</h1>
 					<span>${error.get("computerId")}</span>
-                    <form action="editComputer" method="POST">
+                    <form id="form" action="editComputer" method="POST">
                         <input type="hidden" name="computerId" value="${computer.id}"/>
                         <fieldset>
                             <div class="form-group">
@@ -63,6 +63,8 @@ pageEncoding="UTF-8"%>
         </div>
     </section>
     
+    <style> .error{ color: red; } </style>
+    <style> .valid{ color: green; } </style>
     <script src="js/jquery.min.js"></script>
 	<script src="js/jquery.validate.min.js"></script>
 	<script src="js/validForm.js"></script>

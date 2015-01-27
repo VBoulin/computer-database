@@ -9,7 +9,7 @@ pageEncoding="UTF-8"%>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="addComputer" method="POST">
+                    <form id="form" action="addComputer" method="POST">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -50,6 +50,8 @@ pageEncoding="UTF-8"%>
         </div>
     </section>
     
+    <style> .error{ color: red; } </style>
+    <style> .valid{ color: green; } </style>
     <script src="js/jquery.min.js"></script>
 	<script src="js/jquery.validate.min.js"></script>
 	<script src="js/validForm.js"></script>
