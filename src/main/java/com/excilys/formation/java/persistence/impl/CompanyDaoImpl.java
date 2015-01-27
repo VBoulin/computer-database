@@ -17,7 +17,7 @@ import com.excilys.formation.java.mapper.impl.CompanyRowMapperImpl;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
-import com.excilys.formation.java.persistence.DaoFactory;
+import com.excilys.formation.java.persistence.DaoManager;
 
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
@@ -27,7 +27,7 @@ public class CompanyDaoImpl implements CompanyDao {
   private CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
 
   @Autowired
-  private DaoFactory daoFactory;
+  private DaoManager daoFactory;
   
   /**
    * Singleton : provide the access service to the database (company)

@@ -11,7 +11,7 @@ import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.ComputerDao;
-import com.excilys.formation.java.persistence.DaoFactory;
+import com.excilys.formation.java.persistence.DaoManager;
 import com.excilys.formation.java.service.CompanyDBService;
 
 @Service
@@ -25,7 +25,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
   private Logger      logger = LoggerFactory.getLogger(CompanyDBServiceImpl.class);
 
   @Autowired
-  private DaoFactory  daoFactory;
+  private DaoManager  daoFactory;
 
   /**
    * Singleton : provide the access service to the database (company)

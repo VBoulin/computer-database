@@ -1,56 +1,55 @@
 package com.excilys.formation.java.persistence;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
-import com.excilys.formation.java.persistence.impl.CompanyDaoImpl;
-import com.excilys.formation.java.persistence.impl.ComputerDaoImpl;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
 
 @Component
-public class DaoFactory {
+public class DaoManager {
 
-  private static Logger           logger = LoggerFactory.getLogger(DaoFactory.class);
-
-  @Autowired
-  private static CompanyDao       companyDao;
-  @Autowired
-  private static ComputerDao      computerDao;
+  private static Logger           logger = LoggerFactory.getLogger(DaoManager.class);
 
   private static BoneCP           boneCpPool;
 
   private ThreadLocal<Connection> ThreadLocalConnection;
 
-  /**
-   * Singleton : DAO
-   */
-  public DaoFactory() {
-    Properties properties = new Properties();
-    InputStream stream = null;
+  @Value("${db.driver}")
+  private String driver;
+  
+  @Value("${db.url}")
+  private String url;
+  
+  @Value("${db.usr}")
+  private String usr;
+  
+  @Value("${db.password}")
+  private String password;
+  
+  @PostConstruct
+  public void config() {
     try {
-      stream = DaoFactory.class.getClassLoader().getResourceAsStream("db.properties");
-      properties.load(stream);
 
       //Load the Driver class
-      Class.forName(properties.getProperty("db.driver"));
+      Class.forName(driver);
 
       BoneCPConfig connectionConfig = new BoneCPConfig();
 
-      connectionConfig.setJdbcUrl(properties.getProperty("db.url"));
-      connectionConfig.setUser(properties.getProperty("db.usr"));
-      connectionConfig.setPassword(properties.getProperty("db.password"));
+      connectionConfig.setJdbcUrl(url);
+      connectionConfig.setUser(usr);
+      connectionConfig.setPassword(password);
 
       connectionConfig.setMinConnectionsPerPartition(5);
       connectionConfig.setMaxConnectionsPerPartition(15);
@@ -58,9 +57,6 @@ public class DaoFactory {
       boneCpPool = new BoneCP(connectionConfig);
 
       logger.info("Properties loaded with success!");
-    } catch (final IOException e) {
-      logger.error("Couldn't load db.properties");
-      throw new PersistenceException(e.getMessage(), e);
     } catch (ClassNotFoundException e) {
       logger.error("Driver problems");
       throw new PersistenceException(e.getMessage(), e);
@@ -69,14 +65,10 @@ public class DaoFactory {
       throw new PersistenceException(e.getMessage(), e);
     }
   }
-
-  public CompanyDao getCompanyDao() {
-    return companyDao;
-  }
-
-  public ComputerDao getComputerDao() {
-    return computerDao;
-  }
+  /**
+   * Singleton : DAO
+   */
+  public DaoManager() {}
 
   /**
    * Return the connection to the database

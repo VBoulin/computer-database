@@ -14,7 +14,7 @@ import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.mapper.RowMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.persistence.DaoFactory;
+import com.excilys.formation.java.persistence.DaoManager;
 
 public class ComputerRowMapperImpl implements RowMapper<Computer> {
 

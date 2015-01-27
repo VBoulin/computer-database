@@ -19,7 +19,7 @@ import com.excilys.formation.java.mapper.impl.ComputerRowMapperImpl;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.ComputerDao;
-import com.excilys.formation.java.persistence.DaoFactory;
+import com.excilys.formation.java.persistence.DaoManager;
 
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
@@ -29,7 +29,7 @@ public class ComputerDaoImpl implements ComputerDao {
   private Logger              logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
   
   @Autowired
-  private DaoFactory daoFactory;
+  private DaoManager daoFactory;
 
   /**
    * Singleton : provide the access service to the database (company)

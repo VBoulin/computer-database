@@ -6,6 +6,8 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.excilys.formation.java.model.Company;
@@ -213,7 +215,10 @@ public class UserConsole {
 
     Computer computer = computerDBService.getOne(Long.parseLong(input));
 
-    System.out.println(computer.toString());
+    if(computer != null)
+      System.out.println(computer.toString());
+    else
+      System.out.println("Computer not found !");
   }
 
   /**
@@ -392,7 +397,8 @@ public class UserConsole {
    * @param args
    */
   public static void main(String[] args) {
-    UserConsole console = new UserConsole();
+    ApplicationContext context = new AnnotationConfigApplicationContext("com.excilys.formation.java");
+    UserConsole console = context.getBean(UserConsole.class);
     console.showMenu();
   }
 

@@ -10,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import com.excilys.formation.java.persistence.DaoFactory;
+import com.excilys.formation.java.persistence.DaoManager;
 import com.excilys.formation.java.service.ServiceFactory;
 import com.excilys.formation.java.service.impl.ComputerDBServiceImpl;
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.ComputerDao;
-import com.excilys.formation.java.persistence.DaoFactory;
+import com.excilys.formation.java.persistence.DaoManager;
 import com.excilys.formation.java.service.ComputerDBService;
 
 @Service
@@ -20,8 +20,6 @@ public class ComputerDBServiceImpl implements ComputerDBService {
 
   @Autowired
   private ComputerDao computerDao;
-  @Autowired
-  private DaoFactory  daoFactory;
 
   /**
    * Singleton : provide the access service to the database

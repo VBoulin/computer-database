@@ -22,14 +22,13 @@ import com.excilys.formation.java.service.ServiceFactory;
 /**
  * Servlet implementation class DeleteComputer
  */
+@Controller
 @WebServlet("/delete")
 public class DeleteComputer extends HttpServlet {
   private static final long    serialVersionUID = 1L;
 
   @Autowired
   private ComputerDBService    computerDBService;
-  @Autowired
-  private ServiceFactory       service;
 
   private static final Pattern PATTERN          = Pattern.compile("\\d{1,19}");
 

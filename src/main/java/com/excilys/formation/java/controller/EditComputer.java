@@ -35,6 +35,7 @@ import com.excilys.formation.java.validator.Validator;
 /**
  * Servlet implementation class EditComputer
  */
+@Controller
 @WebServlet("/editComputer")
 public class EditComputer extends HttpServlet {
   private static final long serialVersionUID = 1L;
@@ -43,8 +44,6 @@ public class EditComputer extends HttpServlet {
   private ComputerDBService computerDBService;
   @Autowired
   private CompanyDBService  companyDBService;
-  @Autowired
-  private ServiceFactory    service;
   
   private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
 
