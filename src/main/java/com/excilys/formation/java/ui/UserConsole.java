@@ -15,7 +15,6 @@ import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
-import com.excilys.formation.java.service.ServiceFactory;
 import com.excilys.formation.java.validator.Validator;
 
 @Component

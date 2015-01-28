@@ -14,7 +14,6 @@ import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.mapper.RowMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.persistence.DaoManager;
 
 public class ComputerRowMapperImpl implements RowMapper<Computer> {
 
@@ -73,7 +72,6 @@ public class ComputerRowMapperImpl implements RowMapper<Computer> {
      */
   @Override
   public List<Computer> mapRowList(ResultSet rs) {
-    // TODO Auto-generated method stub
     Computer computer = null;
     List<Computer> computers = new ArrayList<Computer>();
 

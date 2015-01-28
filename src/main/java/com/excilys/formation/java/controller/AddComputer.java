@@ -1,8 +1,6 @@
 package com.excilys.formation.java.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +19,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.java.dto.ComputerDto;
-import com.excilys.formation.java.dto.ComputerDto.Builder;
 import com.excilys.formation.java.mapper.DtoMapper;
 import com.excilys.formation.java.mapper.impl.ComputerDtoMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
-import com.excilys.formation.java.service.ServiceFactory;
 import com.excilys.formation.java.validator.Validator;
 
 /**

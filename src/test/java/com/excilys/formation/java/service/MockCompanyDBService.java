@@ -9,7 +9,6 @@ import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.service.CompanyDBService;
-import com.excilys.formation.java.service.impl.ComputerDBServiceImpl;
 
 public class MockCompanyDBService implements CompanyDBService {
 

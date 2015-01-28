@@ -2,7 +2,6 @@ package com.excilys.formation.java.mapper.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.mapper.RowMapper;
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Computer;
 
 public class CompanyRowMapperImpl implements RowMapper<Company> {
 
@@ -20,7 +18,6 @@ public class CompanyRowMapperImpl implements RowMapper<Company> {
 
   @Override
   public Company mapRow(ResultSet rs) {
-    // TODO Auto-generated method stub
     Company company = null;
     if (rs == null) {
       return null;

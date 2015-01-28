@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
-import com.excilys.formation.java.mapper.impl.CompanyRowMapperImpl;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
@@ -143,7 +142,6 @@ public class MockCompanyDao implements CompanyDao {
 
   @Override
   public void delete(Long id) {
-    // TODO Auto-generated method stub
     
   }
 

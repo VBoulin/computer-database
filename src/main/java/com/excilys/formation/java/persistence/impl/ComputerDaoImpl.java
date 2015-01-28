@@ -8,10 +8,13 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.mapper.RowMapper;
@@ -29,7 +32,7 @@ public class ComputerDaoImpl implements ComputerDao {
   private Logger              logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
   
   @Autowired
-  private DaoManager daoFactory;
+  private DataSource dataSource;
 
   /**
    * Singleton : provide the access service to the database (company)
@@ -49,7 +52,8 @@ public class ComputerDaoImpl implements ComputerDao {
       logger.warn("create : Param computer o cannot be null.");
     } else {
       try {
-        conn = daoFactory.getConnection();
+        conn = DataSourceUtils.getConnection(dataSource);
+        
         stmt = conn.prepareStatement(CREATE_QUERY);
         stmt.setString(1, o.getName());
         if (o.getIntroduced() == null) {
@@ -74,9 +78,6 @@ public class ComputerDaoImpl implements ComputerDao {
       } catch (NullPointerException ne) {
         logger.error("NullError with create()");
         throw new PersistenceException(ne.getMessage(), ne);
-      } finally {
-        //Close the connection
-        daoFactory.closeConnection(conn, stmt, null);
       }
     }
   }
@@ -98,7 +99,8 @@ public class ComputerDaoImpl implements ComputerDao {
     }
 
     try {
-      conn = daoFactory.getConnection();
+      conn = DataSourceUtils.getConnection(dataSource);
+      
       stmt = conn.prepareStatement(SELECT_ONE_COMPUTER_QUERY);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
@@ -113,9 +115,6 @@ public class ComputerDaoImpl implements ComputerDao {
     } catch (NullPointerException ne) {
       logger.error("NullError with getOne()");
       throw new PersistenceException(ne.getMessage(), ne);
-    } finally {
-      //Close the connection
-      daoFactory.closeConnection(conn, stmt, rs);
     }
     return computer;
   }
@@ -133,7 +132,8 @@ public class ComputerDaoImpl implements ComputerDao {
       logger.warn("update : Param computer o cannot be null.");
     } else {
       try {
-        conn = daoFactory.getConnection();
+        conn = DataSourceUtils.getConnection(dataSource);
+        
         stmt = conn.prepareStatement(UPDATE_QUERY);
         stmt.setString(1, o.getName());
         if (o.getIntroduced() == null) {
@@ -159,10 +159,7 @@ public class ComputerDaoImpl implements ComputerDao {
       } catch (NullPointerException ne) {
         logger.error("NullError with update()");
         throw new PersistenceException(ne.getMessage(), ne);
-      } finally {
-        //Close the connection
-        daoFactory.closeConnection(conn, stmt, null);
-      }
+      } 
     }
   }
 
@@ -179,7 +176,8 @@ public class ComputerDaoImpl implements ComputerDao {
       logger.warn("getOne : Param id cannot be null or negative.");
     } else {
       try {
-        conn = daoFactory.getConnection();
+        conn = DataSourceUtils.getConnection(dataSource);
+        
         stmt = conn.prepareStatement(DELETE_QUERY);
         stmt.setLong(1, id);
         stmt.executeUpdate();
@@ -189,10 +187,7 @@ public class ComputerDaoImpl implements ComputerDao {
       } catch (NullPointerException ne) {
         logger.error("NullError with delete()");
         throw new PersistenceException(ne.getMessage(), ne);
-      } finally {
-        //Close the connection
-        daoFactory.closeConnection(conn, stmt, null);
-      }
+      } 
     }
   }
 
@@ -217,8 +212,9 @@ public class ComputerDaoImpl implements ComputerDao {
         + page.getSort().getColumn() + " " + page.getOrder().getOrder() + " LIMIT ? OFFSET ? ;";
 
     StringBuilder search = new StringBuilder("%").append(page.getSearch()).append("%");
+    
     try {
-      conn = daoFactory.getConnection();
+      conn = DataSourceUtils.getConnection(dataSource);
 
       countStmt = conn.createStatement();
 
@@ -244,10 +240,7 @@ public class ComputerDaoImpl implements ComputerDao {
     } catch (NullPointerException ne) {
       logger.error("NullError with createPage()");
       throw new PersistenceException(ne.getMessage(), ne);
-    } finally {
-      //Close the connection
-      daoFactory.closeConnection(conn, stmt, null);
-    }
+    } 
     return page;
   }
 
@@ -258,14 +251,13 @@ public class ComputerDaoImpl implements ComputerDao {
    */
   @Override
   public List<Computer> getAll() {
-    // TODO Auto-generated method stub
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
     List<Computer> computers;
 
     try {
-      conn = daoFactory.getConnection();
+      conn = DataSourceUtils.getConnection(dataSource);
 
       stmt = conn.prepareStatement(SELECT_ALL_COMPUTERS);
 
@@ -276,9 +268,6 @@ public class ComputerDaoImpl implements ComputerDao {
     } catch (SQLException e) {
       logger.error("SQLError with getAll()");
       throw new PersistenceException(e.getMessage(), e);
-    } finally {
-      //Close the connection
-      daoFactory.closeConnection(conn, stmt, null);
     }
     return computers;
   }
@@ -294,18 +283,16 @@ public class ComputerDaoImpl implements ComputerDao {
     if (id == null || id < 0) {
       logger.warn("deleteByCompany : Param id cannot be null or negative.");
     } else {
-      conn = daoFactory.getTransactionnalConnection();
+      conn = DataSourceUtils.getConnection(dataSource);
+      
       try {
         stmt = conn.prepareStatement(DELETE_COMPANY_QUERY);
         stmt.setLong(1, id);
         stmt.executeUpdate();
       } catch (final SQLException e) {
         logger.error("SQLError with deleteByCompany()");
-        daoFactory.doRollback(conn);
         throw new PersistenceException(e.getMessage(), e);
-      } finally {
-        daoFactory.closeConnection(null, stmt, null);
-      }
+      } 
     }
   }
 

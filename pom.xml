@@ -3,35 +3,35 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>computer-database</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.3.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Computer-Database</name>
 
 	<properties>
 		<maven-compiler.version>3.1</maven-compiler.version>
 		<maven-war.version>2.6</maven-war.version>
-		
+
 		<!-- Driver for MySQL -->
 		<mysql.version>5.1.34</mysql.version>
-		
+
 		<!-- Logger, SLF4J -->
 		<slf4j.version>1.7.10</slf4j.version>
 		<logback.version>1.1.2</logback.version>
-		
+
 		<!-- Tests -->
 		<junit.version>4.12</junit.version>
 		<mockito.version>2.0.2-beta</mockito.version>
 		<selenium.version>2.44.0</selenium.version>
-		
+
 		<!-- Servlets -->
 		<javax-servlet-api.version>3.1.0</javax-servlet-api.version>
 		<jstl.version>1.2</jstl.version>
-		
+
 		<!-- Connection Pool -->
 		<bonecp.version>0.8.0.RELEASE</bonecp.version>
-		
+
 		<!-- Spring framework -->
-  		<spring-context.version>4.1.4.RELEASE</spring-context.version>
+		<spring-context.version>4.1.4.RELEASE</spring-context.version>
 	</properties>
 
 	<build>
@@ -51,6 +51,23 @@
 		</plugins>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>version99</id>
+			<!-- highly available repository serving empty artifacts -->
+			<url>http://version99.qos.ch/</url>
+		</repository>
+	</repositories>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>99-empty</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<!-- Driver for MySQL -->
@@ -61,11 +78,16 @@
 			<scope>runtime</scope>
 		</dependency>
 
-
 		<!-- Logger, SLF4J -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
 
@@ -75,7 +97,6 @@
 			<version>${logback.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-
 
 		<!-- Tests -->
 		<dependency>
@@ -128,12 +149,39 @@
 			<version>${spring-context.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${spring-context.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-context.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring-context.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring-context.version}</version>
+			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 </project>

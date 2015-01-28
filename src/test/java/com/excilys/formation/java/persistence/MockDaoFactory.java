@@ -13,10 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
-import com.excilys.formation.java.persistence.CompanyDao;
-import com.excilys.formation.java.persistence.ComputerDao;
-import com.excilys.formation.java.persistence.impl.CompanyDaoImpl;
-import com.excilys.formation.java.persistence.impl.ComputerDaoImpl;
 
 public enum MockDaoFactory {
 

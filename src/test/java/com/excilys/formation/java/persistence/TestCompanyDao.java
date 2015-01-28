@@ -1,9 +1,6 @@
 package com.excilys.formation.java.persistence;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,17 +8,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
-import com.excilys.formation.java.mapper.impl.CompanyRowMapperImpl;
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
-import com.excilys.formation.java.persistence.CompanyDao;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestCompanyDao {

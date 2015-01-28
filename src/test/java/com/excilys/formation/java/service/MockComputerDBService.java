@@ -9,7 +9,6 @@ import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.ComputerDao;
 import com.excilys.formation.java.service.ComputerDBService;
-import com.excilys.formation.java.service.impl.ComputerDBServiceImpl;
 
 public class MockComputerDBService implements ComputerDBService {
 

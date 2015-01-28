@@ -4,17 +4,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestPage {
 
-  private Page page;
+  private Page<Computer> page;
 
   @Before
   public void setUp() {
-    page = new Page();
+    page = new Page<Computer>();
 
     page.setNbResults(11);
   }

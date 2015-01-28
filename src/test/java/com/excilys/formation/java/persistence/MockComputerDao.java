@@ -265,7 +265,6 @@ public class MockComputerDao implements ComputerDao {
 
   @Override
   public void deleteByCompany(Long id) {
-    // TODO Auto-generated method stub
     
   }
 

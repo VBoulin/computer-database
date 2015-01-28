@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.java.service.ComputerDBService;
-import com.excilys.formation.java.service.ServiceFactory;
 
 /**
  * Servlet implementation class DeleteComputer

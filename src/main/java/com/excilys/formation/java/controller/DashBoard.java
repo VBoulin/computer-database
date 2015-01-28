@@ -1,8 +1,6 @@
 package com.excilys.formation.java.controller;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,7 +23,6 @@ import com.excilys.formation.java.model.OrderBy;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.model.SortBy;
 import com.excilys.formation.java.service.ComputerDBService;
-import com.excilys.formation.java.service.ServiceFactory;
 import com.excilys.formation.java.validator.Validator;
 
 /**

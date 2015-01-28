@@ -7,9 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
@@ -27,7 +30,7 @@ public class CompanyDaoImpl implements CompanyDao {
   private CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
 
   @Autowired
-  private DaoManager daoFactory;
+  private DataSource dataSource;
   
   /**
    * Singleton : provide the access service to the database (company)
@@ -51,7 +54,8 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     try {
-      conn = daoFactory.getConnection();
+      conn = DataSourceUtils.getConnection(dataSource);
+      
       stmt = conn.prepareStatement(SELECT_ONE_COMPANY_QUERY);
       stmt.setLong(1, id);
       rs = stmt.executeQuery();
@@ -66,9 +70,6 @@ public class CompanyDaoImpl implements CompanyDao {
     } catch (NullPointerException ne) {
       logger.error("NullError with getOne()");
       throw new PersistenceException(ne.getMessage(), ne);
-    } finally {
-      //Close the connection
-      daoFactory.closeConnection(conn, stmt, rs);
     }
     return company;
   }
@@ -93,7 +94,7 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     try {
-      conn = daoFactory.getConnection();
+      conn = DataSourceUtils.getConnection(dataSource);
 
       countStmt = conn.createStatement();
 
@@ -117,9 +118,6 @@ public class CompanyDaoImpl implements CompanyDao {
     } catch (NullPointerException ne) {
       logger.error("NullError with createPage()");
       throw new PersistenceException(ne.getMessage(), ne);
-    } finally {
-      //Close the connection
-      daoFactory.closeConnection(conn, stmt, null);
     }
     return page;
   }
@@ -137,7 +135,7 @@ public class CompanyDaoImpl implements CompanyDao {
     List<Company> companies;
 
     try {
-      conn = daoFactory.getConnection();
+      conn = DataSourceUtils.getConnection(dataSource);
 
       stmt = conn.createStatement();
 
@@ -148,9 +146,6 @@ public class CompanyDaoImpl implements CompanyDao {
     } catch (SQLException e) {
       logger.error("SQLError with getAll()");
       throw new PersistenceException(e.getMessage(), e);
-    } finally {
-      //Close the connection
-      daoFactory.closeConnection(conn, stmt, null);
     }
     return companies;
   }
@@ -161,22 +156,20 @@ public class CompanyDaoImpl implements CompanyDao {
    * {@inheritDoc}
    */
   public void delete(Long id) {
-    PreparedStatement statement = null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     if (id == null || id < 0) {
       logger.warn("delete : Param id cannot be null or negative.");
     } else {
-      conn = daoFactory.getTransactionnalConnection();
+      conn = DataSourceUtils.getConnection(dataSource);
+      
       try {
-        statement = conn.prepareStatement(DELETE_QUERY);
-        statement.setLong(1, id);
-        statement.executeUpdate();
+        stmt = conn.prepareStatement(DELETE_QUERY);
+        stmt.setLong(1, id);
+        stmt.executeUpdate();
       } catch (final SQLException e) {
         logger.error("SQLError with delete()");
-        daoFactory.doRollback(conn);
         throw new PersistenceException(e.getMessage(), e);
-      } finally {
-        daoFactory.closeConnection(null, statement, null);
       }
     }
   }

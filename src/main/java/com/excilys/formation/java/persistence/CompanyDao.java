@@ -1,6 +1,5 @@
 package com.excilys.formation.java.persistence;
 
-import java.sql.Connection;
 import java.util.List;
 
 import com.excilys.formation.java.model.Company;
