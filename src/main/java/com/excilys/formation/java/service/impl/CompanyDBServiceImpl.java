@@ -12,7 +12,6 @@ import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.ComputerDao;
-import com.excilys.formation.java.persistence.DaoManager;
 import com.excilys.formation.java.service.CompanyDBService;
 
 @Service
