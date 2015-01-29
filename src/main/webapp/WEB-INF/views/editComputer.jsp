@@ -13,7 +13,7 @@ pageEncoding="UTF-8"%>
                     </div>
                     <h1>Edit Computer</h1>
 					<span>${error.get("computerId")}</span>
-                    <form id="form" action="editComputer" method="POST">
+                    <form id="form" action="editcomputer" method="POST">
                         <input type="hidden" name="computerId" value="${computer.id}"/>
                         <fieldset>
                             <div class="form-group">
@@ -55,7 +55,7 @@ pageEncoding="UTF-8"%>
                         <div class="actions pull-right">
                             <input type="submit" id="submit" value="Edit" class="btn btn-primary">
                             or
-                            <a href="dashBoard" class="btn btn-default">Cancel</a>
+                            <a href="dashboard" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

@@ -16,6 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.java.dto.ComputerDto;
@@ -31,125 +35,102 @@ import com.excilys.formation.java.validator.Validator;
  * Servlet implementation class EditComputer
  */
 @Controller
-@WebServlet("/editComputer")
-public class EditComputer extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+@RequestMapping("/editcomputer")
+public class EditComputer {
 
   @Autowired
-  private ComputerDBService computerDBService;
+  private ComputerDBService                computerDBService;
   @Autowired
-  private CompanyDBService  companyDBService;
-  
+  private CompanyDBService                 companyDBService;
+
   private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
 
-  private Logger            logger           = LoggerFactory.getLogger(EditComputer.class);
+  private Logger                           logger            = LoggerFactory
+                                                                 .getLogger(EditComputer.class);
 
-  /**
-   * @see HttpServlet#HttpServlet()
-   */
-  public EditComputer() {
-    super();
-  }
-  
-  @Override
-  public void init() throws ServletException {
-    super.init();
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-  }
+  private long                             id                = 0;
 
   /**
    * Update the information of a computer (corresponding to the id in the url)
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @RequestMapping(method = RequestMethod.GET)
+  protected String doGet(Model model,
+      @RequestParam(defaultValue = "0", value = "id") String idComputer) {
 
-    long id = 0;
-    String idComputer = request.getParameter("id");
-    
+    idComputer = idComputer.trim();
+
     if (Validator.isID(idComputer)) {
       id = Long.valueOf(idComputer);
 
       Computer computer = computerDBService.getOne(id);
-      
+
       ComputerDto computerDto = computerDtoMapper.toDto(computer);
-      
-      request.setAttribute("computer", computerDto);
+
+      model.addAttribute("computer", computerDto);
     }
 
     List<Company> companies = companyDBService.getAll();
-    request.setAttribute("companies", companies);
 
-    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/editComputer.jsp");
+    model.addAttribute("companies", companies);
 
-    dispatcher.forward(request, response);
-
+    return "editComputer";
   }
 
   /**
    * Update a computer in the database and redirect to the dashboard
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-    Computer computer = updateComputer(request);
+  @RequestMapping(method = RequestMethod.POST)
+  protected String doPost(Model model, @RequestParam("name") String name,
+      @RequestParam("introduced") String introduced,
+      @RequestParam("discontinued") String discontinued, @RequestParam("companyId") String companyId) {
+    Computer computer = updateComputer(model, name, introduced, discontinued, companyId);
 
     if (computer != null) {
       computerDBService.update(computer);
-
       logger.info("Computer updated with success");
-
-      response.sendRedirect("dashBoard");
     } else {
-      doGet(request, response);
+      logger.info("Fail to update the computer");
     }
+
+    return "redirect:/dashboard";
   }
 
   /**
    * Display the information of a computer corresponding to the id in the url
    * @param request
-   * @return
+   * @return A computer edited
    */
-  public Computer updateComputer(HttpServletRequest request) {
+  public Computer updateComputer(Model model, String name, String introduced, String discontinued,
+      String companyId) {
     Map<String, String> error = new HashMap<String, String>();
 
     Computer computer;
 
-    String idString = request.getParameter("computerId");
-
-    if (!Validator.isID(idString)) {
-      error.put("computerId", "Incorrect id");
-      request.setAttribute("error", error);
-      return null;
-    }
-
-    Long id = Long.valueOf(idString);
-
     //Check if a computer with this id exist in the database
     if (computerDBService.getOne(id) == null) {
       error.put("computerId", "No computer found");
-      request.setAttribute("error", error);
+      model.addAttribute("error", error);
       return null;
     }
 
     ComputerDto.Builder dtoBuilder = ComputerDto.builder();
 
-    String name = request.getParameter("name").trim();
-    if(!name.trim().isEmpty()){
+    name = name.trim();
+    if (!name.trim().isEmpty()) {
       dtoBuilder.name(name);
     }
-    String introduced = request.getParameter("introduced").trim();
-    if(!introduced.trim().isEmpty()){
+    introduced = introduced.trim();
+    if (!introduced.trim().isEmpty()) {
       dtoBuilder.introduced(introduced);
     }
-    String discontinued = request.getParameter("discontinued").trim();
-    if(!discontinued.trim().isEmpty()){
+    discontinued = discontinued.trim();
+    if (!discontinued.trim().isEmpty()) {
       dtoBuilder.discontinued(discontinued);
     }
-    String companyId = request.getParameter("companyId").trim();
-    
+    companyId = companyId.trim();
+
     ComputerDto computerDto = dtoBuilder.build();
-    
+
     Company company = null;
     if (!companyId.trim().equals("0") || companyId != null) {
       if (Validator.isID(companyId)) {
@@ -163,7 +144,7 @@ public class EditComputer extends HttpServlet {
       computer = computerDtoMapper.fromDto(computerDto);
       computer.setCompany(company);
     } else {
-      request.setAttribute("error", error);
+      model.addAttribute("error", error);
       return null;
     }
 

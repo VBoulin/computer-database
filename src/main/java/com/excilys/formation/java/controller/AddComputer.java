@@ -1,22 +1,17 @@
 package com.excilys.formation.java.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.mapper.DtoMapper;
@@ -27,62 +22,42 @@ import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.validator.Validator;
 
-/**
- * Servlet implementation class AddComputer
- */
 @Controller
-@WebServlet("/addComputer")
-public class AddComputer extends HttpServlet {
-  private static final long                serialVersionUID = 1L;
+@RequestMapping("/addcomputer")
+public class AddComputer {
 
   @Autowired
   private ComputerDBService                computerDBService;
   @Autowired
   private CompanyDBService                 companyDBService;
-  
+
   private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
 
-  private Logger                           logger           = LoggerFactory
-                                                                .getLogger(AddComputer.class);
-
-  /**
-   * Instantiation of the services 
-   * @see HttpServlet#HttpServlet()
-   */
-  public AddComputer() {
-    super();
-  }
-  
-  @Override
-  public void init() throws ServletException {
-    super.init();
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-  }
+  private Logger                           logger            = LoggerFactory
+                                                                 .getLogger(AddComputer.class);
 
   /**
    * Instantiation of the list of companies
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @RequestMapping(method = RequestMethod.GET)
+  protected String doGet(Model model) {
 
     List<Company> companies = companyDBService.getAll();
 
-    request.setAttribute("companies", companies);
+    model.addAttribute("companies", companies);
 
-    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/addComputer.jsp");
-
-    dispatcher.forward(request, response);
+    return "addComputer";
   }
 
   /**
    * Add a computer in the database and redirect to the dashboard
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @RequestMapping(method = RequestMethod.POST)
+  protected String doPost(Model model, @RequestParam("name") String name,
+      @RequestParam("introduced") String introduced,
+      @RequestParam("discontinued") String discontinued, @RequestParam("companyId") String companyId) {
 
-    Computer computer = addComputer(request);
+    Computer computer = addComputer(model, name, introduced, discontinued, companyId);
 
     if (computer != null) {
 
@@ -90,11 +65,11 @@ public class AddComputer extends HttpServlet {
 
       logger.info("Computer added with success");
 
-      response.sendRedirect("dashBoard");
+      return "redirect:/dashboard";
 
     } else {
 
-      doGet(request, response);
+      return doGet(model);
 
     }
   }
@@ -102,27 +77,26 @@ public class AddComputer extends HttpServlet {
   /**
    * Return a computer based on the request
    * If there was an error, set a map of error in the request and return null
-   * @param request
    * @return A computer or null if there was an error
    */
-  public Computer addComputer(HttpServletRequest request) {
+  public Computer addComputer(Model model, String name, String introduced, String discontinued, String companyId) {
     ComputerDto.Builder dtoBuilder = ComputerDto.builder();
 
     Map<String, String> error = new HashMap<String, String>();
 
-    String name = request.getParameter("name").trim();
+    name = name.trim();
     if (!name.trim().isEmpty()) {
       dtoBuilder.name(name);
     }
-    String introduced = request.getParameter("introduced").trim();
+    introduced = introduced.trim();
     if (!introduced.trim().isEmpty()) {
       dtoBuilder.introduced(introduced);
     }
-    String discontinued = request.getParameter("discontinued").trim();
+    discontinued = discontinued.trim();
     if (!discontinued.trim().isEmpty()) {
       dtoBuilder.discontinued(discontinued);
     }
-    String companyId = request.getParameter("companyId").trim();
+    companyId = companyId.trim();
 
     ComputerDto computerDto = dtoBuilder.build();
 
@@ -140,7 +114,7 @@ public class AddComputer extends HttpServlet {
       computer.setCompany(company);
       return computer;
     } else {
-      request.setAttribute("error", error);
+      model.addAttribute("error", error);
       return null;
     }
 

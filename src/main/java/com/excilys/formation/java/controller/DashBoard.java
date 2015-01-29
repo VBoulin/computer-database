@@ -1,19 +1,13 @@
 package com.excilys.formation.java.controller;
 
-import java.io.IOException;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.mapper.DtoMapper;
@@ -25,49 +19,31 @@ import com.excilys.formation.java.model.SortBy;
 import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.validator.Validator;
 
-/**
- * Servlet implementation class DashBoard
- */
 @Controller
-@WebServlet("/dashBoard")
-public class DashBoard extends HttpServlet {
-  private static final long                serialVersionUID = 1L;
+@RequestMapping("/dashboard")
+public class DashBoard {
 
   @Autowired
   private ComputerDBService                computerDBService;
-  
+
   private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
 
-  private Logger                           logger           = LoggerFactory
-                                                                .getLogger(DashBoard.class);
+  private Logger                           logger            = LoggerFactory
+                                                                 .getLogger(DashBoard.class);
 
-  /**
-   * Instantiation of the services
-   * @see HttpServlet#HttpServlet()
-   */
-  public DashBoard() {
-    super();
-  }
-
-  @Override
-  public void init() throws ServletException {
-    super.init();
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-  }
-  
   /**
    * Creation of a page based on the request
-   * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
    */
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @RequestMapping(method = RequestMethod.GET)
+  protected String doGet(Model model, @RequestParam(defaultValue="0", value="page") String pageNum,
+      @RequestParam(defaultValue="0", value="nbResults") String nbRs, @RequestParam(defaultValue="", value="search") String search,
+      @RequestParam(defaultValue="", value="sort") String sortBy, @RequestParam(defaultValue="", value="order") String orderBy) {
     Page<Computer> page = new Page<Computer>();
 
-    String pageNb = request.getParameter("page");
     int pageNumber = 0;
 
-    if (Validator.isInt(pageNb)) {
-      pageNumber = Integer.valueOf(pageNb);
+    if (Validator.isInt(pageNum)) {
+      pageNumber = Integer.valueOf(pageNum);
     }
 
     if (pageNumber < 1) {
@@ -76,7 +52,6 @@ public class DashBoard extends HttpServlet {
       page.setPageNumber(pageNumber);
     }
 
-    String nbRs = request.getParameter("nbResults");
     int nbResults = 0;
 
     if (nbRs != null) {
@@ -89,14 +64,11 @@ public class DashBoard extends HttpServlet {
       page.setNbResultsPerPage(nbResults);
     }
 
-    String search = request.getParameter("search");
     if (search == null) {
       page.setSearch("");
     } else {
       page.setSearch(search.trim());
     }
-
-    String sortBy = request.getParameter("sort");
 
     SortBy sort = SortBy.getInstance(sortBy);
 
@@ -105,8 +77,6 @@ public class DashBoard extends HttpServlet {
     }
 
     page.setSort(sort);
-
-    String orderBy = request.getParameter("order");
 
     if (orderBy != null) {
       orderBy = orderBy.toUpperCase();
@@ -132,15 +102,14 @@ public class DashBoard extends HttpServlet {
 
     nbPages = page.getNbTotalPage();
 
-    request.setAttribute("nbPages", nbPages);
+    model.addAttribute("nbPages", nbPages);
 
     Page<ComputerDto> pageDto = computerDtoMapper.toDto(page);
 
-    request.setAttribute("page", pageDto);
+    model.addAttribute("page", pageDto);
 
-    RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 
-    dispatcher.forward(request, response);
+    return "dashboard";
   }
 
 }

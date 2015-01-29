@@ -14,6 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.java.service.ComputerDBService;
@@ -22,9 +25,8 @@ import com.excilys.formation.java.service.ComputerDBService;
  * Servlet implementation class DeleteComputer
  */
 @Controller
-@WebServlet("/delete")
-public class DeleteComputer extends HttpServlet {
-  private static final long    serialVersionUID = 1L;
+@RequestMapping("/delete")
+public class DeleteComputer{
 
   @Autowired
   private ComputerDBService    computerDBService;
@@ -34,28 +36,12 @@ public class DeleteComputer extends HttpServlet {
   private static Logger        logger           = LoggerFactory.getLogger(DeleteComputer.class);
 
   /**
-   * @see HttpServlet#HttpServlet()
-   */
-  public DeleteComputer() {
-    super();
-  }
-  
-  @Override
-  public void init() throws ServletException {
-    super.init();
-    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-  }
-
-  /**
    * Get the String containing the Ids of the computers to delete 
    * and Create a matcher to find the positives longs in the String
    * For each long found, delete the computer
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    */
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    String selection = request.getParameter("selection");
+  @RequestMapping(method = RequestMethod.POST)
+  protected String doPost(@RequestParam("selection") String selection){
 
     Matcher m = PATTERN.matcher(selection);
     String id;
@@ -66,7 +52,7 @@ public class DeleteComputer extends HttpServlet {
       logger.info("Id of the deleted computer =" + id);
     }
 
-    response.sendRedirect("dashBoard");
+    return "redirect:/dashboard";
   }
 
 }
