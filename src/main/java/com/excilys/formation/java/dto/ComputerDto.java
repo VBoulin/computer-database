@@ -1,12 +1,42 @@
 package com.excilys.formation.java.dto;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 public class ComputerDto {
 
+  @Min(value = 0, message = "Incorrect Computer id")
   private long   id;
+  @NotNull(message = "Incorrect name")
+  @NotBlank(message = "Please enter a name")
   private String name;
+  @Pattern(regexp = "(" + "^\\s*$"
+      + "|((\\d{4})([-])(0[13578]|10|12)([-])(0[1-9]|[12][0-9]|3[01]))"
+      + "|((\\d{4})([-])(0[469]|11)([-])([0][1-9]|[12][0-9]|30))"
+      + "|((\\d{4})([-])(02)([-])(0[1-9]|1[0-9]|2[0-8]))"
+      + "|(([02468][048]00)([-])(02)([-])(29))"
+      + "|(([13579][26]00)([-])(02)([-])(29))"
+      + "|(([0-9][0-9][0][48])([-])(02)([-])(29))"
+      + "|(([0-9][0-9][2468][048])([-])(02)([-])(29))"
+      + "|(([0-9][0-9][13579][26])([-])(02)([-])(29))" + ")",
+      message = "Incorrect introduced Date : yyyy-mm-dd")
   private String introduced;
+  @Pattern(regexp = "(" + "^\\s*$"
+      + "|((\\d{4})([-])(0[13578]|10|12)([-])(0[1-9]|[12][0-9]|3[01]))"
+      + "|((\\d{4})([-])(0[469]|11)([-])([0][1-9]|[12][0-9]|30))"
+      + "|((\\d{4})([-])(02)([-])(0[1-9]|1[0-9]|2[0-8]))"
+      + "|(([02468][048]00)([-])(02)([-])(29))"
+      + "|(([13579][26]00)([-])(02)([-])(29))"
+      + "|(([0-9][0-9][0][48])([-])(02)([-])(29))"
+      + "|(([0-9][0-9][2468][048])([-])(02)([-])(29))"
+      + "|(([0-9][0-9][13579][26])([-])(02)([-])(29))" + ")",
+      message = "Incorrect discontinued Date : yyyy-mm-dd")
   private String discontinued;
-  private String idCompany;
+  @Min(value = 0, message = "Incorrect Company id")
+  private long idCompany;
   private String companyName;
 
   //------------------------------
@@ -53,11 +83,11 @@ public class ComputerDto {
     this.discontinued = discontinued;
   }
 
-  public String getIdCompany() {
+  public long getIdCompany() {
     return idCompany;
   }
 
-  public void setIdCompany(String company) {
+  public void setIdCompany(long company) {
     this.idCompany = company;
   }
 
@@ -80,7 +110,7 @@ public class ComputerDto {
     result = prime * result + ((companyName == null) ? 0 : companyName.hashCode());
     result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
     result = prime * result + (int) (id ^ (id >>> 32));
-    result = prime * result + ((idCompany == null) ? 0 : idCompany.hashCode());
+    result = prime * result + (int) (idCompany ^ (idCompany >>> 32));
     result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
@@ -107,10 +137,7 @@ public class ComputerDto {
       return false;
     if (id != other.id)
       return false;
-    if (idCompany == null) {
-      if (other.idCompany != null)
-        return false;
-    } else if (!idCompany.equals(other.idCompany))
+    if (idCompany != other.idCompany)
       return false;
     if (introduced == null) {
       if (other.introduced != null)
@@ -168,7 +195,7 @@ public class ComputerDto {
       return this;
     }
 
-    public Builder idCompany(String idCompany) {
+    public Builder idCompany(long idCompany) {
       computerDTO.idCompany = idCompany;
       return this;
     }

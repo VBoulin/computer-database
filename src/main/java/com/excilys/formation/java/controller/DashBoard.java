@@ -84,11 +84,6 @@ public class DashBoard {
 
     OrderBy order = OrderBy.getInstance(orderBy);
 
-    if (OrderBy.getInstance("ASC").equals(order)) {
-      order = OrderBy.DESC;
-    } else {
-      order = OrderBy.ASC;
-    }
     if (order == null) {
       order = OrderBy.ASC;
     }

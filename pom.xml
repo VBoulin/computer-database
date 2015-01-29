@@ -32,6 +32,13 @@
 
 		<!-- Spring framework -->
 		<spring-context.version>4.1.4.RELEASE</spring-context.version>
+		
+		<!-- Validator dependencies -->
+		<validator-api.version>1.1.0.Final</validator-api.version>
+		<apache-commons-lang.version>3.3.2</apache-commons-lang.version>
+		
+		<!-- Hibernate validation -->
+		<hibernate.validation.version>5.1.2.Final</hibernate.validation.version>
 	</properties>
 
 	<build>
@@ -183,6 +190,26 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring-context.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- Validation-->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${validator-api.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${apache-commons-lang.version}</version>
+		</dependency>
+		
+		<!-- Hibernate validation -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate.validation.version}</version>
 		</dependency>
 	</dependencies>
 </project>

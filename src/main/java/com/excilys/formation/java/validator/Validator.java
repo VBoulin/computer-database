@@ -141,10 +141,8 @@ public class Validator {
         return false;
       }
     }
-    if (dto.getIdCompany() != null) {
-      if (!isID(dto.getIdCompany())) {
-        return false;
-      }
+    if (dto.getIdCompany() < 0) {
+       return false;
     }
 
     return true;
@@ -176,10 +174,8 @@ public class Validator {
         error.put("discontinued", "Incorrect date format : yyyy-mm-dd");
       }
     }
-    if (dto.getIdCompany() != null) {
-      if (!isID(dto.getIdCompany())) {
-        error.put("companyId", "Incorrect Company identifier");
-      }
+    if (dto.getIdCompany() <0) {
+       error.put("companyId", "Incorrect Company identifier");
     }
 
     if (error.isEmpty())

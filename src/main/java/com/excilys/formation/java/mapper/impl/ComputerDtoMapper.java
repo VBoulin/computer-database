@@ -10,7 +10,9 @@ import com.excilys.formation.java.mapper.DtoMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
-import com.excilys.formation.java.validator.Validator;
+
+
+import org.apache.commons.lang3.StringUtils;
 
 public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
 
@@ -18,23 +20,17 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
    * {@inheritDoc}
    */
   public Computer fromDto(ComputerDto dto) {
-    if (!Validator.isComputerDTO(dto)) {
-      return null;
-    }
-
     Computer.Builder builder = Computer.builder();
     builder.id(dto.getId()).name(dto.getName());
 
-    if (dto.getIntroduced() != null) {
+    if (!StringUtils.isEmpty(dto.getIntroduced())) {
       builder.introduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
     }
-    if (dto.getDiscontinued() != null) {
+    if (!StringUtils.isEmpty(dto.getDiscontinued())) {
       builder
           .discontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
     }
-    if (dto.getIdCompany() != null) {
-      builder.company(new Company(Long.parseLong(dto.getIdCompany()), dto.getCompanyName()));
-    }
+    
     return builder.build();
   }
 
@@ -67,7 +63,7 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
       builder.discontinued(computer.getDiscontinued().toString());
     }
     if (computer.getCompany() != null) {
-      builder.idCompany(String.valueOf(computer.getCompany().getId()));
+      builder.idCompany(computer.getCompany().getId());
       builder.companyName(computer.getCompany().getName());
     }
 
