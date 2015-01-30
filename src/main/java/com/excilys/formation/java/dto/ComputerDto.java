@@ -12,14 +12,14 @@ public class ComputerDto {
 
   @Min(value = 0, message = "Incorrect Computer id")
   private long   id;
-  @NotNull(message = "Incorrect name")
-  @NotBlank(message = "Please enter a name")
+  @NotNull(message = "{error.name}")
+  @NotBlank(message = "{error.name}")
   private String name;
-  @DateValidator(message = "Incorrect introduced Date : yyyy-mm-dd")
+  @DateValidator(message = "{error.introduced}")
   private String introduced;
-  @DateValidator(message = "Incorrect discontinued Date : yyyy-mm-dd")
+  @DateValidator(message = "{error.discontinued}")
   private String discontinued;
-  @Min(value = 0, message = "Incorrect Company id")
+  @Min(value = 0, message = "{error.companyId}")
   private long idCompany;
   private String companyName;
 

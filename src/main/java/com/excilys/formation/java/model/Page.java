@@ -21,6 +21,7 @@ public class Page<T> {
     nbResultsPerPage = 10;
     sort=SortBy.ID;
     order=OrderBy.ASC;
+    search="";
   }
 
   public Page(int pageNumber, List<T> list, int nbResultsPerPage, int nbResults) {
@@ -30,6 +31,7 @@ public class Page<T> {
     this.nbResults = nbResults;
     sort=SortBy.ID;
     order=OrderBy.ASC;
+    search="";
   }
 
   //------------------------------
@@ -132,10 +134,27 @@ public class Page<T> {
 
   @Override
   public String toString() {
-    return "Page [pageNumber=" + pageNumber + ", list=" + list + ", nbResultsPerPage="
-        + nbResultsPerPage + ", nbResults=" + nbResults + "]";
+    StringBuilder builder = new StringBuilder();
+    builder.append("Page [pageNumber=");
+    builder.append(pageNumber);
+    builder.append(", list=");
+    builder.append(list);
+    builder.append(", nbResultsPerPage=");
+    builder.append(nbResultsPerPage);
+    builder.append(", nbResults=");
+    builder.append(nbResults);
+    builder.append(", nbTotalPage=");
+    builder.append(nbTotalPage);
+    builder.append(", search=");
+    builder.append(search);
+    builder.append(", order=");
+    builder.append(order);
+    builder.append(", sort=");
+    builder.append(sort);
+    builder.append("]");
+    return builder.toString();
   }
-
+  
   //------------------------------
   //Other functions
   //------------------------------
