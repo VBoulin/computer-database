@@ -4,15 +4,13 @@ pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
 <%@ page import="com.excilys.formation.java.model.*"%>
 
     <section id="main">
         <div class="container">
         	<span style="float: right"> 
-				<a href="?lang=en" class="btn btn-primary">en</a>
-				<a href="?lang=fr" class="btn btn-primary">fr</a>
+				<a href="?id=${computer.id}&lang=en" class="btn btn-primary">en</a>
+				<a href="?id=${computer.id}&lang=fr" class="btn btn-primary">fr</a>
 			</span>
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">

@@ -18,17 +18,20 @@ pageEncoding="UTF-8"%>
                         <fieldset>
 	                        <div class="form-group">
                                 <label for="computerName"><spring:message code="label.name"/></label>
-                                <form:input path="name" type="text" class="form-control" id="computerName" placeholder="Computer name" required="required"/>
+                                <spring:message code="placeholder.name" var="namePlaceholder"/>
+                                <form:input path="name" type="text" class="form-control" id="computerName" placeholder="${namePlaceholder}" required="required"/>
                             	<form:errors path="name" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="label.introduced"/></label>
-                                <form:input path="introduced" type="date" class="form-control" id="introduced" placeholder="Introduced date : yyyy-MM-dd"/>
+                                <spring:message code="placeholder.introduced" var="introducedPlaceholder"/>
+                                <form:input path="introduced" type="date" class="form-control" id="introduced" placeholder="${introducedPlaceholder}"/>
                             	<form:errors path="introduced" cssClass="error"/>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued"><spring:message code="label.discontinued"/></label>
-                                <form:input path="discontinued" type="date" class="form-control" id="discontinued" placeholder="Discontinued date : yyyy-MM-dd"/>
+                                <spring:message code="placeholder.discontinued" var="discontinuedPlaceholder"/>
+                                <form:input path="discontinued" type="date" class="form-control" id="discontinued" placeholder="${discontinuedPlaceholder}"/>
                             	<form:errors path="discontinued" cssClass="error"/>
                             </div>
                             <div class="form-group">
