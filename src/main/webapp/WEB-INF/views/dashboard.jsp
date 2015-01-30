@@ -3,25 +3,29 @@ pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.excilys.formation.java.model.*"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <jsp:include page="includes/header.jsp" />
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.nbResults} Computers found</h1>
+        	<span style="float: right"> 
+				<a href="?lang=en" class="btn btn-primary">en</a>
+				<a href="?lang=fr" class="btn btn-primary">fr</a>
+			</span>
+			<h1 id="homeTitle">${page.nbResults} <spring:message code="title.dashboard"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code="placeholder.search"/>" /> <input
+							type="submit" id="searchsubmit" value="<spring:message code="button.filter"/>"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addcomputer" href="addcomputer">Add
-						Computer</a> <a class="btn btn-default" id="editcomputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addcomputer" href="addcomputer"><spring:message code="button.addComputer"/></a> 
+					<a class="btn btn-default" id="editcomputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="button.edit"/></a>
 				</div>
 			</div>
 		</div>
@@ -47,19 +51,19 @@ pageEncoding="UTF-8"%>
                         </th>
                         <!-- Table header for Computer name -->
                         <th>
-                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="name" order="${page.order.order}" search="${page.search}" >Computer name</t:link>
+                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="name" order="${page.order.order}" search="${page.search}" ><spring:message code="label.name"/></t:link>
                         </th>
                         <!-- Table header for Introduced date -->
                         <th>
-                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="introduced" order="${page.order.order}" search="${page.search}">Introduced date</t:link>
+                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="introduced" order="${page.order.order}" search="${page.search}"><spring:message code="label.introduced"/></t:link>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="discontinued" order="${page.order.order}" search="${page.search}">Discontinued date</t:link>
+                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="discontinued" order="${page.order.order}" search="${page.search}"><spring:message code="label.discontinued"/></t:link>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="company_name" order="${page.order.order}" search="${page.search}">Company</t:link>
+                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="company_name" order="${page.order.order}" search="${page.search}"><spring:message code="label.company"/></t:link>
                         </th>
 
                     </tr>
