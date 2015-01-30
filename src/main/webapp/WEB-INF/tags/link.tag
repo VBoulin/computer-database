@@ -1,7 +1,8 @@
+<%@ tag body-content="scriptless" %>
 <%@ attribute name="classes" required="false" %>
 <%@ attribute name="url" required="true" %>
-<%@ attribute name="pageNumber" required="false" %>
-<%@ attribute name="nbResultsPerPage" required="false" %>
+<%@ attribute name="pageNumber" required="false"  type="java.lang.Integer"%>
+<%@ attribute name="nbResultsPerPage" required="false"  type="java.lang.Integer"%>
 <%@ attribute name="order" required="false" %>
 <%@ attribute name="sort" required="false" %>
 <%@ attribute name="search" required="false" %>

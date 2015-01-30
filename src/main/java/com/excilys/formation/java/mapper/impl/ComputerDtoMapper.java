@@ -5,14 +5,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.mapper.DtoMapper;
-import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
-
-
-import org.apache.commons.lang3.StringUtils;
 
 public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
 

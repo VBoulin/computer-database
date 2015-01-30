@@ -3,8 +3,8 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <%@ attribute name="url" required="true"%>
-<%@ attribute name="nbPages" type="java.lang.Integer" required="true"%>
-<%@ attribute name="pageNumber" type="java.lang.Integer" required="true"%>
+<%@ attribute name="nbPages" required="true" type="java.lang.Integer"%>
+<%@ attribute name="pageNumber" required="true" type="java.lang.Integer"%>
 <%@ attribute name="nbResultsPerPage" required="true"%>
 <%@ attribute name="search" required="false"%>
 <%@ attribute name="sort" required="false"%>

@@ -1,10 +1,5 @@
 package com.excilys.formation.java.persistence.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -13,10 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.mapper.impl.CompanyRowMapperImpl;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Page;
@@ -28,9 +21,6 @@ public class CompanyDaoImpl implements CompanyDao {
   private Logger               logger = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
   private CompanyRowMapperImpl mapper = new CompanyRowMapperImpl();
-
-  @Autowired
-  private DataSource           dataSource;
 
   private JdbcTemplate         jdbcTemplate;
 

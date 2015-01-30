@@ -13,7 +13,7 @@ public class Validator {
 
   /**
    * Check if a String is a valid date
-   * @param date String to check
+   * @param input String to check
    * @return true if the format is correct
    */
   public static boolean isDate(String input) {

@@ -24,9 +24,6 @@ public class ComputerDaoImpl implements ComputerDao {
 
   private Logger                logger = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
-  @Autowired
-  private DataSource            dataSource;
-
   private JdbcTemplate          jdbcTemplate;
 
   @Autowired

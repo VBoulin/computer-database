@@ -1,8 +1,6 @@
 package com.excilys.formation.java.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -23,7 +21,6 @@ import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
-import com.excilys.formation.java.validator.Validator;
 
 /**
  * Servlet implementation class EditComputer

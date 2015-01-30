@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>computer-database</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.3.4-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Computer-Database</name>
 
@@ -136,7 +136,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>jstl</groupId>
+			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 		</dependency>
@@ -146,7 +146,6 @@
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
 			<version>${bonecp.version}</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<!-- Spring framework -->
@@ -154,7 +153,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<version>${spring-context.version}</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
