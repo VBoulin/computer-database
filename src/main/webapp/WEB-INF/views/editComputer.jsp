@@ -18,7 +18,7 @@ pageEncoding="UTF-8"%>
                         id: ${computer.id}
                     </div>
                     <h1><spring:message code="title.edit"/></h1>
-                    <form:form id="form" action="editcomputer" method="POST" commandName="computerDto">
+                    <form:form id="form" action="editcomputer" method="POST" commandName="computer">
                         <form:input type="hidden" path="id" value="${computer.id}"/>
                         <form:errors path="id" cssClass="error"/>
                         <fieldset>

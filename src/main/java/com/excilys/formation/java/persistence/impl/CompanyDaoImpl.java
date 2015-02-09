@@ -35,13 +35,7 @@ public class CompanyDaoImpl implements CompanyDao {
    * {@inheritDoc}
    */
   public Company getOne(Long id) {
-
-    if (id == null || id < 0) {
-      logger.warn("getOne : Param id cannot be null or negative.");
-      return null;
-    } else {
       return jdbcTemplate.queryForObject(SELECT_ONE_COMPANY_QUERY, mapper, id);
-    }
   }
 
   private static final String COUNT_QUERY     = "SELECT COUNT(id) AS total FROM company";
@@ -51,11 +45,6 @@ public class CompanyDaoImpl implements CompanyDao {
    * {@inheritDoc}
    */
   public Page<Company> createPage(Page<Company> page) {
-
-    if (page == null) {
-      logger.warn("createPage : Param page cannot be null.");
-      return null;
-    }
     page.setNbResults(jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class));
 
     final Object[] o = new Object[] { page.getNbResultsPerPage(),
@@ -81,11 +70,7 @@ public class CompanyDaoImpl implements CompanyDao {
    * {@inheritDoc}
    */
   public void delete(Long id) {
-    if (id == null || id < 0) {
-      logger.warn("delete : Param id cannot be null or negative.");
-    } else {
       jdbcTemplate.update(DELETE_QUERY, id);
-    }
   }
 
 }

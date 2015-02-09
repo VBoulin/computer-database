@@ -17,7 +17,7 @@ import com.excilys.formation.java.model.OrderBy;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.model.SortBy;
 import com.excilys.formation.java.service.ComputerDBService;
-import com.excilys.formation.java.validator.Validator;
+import com.excilys.formation.java.util.Validator;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -35,9 +35,13 @@ public class DashBoard {
    * Creation of a page based on the request
    */
   @RequestMapping(method = RequestMethod.GET)
-  protected String doGet(Model model, @RequestParam(defaultValue="0", value="page") String pageNum,
-      @RequestParam(defaultValue="0", value="nbResults") String nbRs, @RequestParam(defaultValue="", value="search") String search,
-      @RequestParam(defaultValue="", value="sort") String sortBy, @RequestParam(defaultValue="", value="order") String orderBy) {
+  protected String doGet(Model model,
+      @RequestParam(defaultValue = "0", value = "page") String pageNum,
+      @RequestParam(defaultValue = "0", value = "nbResults") String nbRs,
+      @RequestParam(defaultValue = "", value = "search") String search,
+      @RequestParam(defaultValue = "", value = "sort") String sortBy,
+      @RequestParam(defaultValue = "", value = "order") String orderBy,
+      @RequestParam(defaultValue = "en", value = "lang") String lang) {
     Page<Computer> page = new Page<Computer>();
 
     int pageNumber = 0;
@@ -103,6 +107,7 @@ public class DashBoard {
 
     model.addAttribute("page", pageDto);
 
+    logger.info("Langage selected :"+lang);
 
     return "dashboard";
   }

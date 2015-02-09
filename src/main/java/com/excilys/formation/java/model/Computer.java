@@ -8,20 +8,17 @@ public class Computer{
   private LocalDate introduced;
   private LocalDate discontinued;
   private Company   company;
-  private String    comparison;
 
   //------------------------------
   //Constructors
   //------------------------------
   public Computer() {
     super();
-    this.comparison = "name";
   }
 
   public Computer(String name) {
     super();
     this.name = name;
-    this.comparison = "name";
   }
 
   public Computer(long id, String name, LocalDate introduced, LocalDate discontinued,
@@ -32,7 +29,6 @@ public class Computer{
     this.introduced = introduced;
     this.discontinued = discontinued;
     this.company = company;
-    this.comparison = "name";
   }
 
   //------------------------------
@@ -77,14 +73,6 @@ public class Computer{
 
   public void setCompany(Company company) {
     this.company = company;
-  }
-
-  public String getComparison() {
-    return comparison;
-  }
-
-  public void setComparison(String comparison) {
-    this.comparison = comparison;
   }
 
   //------------------------------

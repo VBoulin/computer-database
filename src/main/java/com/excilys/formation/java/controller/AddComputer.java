@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -41,7 +42,7 @@ public class AddComputer {
   @RequestMapping(method = RequestMethod.GET)
   protected String doGet(Model model) {
     List<Company> companies = companyDBService.getAll();
-    
+
     model.addAttribute("computerDto", new ComputerDto());
     model.addAttribute("companies", companies);
 
@@ -55,20 +56,28 @@ public class AddComputer {
   protected String doPost(Model model, @Valid ComputerDto computerDto, BindingResult rs) {
     Company company = null;
     Computer computer = null;
-    
+
     if (!rs.hasErrors()) {
-        computer = computerDtoMapper.fromDto(computerDto);
-        long id = computerDto.getIdCompany();
-        if(id > 0){
-          company=companyDBService.getOne(computerDto.getIdCompany());
-        }
-        computer.setCompany(company);
-        computerDBService.create(computer);
-        logger.info("Computer added with success");
-        return "redirect:/dashboard";
+      computer = computerDtoMapper.fromDto(computerDto);
+      long id = computerDto.getIdCompany();
+      if (id > 0) {
+        company = companyDBService.getOne(computerDto.getIdCompany());
+      }
+      computer.setCompany(company);
+      computerDBService.create(computer);
+      logger.info("Computer added with success");
+      return "redirect:/dashboard";
     } else {
-        model.addAttribute("companies", companyDBService.getAll());
-        return "addComputer";
+      model.addAttribute("companies", companyDBService.getAll());
+      return "addComputer";
     }
+  }
+
+  /**
+  * ExceptionHandler that redirect any error catch to a custom error page
+  */
+  @ExceptionHandler(Exception.class)
+  public String handleAllException(Exception ex) {
+    return "error";
   }
 }

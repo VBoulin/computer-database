@@ -37,10 +37,6 @@ public class ComputerDaoImpl implements ComputerDao {
    * {@inheritDoc}
    */
   public void create(Computer c) {
-
-    if (c == null) {
-      logger.warn("create : Param computer o cannot be null.");
-    } else {
       LocalDate introduced = c.getIntroduced();
       LocalDate discontinued = c.getDiscontinued();
 
@@ -64,7 +60,6 @@ public class ComputerDaoImpl implements ComputerDao {
           companyId };
 
       jdbcTemplate.update(CREATE_QUERY, o);
-    }
   }
 
   private static final String SELECT_ONE_COMPUTER_QUERY = "SELECT c.id, c.name, c.introduced, c.discontinued, cp.id AS cpId, cp.name AS cpName FROM computer AS c LEFT JOIN company AS cp ON c.company_id = cp.id WHERE c.id = ?";
@@ -73,13 +68,7 @@ public class ComputerDaoImpl implements ComputerDao {
    * {@inheritDoc}
    */
   public Computer getOne(Long id) {
-
-    if (id == null || id < 0) {
-      logger.warn("getOne : Param id cannot be null or negative.");
-      return null;
-    } else {
       return jdbcTemplate.queryForObject(SELECT_ONE_COMPUTER_QUERY, mapper, id);
-    }
   }
 
   private static final String UPDATE_QUERY = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?;";
@@ -88,10 +77,6 @@ public class ComputerDaoImpl implements ComputerDao {
    * {@inheritDoc}
    */
   public void update(Computer c) {
-
-    if (c == null) {
-      logger.warn("update : Param computer o cannot be null.");
-    } else {
       LocalDate introduced = c.getIntroduced();
       LocalDate discontinued = c.getDiscontinued();
 
@@ -115,7 +100,6 @@ public class ComputerDaoImpl implements ComputerDao {
           companyId, c.getId() };
 
       jdbcTemplate.update(UPDATE_QUERY, o);
-    }
   }
 
   private static final String DELETE_QUERY = "DELETE FROM computer WHERE id = ?;";
@@ -124,11 +108,7 @@ public class ComputerDaoImpl implements ComputerDao {
    * {@inheritDoc}
    */
   public void delete(Long id) {
-    if (id == null || id < 0) {
-      logger.warn("getOne : Param id cannot be null or negative.");
-    } else {
       jdbcTemplate.update(DELETE_QUERY, id);
-    }
   }
 
   private static final String COUNT_QUERY = "SELECT COUNT(id) as total FROM computer";
@@ -137,11 +117,6 @@ public class ComputerDaoImpl implements ComputerDao {
    * {@inheritDoc}
    */
   public Page<Computer> createPage(Page<Computer> page) {
-
-    if (page == null) {
-      logger.warn("createpage : Param page cannot be null.");
-      return null;
-    }
 
     page.setNbResults(jdbcTemplate.queryForObject(COUNT_QUERY, Integer.class));
 
@@ -173,11 +148,7 @@ public class ComputerDaoImpl implements ComputerDao {
    * {@inheritDoc}
    */
   public void deleteByCompany(Long id) {
-    if (id == null || id < 0) {
-      logger.warn("deleteByCompany : Param id cannot be null or negative.");
-    } else {
       jdbcTemplate.update(DELETE_COMPANY_QUERY, id);
-    }
   }
 
 }

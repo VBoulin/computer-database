@@ -1,4 +1,4 @@
-package com.excilys.formation.java.validator;
+package com.excilys.formation.java.util;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

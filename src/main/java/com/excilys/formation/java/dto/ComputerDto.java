@@ -6,7 +6,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.excilys.formation.java.validator.DateValidator;
+import com.excilys.formation.java.util.DateValidator;
 
 public class ComputerDto {
 

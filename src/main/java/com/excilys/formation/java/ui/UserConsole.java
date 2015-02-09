@@ -16,7 +16,7 @@ import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
-import com.excilys.formation.java.validator.Validator;
+import com.excilys.formation.java.util.Validator;
 
 @Component
 public class UserConsole {

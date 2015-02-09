@@ -28,7 +28,7 @@ import com.excilys.formation.java.service.ComputerDBService;
 @Controller
 @RequestMapping("/editcomputer")
 public class EditComputer {
-
+  
   @Autowired
   private ComputerDBService                computerDBService;
   @Autowired
@@ -45,13 +45,11 @@ public class EditComputer {
   @RequestMapping(method = RequestMethod.GET)
   protected String doGet(Model model, @RequestParam long id) {
 
-
     Computer computer = computerDBService.getOne(id);
 
     ComputerDto computerDto = computerDtoMapper.toDto(computer);
 
     model.addAttribute("computer", computerDto);
-    model.addAttribute("computerDto", new ComputerDto());
 
     List<Company> companies = companyDBService.getAll();
 
