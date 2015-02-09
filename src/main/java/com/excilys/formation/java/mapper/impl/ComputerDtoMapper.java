@@ -2,10 +2,12 @@ package com.excilys.formation.java.mapper.impl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.mapper.DtoMapper;
@@ -21,12 +23,14 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
     Computer.Builder builder = Computer.builder();
     builder.id(dto.getId()).name(dto.getName());
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(LocaleContextHolder.getLocale());
+    
     if (!StringUtils.isEmpty(dto.getIntroduced())) {
-      builder.introduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
+      builder.introduced(LocalDate.parse(dto.getIntroduced(), formatter));
     }
     if (!StringUtils.isEmpty(dto.getDiscontinued())) {
       builder
-          .discontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
+          .discontinued(LocalDate.parse(dto.getDiscontinued(), formatter));
     }
     
     return builder.build();

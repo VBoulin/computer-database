@@ -25,8 +25,8 @@ $(document).ready(function() {
 			},
 			messages: {
 	            name: "Veuillez entrer un nom.",
-	            introduced: "Format à respecter : yyyy-MM-dd ou laisser vide",
-	            discontinued: "Format à respecter : yyyy-MM-dd ou laisser vide"
+	            introduced: "Format de date invalide",
+	            discontinued: "Format de date invalide"
 	        }
 		});
 	}else{

@@ -1,10 +1,8 @@
 package com.excilys.formation.java.util;
 
-import java.util.Map;
-
 import org.apache.commons.validator.GenericValidator;
+import org.springframework.context.i18n.LocaleContextHolder;
 
-import com.excilys.formation.java.dto.ComputerDto;
 
 public class Validator {
 
@@ -20,8 +18,9 @@ public class Validator {
     if (input.trim().isEmpty()) {
       return true;
     }
-
-    return GenericValidator.isDate(input, "yyyy-MM-dd", true);
+    
+    return GenericValidator.isDate(input, LocaleContextHolder.getLocale());
+      
   }
 
   /**
@@ -59,73 +58,4 @@ public class Validator {
     
     return GenericValidator.isInt(input);
   }
-
-  /**
-   * Check if the computerDto is valid
-   * @param dto Dto to validate
-   * @return True if valid, false otherwise
-   */
-  public static boolean isComputerDTO(ComputerDto dto) {
-    if (dto == null) {
-      return false;
-    }
-    if (dto.getId() < 0) {
-      return false;
-    }
-    if (!isName(dto.getName())) {
-      return false;
-    }
-    if (dto.getIntroduced() != null) {
-      if (!isDate(dto.getIntroduced())) {
-        return false;
-      }
-    }
-    if (dto.getDiscontinued() != null) {
-      if (!isDate(dto.getDiscontinued())) {
-        return false;
-      }
-    }
-    if (dto.getIdCompany() < 0) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Check if the computerDto is valid and fill an error-map when not valid
-   * @param dto Dto to validate
-   * @param error
-   * @return True if the dto is valid, false otherwise
-   */
-  public static boolean isComputerDTO(ComputerDto dto, Map<String, String> error) {
-    if (dto == null) {
-      return false;
-    }
-    if (dto.getId() < 0) {
-      return false;
-    }
-    if (!isName(dto.getName())) {
-      error.put("name", "Incorrect name : you must enter a name");
-    }
-    if (dto.getIntroduced() != null) {
-      if (!isDate(dto.getIntroduced())) {
-        error.put("introduced", "Incorrect date format : yyyy-mm-dd");
-      }
-    }
-    if (dto.getDiscontinued() != null) {
-      if (!isDate(dto.getDiscontinued())) {
-        error.put("discontinued", "Incorrect date format : yyyy-mm-dd");
-      }
-    }
-    if (dto.getIdCompany() < 0) {
-      error.put("companyId", "Incorrect Company identifier");
-    }
-
-    if (error.isEmpty())
-      return true;
-    else
-      return false;
-  }
-
 }
