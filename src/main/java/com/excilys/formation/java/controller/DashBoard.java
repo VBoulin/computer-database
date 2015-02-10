@@ -14,7 +14,7 @@ import com.excilys.formation.java.dto.ComputerDtoMapper;
 import com.excilys.formation.java.dto.DtoMapper;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.OrderBy;
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.PageWrapper;
 import com.excilys.formation.java.model.SortBy;
 import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.util.Validator;
@@ -42,7 +42,7 @@ public class DashBoard {
       @RequestParam(defaultValue = "", value = "sort") String sortBy,
       @RequestParam(defaultValue = "", value = "order") String orderBy,
       @RequestParam(defaultValue = "en", value = "lang") String lang) {
-    Page<Computer> page = new Page<Computer>();
+    PageWrapper<Computer> page = new PageWrapper<Computer>();
 
     int pageNumber = 0;
 
@@ -103,7 +103,7 @@ public class DashBoard {
 
     model.addAttribute("nbPages", nbPages);
 
-    Page<ComputerDto> pageDto = computerDtoMapper.toDto(page);
+    PageWrapper<ComputerDto> pageDto = computerDtoMapper.toDto(page);
 
     model.addAttribute("page", pageDto);
 

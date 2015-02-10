@@ -2,7 +2,7 @@ package com.excilys.formation.java.dto;
 
 import java.util.List;
 
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.PageWrapper;
 
 public interface DtoMapper<X, Y> {
   
@@ -29,12 +29,12 @@ public interface DtoMapper<X, Y> {
   /**
    * Map a page of Y into Dtos X
    */
-  Page<X> toDto(Page<Y> y);
+  PageWrapper<X> toDto(PageWrapper<Y> y);
 
   /**
    * Map a page of Dtos X to Objects Y
    */
-  Page<Y> fromDto(Page<X> x);
+  PageWrapper<Y> fromDto(PageWrapper<X> x);
   
   
 }

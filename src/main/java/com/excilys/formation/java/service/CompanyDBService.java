@@ -3,7 +3,7 @@ package com.excilys.formation.java.service;
 import java.util.List;
 
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.PageWrapper;
 
 public interface CompanyDBService {
 
@@ -25,7 +25,7 @@ public interface CompanyDBService {
    * @param page Raw page with only basics informations such as number of results per page
    * @return Page with a list
    */
-  Page<Company> createPage(Page<Company> page);
+  PageWrapper<Company> createPage(PageWrapper<Company> page);
   
   /**
    * Delete a company and all the computer referencing that company

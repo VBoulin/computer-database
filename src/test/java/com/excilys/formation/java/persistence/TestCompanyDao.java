@@ -12,7 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.PageWrapper;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestCompanyDao {
@@ -53,9 +53,9 @@ public class TestCompanyDao {
 
   @Test
   public void testCreatepage() {
-    Page<Company> page = new Page<Company>();
+    PageWrapper<Company> page = new PageWrapper<Company>();
 
-    Page<Company> pageR = new Page<Company>();
+    PageWrapper<Company> pageR = new PageWrapper<Company>();
     pageR.setNbResultsPerPage(10);
     pageR.setPageNumber(1);
     pageR.setNbResults(42);

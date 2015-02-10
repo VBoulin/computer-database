@@ -9,11 +9,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class TestPage {
 
-  private Page<Computer> page;
+  private PageWrapper<Computer> page;
 
   @Before
   public void setUp() {
-    page = new Page<Computer>();
+    page = new PageWrapper<Computer>();
 
     page.setNbResults(11);
   }

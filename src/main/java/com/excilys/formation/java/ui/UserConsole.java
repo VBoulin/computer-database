@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.PageWrapper;
 import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.util.Validator;
@@ -119,7 +119,7 @@ public class UserConsole {
     String input;
 
     //Retrieve the first Page
-    Page<Computer> page = computerDBService.createPage(new Page<Computer>());
+    PageWrapper<Computer> page = computerDBService.createPage(new PageWrapper<Computer>());
 
     //Show the content of the page
     System.out.println("Number of results found : " + page.getNbResults());
@@ -169,7 +169,7 @@ public class UserConsole {
     String input;
 
     //Retrieve the first Page
-    Page<Company> page = companyDBService.createPage(new Page<Company>());
+    PageWrapper<Company> page = companyDBService.createPage(new PageWrapper<Company>());
 
     //Show the content of the page
     System.out.println("Number of results found : " + page.getNbResults());

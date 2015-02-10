@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.PageWrapper;
 
 public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
 
@@ -88,8 +88,8 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
   /**
    * {@inheritDoc}
    */
-  public Page<ComputerDto> toDto(Page<Computer> page) {
-    Page<ComputerDto> pageReturn = new Page<ComputerDto>();
+  public PageWrapper<ComputerDto> toDto(PageWrapper<Computer> page) {
+    PageWrapper<ComputerDto> pageReturn = new PageWrapper<ComputerDto>();
     pageReturn.setNbResults(page.getNbResults());
     pageReturn.setNbResultsPerPage(page.getNbResultsPerPage());
     pageReturn.setPageNumber(page.getPageNumber());
@@ -105,8 +105,8 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
    * {@inheritDoc}
    */
   @Override
-  public Page<Computer> fromDto(Page<ComputerDto> page) {
-    Page<Computer> pageReturn = new Page<Computer>();
+  public PageWrapper<Computer> fromDto(PageWrapper<ComputerDto> page) {
+    PageWrapper<Computer> pageReturn = new PageWrapper<Computer>();
     pageReturn.setNbResults(page.getNbResults());
     pageReturn.setNbResultsPerPage(page.getNbResultsPerPage());
     pageReturn.setPageNumber(page.getPageNumber());

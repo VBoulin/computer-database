@@ -12,11 +12,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.PageWrapper;
 import com.excilys.formation.java.persistence.ComputerDao;
 
 public class MockComputerDao implements ComputerDao {
@@ -175,7 +177,7 @@ public class MockComputerDao implements ComputerDao {
     }
   }
 
-  public Page<Computer> createPage(Page<Computer> page) {
+  public PageWrapper<Computer> createPage(PageWrapper<Computer> page) {
     Computer computer;
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -322,9 +324,22 @@ public class MockComputerDao implements ComputerDao {
   }
 
   @Override
-  public void deleteByCompany(long id) {
+  public void deleteByCompanyId(long id) {
     // TODO Auto-generated method stub
     
+  }
+
+  @Override
+  public int countByNameContainingOrCompanyNameContaining(String name, String companyName) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public Page<Computer> findByNameContainingOrCompanyNameContaining(String name,
+      String companyName, Pageable pageable) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

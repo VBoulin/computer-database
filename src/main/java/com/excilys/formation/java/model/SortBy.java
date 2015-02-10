@@ -5,7 +5,7 @@ public enum SortBy {
   COMPUTER_NAME("name"),
   INTRODUCED("introduced"),
   DISCONTINUED("discontinued"),
-  COMPANY_NAME("cpName");
+  COMPANY_NAME("companyName");
   
 
   private String column;
@@ -29,7 +29,7 @@ public enum SortBy {
               return INTRODUCED;
           case "discontinued":
               return DISCONTINUED;
-          case "company_name":
+          case "companyName":
               return COMPANY_NAME;
           default:
               break;

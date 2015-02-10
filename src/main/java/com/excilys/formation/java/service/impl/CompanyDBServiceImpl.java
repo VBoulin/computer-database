@@ -5,11 +5,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.Computer;
+import com.excilys.formation.java.model.PageWrapper;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.ComputerDao;
 import com.excilys.formation.java.service.CompanyDBService;
@@ -48,12 +52,26 @@ public class CompanyDBServiceImpl implements CompanyDBService {
    */
   @Override
   @Transactional(readOnly = true)
-  public Page<Company> createPage(Page<Company> page) {
+  public PageWrapper<Company> createPage(PageWrapper<Company> page) {
     if (page == null) {
       logger.error("Error with createPage()");
       throw new IllegalArgumentException("Page cannot be null");
     }
-    //return companyDao.createPage(page);
+    Page<Company> pageCompany;
+    
+    Sort sort;
+    if(page.getOrder().getOrder().equals("ASC")) {
+      sort = new Sort(Sort.Direction.ASC, page.getSort().getColumn());
+    } else {
+      sort = new Sort(Sort.Direction.DESC, page.getSort().getColumn());
+    }
+    int nbResultTotal = companyDao.countByNameContaining(page.getSearch());
+    page.setNbResults(nbResultTotal);
+
+    PageRequest pr = new PageRequest(page.getPageNumber()-1, page.getNbResultsPerPage(), sort);
+    pageCompany = companyDao.findByNameContaining(page.getSearch(), pr);
+
+    page.setList(pageCompany.getContent());
     return page;
   }
 
@@ -76,7 +94,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
       throw new IllegalArgumentException("id cannot be null or negative");
     }
     
-    computerDao.deleteByCompany(id);
+    computerDao.deleteByCompanyId(id);
     companyDao.delete(id);
 
   }

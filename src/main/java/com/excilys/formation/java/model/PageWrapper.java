@@ -2,7 +2,7 @@ package com.excilys.formation.java.model;
 
 import java.util.List;
 
-public class Page<T> {
+public class PageWrapper<T> {
 
   private int     pageNumber;
   private List<T> list;
@@ -16,7 +16,7 @@ public class Page<T> {
   //------------------------------
   //Constructors
   //------------------------------
-  public Page() {
+  public PageWrapper() {
     pageNumber = 1;
     nbResultsPerPage = 10;
     sort=SortBy.ID;
@@ -24,7 +24,7 @@ public class Page<T> {
     search="";
   }
 
-  public Page(int pageNumber, List<T> list, int nbResultsPerPage, int nbResults) {
+  public PageWrapper(int pageNumber, List<T> list, int nbResultsPerPage, int nbResults) {
     this.pageNumber = pageNumber;
     this.list = list;
     this.nbResultsPerPage = nbResultsPerPage;
@@ -117,7 +117,7 @@ public class Page<T> {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Page other = (Page) obj;
+    PageWrapper other = (PageWrapper) obj;
     if (list == null) {
       if (other.list != null)
         return false;

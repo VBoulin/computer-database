@@ -10,10 +10,12 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.excilys.formation.java.exceptions.PersistenceException;
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.Page;
+import com.excilys.formation.java.model.PageWrapper;
 import com.excilys.formation.java.persistence.CompanyDao;
 
 public class MockCompanyDao implements CompanyDao {
@@ -66,7 +68,7 @@ public class MockCompanyDao implements CompanyDao {
    * @param page Previous page
    * @return page Next page requested containing all the necessary informations
    */
-  public Page<Company> createPage(Page<Company> page) {
+  public PageWrapper<Company> createPage(PageWrapper<Company> page) {
 
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -202,6 +204,18 @@ public class MockCompanyDao implements CompanyDao {
   public void deleteAll() {
     // TODO Auto-generated method stub
     
+  }
+
+  @Override
+  public int countByNameContaining(String name) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public Page<Company> findByNameContaining(String name, Pageable pageable) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }
