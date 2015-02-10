@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.formation.java.dto.ComputerDto;
-import com.excilys.formation.java.mapper.DtoMapper;
-import com.excilys.formation.java.mapper.impl.ComputerDtoMapper;
+import com.excilys.formation.java.dto.ComputerDtoMapper;
+import com.excilys.formation.java.dto.DtoMapper;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.OrderBy;
 import com.excilys.formation.java.model.Page;

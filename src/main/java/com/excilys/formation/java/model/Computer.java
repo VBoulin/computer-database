@@ -3,6 +3,7 @@ package com.excilys.formation.java.model;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,17 +12,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.excilys.formation.java.util.LocalDatePersistenceConverter;
+
 @Entity
 @Table(name="computer")
 public class Computer{
-  
   @Id
   @GeneratedValue
   @Column(name="id")
   private Long      id;
   @Column(name="name")
   private String    name;
+  @Column(name="introduced")
+  @Convert(converter = LocalDatePersistenceConverter.class)
   private LocalDate introduced;
+  @Column(name="discontinued")
+  @Convert(converter = LocalDatePersistenceConverter.class)
   private LocalDate discontinued;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name="company_id", referencedColumnName="id")

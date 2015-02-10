@@ -1,4 +1,4 @@
-package com.excilys.formation.java.mapper;
+package com.excilys.formation.java.dto;
 
 import java.util.List;
 

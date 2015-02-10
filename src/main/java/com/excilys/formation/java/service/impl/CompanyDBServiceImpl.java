@@ -40,7 +40,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
       logger.error("Error with getOne()");
       throw new IllegalArgumentException("id cannot be null or negative");
     }
-    return companyDao.getOne(id);
+    return companyDao.findOne(id);
   }
 
   /**
@@ -53,7 +53,8 @@ public class CompanyDBServiceImpl implements CompanyDBService {
       logger.error("Error with createPage()");
       throw new IllegalArgumentException("Page cannot be null");
     }
-    return companyDao.createPage(page);
+    //return companyDao.createPage(page);
+    return page;
   }
 
   /**
@@ -62,7 +63,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
   @Override
   @Transactional(readOnly = true)
   public List<Company> getAll() {
-    return companyDao.getAll();
+    return (List<Company>) companyDao.findAll();
   }
 
   /**

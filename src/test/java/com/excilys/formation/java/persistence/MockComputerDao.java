@@ -23,7 +23,6 @@ public class MockComputerDao implements ComputerDao {
 
   private Logger logger = LoggerFactory.getLogger(MockComputerDao.class);
 
-  @Override
   public Computer getOne(Long id) {
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -76,7 +75,6 @@ public class MockComputerDao implements ComputerDao {
     return computer;
   }
 
-  @Override
   public void create(Computer o) {
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -114,8 +112,7 @@ public class MockComputerDao implements ComputerDao {
       MockDaoFactory.getInstance().closeConnection(conn, stmt, null);
     }
   }
-
-  @Override
+  
   public void update(Computer o) {
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -155,7 +152,6 @@ public class MockComputerDao implements ComputerDao {
     }
   }
 
-  @Override
   public void delete(Long id) {
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -179,7 +175,6 @@ public class MockComputerDao implements ComputerDao {
     }
   }
 
-  @Override
   public Page<Computer> createPage(Page<Computer> page) {
     Computer computer;
     Connection conn = null;
@@ -229,7 +224,6 @@ public class MockComputerDao implements ComputerDao {
     return page;
   }
 
-  @Override
   public List<Computer> getAll() {
     Computer computer;
     Connection conn = null;
@@ -263,8 +257,73 @@ public class MockComputerDao implements ComputerDao {
     return computers;
   }
 
-  @Override
   public void deleteByCompany(Long id) {
+    
+  }
+
+  @Override
+  public <S extends Computer> S save(S entity) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public <S extends Computer> Iterable<S> save(Iterable<S> entities) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Computer findOne(Long id) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean exists(Long id) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public Iterable<Computer> findAll() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Iterable<Computer> findAll(Iterable<Long> ids) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public long count() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public void delete(Computer entity) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void delete(Iterable<? extends Computer> entities) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void deleteAll() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void deleteByCompany(long id) {
+    // TODO Auto-generated method stub
     
   }
 

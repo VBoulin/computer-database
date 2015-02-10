@@ -23,12 +23,6 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   private ComputerDao computerDao;
 
   /**
-   * Singleton : provide the access service to the database
-   */
-  public ComputerDBServiceImpl() {
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -38,7 +32,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
       logger.error("Error with getOne()");
       throw new IllegalArgumentException("id cannot be null or negative");
     }
-    return computerDao.getOne(id);
+    return computerDao.findOne(id);
   }
 
   /**
@@ -47,7 +41,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   @Override
   @Transactional(readOnly=true)
   public List<Computer> getAll() {
-    return computerDao.getAll();
+    return (List<Computer>) computerDao.findAll();
   }
   
   /**
@@ -60,7 +54,8 @@ public class ComputerDBServiceImpl implements ComputerDBService {
       logger.error("Error with createPage()");
       throw new IllegalArgumentException("Page cannot be null");
     }
-    return computerDao.createPage(page);
+    //return computerDao.createPage(page);
+    return page;
   }
 
   /**
@@ -72,7 +67,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
       logger.error("Error with create()");
       throw new IllegalArgumentException("Computer cannot be null");
     }
-    computerDao.create(c);
+    computerDao.save(c);
   }
 
   /**
@@ -84,7 +79,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
       logger.error("Error with update()");
       throw new IllegalArgumentException("Computer cannot be null");
     }
-    computerDao.update(c);
+    computerDao.save(c);
   }
 
   /**

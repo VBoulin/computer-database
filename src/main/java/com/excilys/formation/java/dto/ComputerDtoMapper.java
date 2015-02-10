@@ -1,4 +1,4 @@
-package com.excilys.formation.java.mapper.impl;
+package com.excilys.formation.java.dto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
 
-import com.excilys.formation.java.dto.ComputerDto;
-import com.excilys.formation.java.mapper.DtoMapper;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.Page;
 
