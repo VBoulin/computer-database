@@ -4,7 +4,7 @@
 	<groupId>computer-database</groupId>
 	<artifactId>computer-database</artifactId>
 	<version>0.3.4-SNAPSHOT</version>
-	<packaging>war</packaging>
+  	<packaging>pom</packaging>
 	<name>Computer-Database</name>
 
 	<properties>
@@ -236,9 +236,18 @@
 		</dependency>
 		
 		<dependency>
-	        <groupId>org.hibernate</groupId>
-	        <artifactId>hibernate-entitymanager</artifactId>
-	        <version>${hibernateVersion}</version>
-    	</dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernateVersion}</version>
+    		</dependency>
 	</dependencies>
+
+	<modules>
+		<module>binding</module>
+		<module>core</module>
+		<module>console</module>
+		<module>persistence</module>
+		<module>service</module>
+		<module>webapp</module>
+	</modules>
 </project>
