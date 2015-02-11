@@ -13,6 +13,12 @@
 	</properties>
 
 	<dependencies>		
+		<!-- Jadira -->
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.extended</artifactId>
+			<version>${jadira-usertype.version}</version>
+		</dependency>
 		<!-- Validation-->
 		<dependency>
 			<groupId>javax.validation</groupId>
@@ -34,10 +40,5 @@
 			<version>${hibernateVersion}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernateVersion}</version>
-    		</dependency>
 	</dependencies>
 </project>

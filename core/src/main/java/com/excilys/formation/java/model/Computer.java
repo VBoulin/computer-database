@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name="computer")
 public class Computer{
@@ -22,10 +24,10 @@ public class Computer{
   @Column(name="name")
   private String    name;
   @Column(name="introduced")
-  @Convert(converter = LocalDatePersistenceConverter.class)
+  @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
   private LocalDate introduced;
   @Column(name="discontinued")
-  @Convert(converter = LocalDatePersistenceConverter.class)
+  @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
   private LocalDate discontinued;
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name="company_id", referencedColumnName="id")

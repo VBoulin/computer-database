@@ -13,8 +13,10 @@
 		http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/tx/spring-tx.xsd">
         
-        <context:component-scan base-package="com.excilys.formation.java" />
-		<context:property-placeholder location="classpath:db.properties" />
+        <context:component-scan base-package="com.excilys.formation.java.persistence" />
+        
+		<context:property-placeholder location="classpath:db-example.properties" order="2" />
+		<context:property-placeholder location="classpath:db.properties" order="1" />
         	
         <!-- Transaction Manager -->
 		<tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager"/>
