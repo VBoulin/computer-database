@@ -16,6 +16,12 @@
 		<!-- Internal Dependencies -->
 		<dependency>
 			<groupId>computer-database</groupId>
+			<artifactId>service</artifactId>
+			<version>0.3.4-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>computer-database</groupId>
 			<artifactId>binding</artifactId>
 			<version>0.3.4-SNAPSHOT</version>
 		</dependency>
@@ -25,11 +31,12 @@
 			<artifactId>core</artifactId>
 			<version>0.3.4-SNAPSHOT</version>
 		</dependency>
-
+		
+		<!-- Spring framework -->
 		<dependency>
-			<groupId>computer-database</groupId>
-			<artifactId>service</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring-context.version}</version>
 		</dependency>
 	</dependencies>
 </project>

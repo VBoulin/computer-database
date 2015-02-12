@@ -3,7 +3,6 @@ package com.excilys.formation.java.model;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -102,13 +101,14 @@ public class Computer{
   //------------------------------
   //hashcode & equals & toString
   //------------------------------
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((company == null) ? 0 : company.hashCode());
     result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
-    result = prime * result + (int) (id ^ (id >>> 32));
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
     result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     return result;
@@ -133,7 +133,10 @@ public class Computer{
         return false;
     } else if (!discontinued.equals(other.discontinued))
       return false;
-    if (id != other.id)
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
       return false;
     if (introduced == null) {
       if (other.introduced != null)

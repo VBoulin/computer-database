@@ -33,7 +33,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   public Computer getOne(Long id) {
     if (id == null || id < 1) {
       logger.error("Error with getOne()");
-      throw new IllegalArgumentException("id cannot be null or negative");
+      return null;
     }
     return computerDao.findOne(id);
   }
@@ -55,7 +55,7 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   public PageWrapper<Computer> createPage(PageWrapper<Computer> page) {
     if (page == null) {
       logger.error("Error with createPage()");
-      throw new IllegalArgumentException("Page cannot be null");
+      return null;
     }
     Page<Computer> pageComputer;
     
@@ -82,9 +82,9 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   public void create(Computer c) {
     if (c == null) {
       logger.error("Error with create()");
-      throw new IllegalArgumentException("Computer cannot be null");
+    } else {
+      computerDao.save(c);
     }
-    computerDao.save(c);
   }
 
   /**
@@ -94,9 +94,9 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   public void update(Computer c) {
     if (c == null) {
       logger.error("Error with update()");
-      throw new IllegalArgumentException("Computer cannot be null");
+    } else {
+      computerDao.save(c);
     }
-    computerDao.save(c);
   }
 
   /**
@@ -106,8 +106,8 @@ public class ComputerDBServiceImpl implements ComputerDBService {
   public void delete(Long id) {
     if (id == null || id < 1) {
       logger.error("Error with delete()");
-      throw new IllegalArgumentException("Id cannot be null or negative");
+    } else {
+      computerDao.delete(id);
     }
-    computerDao.delete(id);
   }
 }

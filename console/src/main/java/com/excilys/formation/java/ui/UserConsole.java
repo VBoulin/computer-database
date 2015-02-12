@@ -6,7 +6,6 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -397,9 +396,10 @@ public class UserConsole {
    */
   public static void main(String[] args) {
     
-    ApplicationContext context = new ClassPathXmlApplicationContext("/applicationContext.xml");
+    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/consoleContext.xml");
     UserConsole console = context.getBean(UserConsole.class);
     console.showMenu();
+    context.close();
   }
 
 }

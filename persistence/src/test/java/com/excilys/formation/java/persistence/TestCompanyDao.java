@@ -1,73 +1,94 @@
-//package com.excilys.formation.java.persistence;
-//
-//import java.sql.SQLException;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import org.junit.Assert;
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.mockito.runners.MockitoJUnitRunner;
-//
-//import com.excilys.formation.java.exceptions.PersistenceException;
-//import com.excilys.formation.java.model.Company;
-//import com.excilys.formation.java.model.PageWrapper;
-//
-//@RunWith(MockitoJUnitRunner.class)
-//public class TestCompanyDao {
-//
-//  private MockCompanyDao companyDao;
-//  List<Company>          companies;
-//
-//  @Before
-//  public void setUp() throws SQLException {
-//    companyDao = new MockCompanyDao();
-//    companies = new ArrayList<Company>();
-//    companies.add(new Company(1l, "Apple Inc."));
-//    companies.add(new Company(2l, "Thinking Machines"));
-//    companies.add(new Company(3l, "RCA"));
-//    companies.add(new Company(4l, "Netronics"));
-//    companies.add(new Company(5l, "Tandy Corporation"));
-//    companies.add(new Company(6l, "Commodore International"));
-//    companies.add(new Company(7l, "MOS Technology"));
-//    companies.add(new Company(8l, "Micro Instrumentation and Telemetry Systems"));
-//    companies.add(new Company(9l, "IMS Associates, Inc."));
-//    companies.add(new Company(10l, "Digital Equipment Corporation"));
-//  }
-//
-//  /**
-//   * test the getOne() method
-//   */
-//  @Test
-//  public void testGetOne() {
-//    Assert.assertEquals(Company.builder().id(1l).name("Apple Inc.").build(), companyDao.getOne(1l));
-//
-//    try {
-//      companyDao.findOne(null);
-//      Assert.fail("Should throw exception when the id is null");
-//    } catch (PersistenceException aExp) {
-//      assert (aExp.getMessage().contains("NullError"));
-//    }
-//  }
-//
-//  @Test
-//  public void testCreatepage() {
-//    PageWrapper<Company> page = new PageWrapper<Company>();
-//
-//    PageWrapper<Company> pageR = new PageWrapper<Company>();
-//    pageR.setNbResultsPerPage(10);
-//    pageR.setPageNumber(1);
-//    pageR.setNbResults(42);
-//    pageR.setList(companies);
-//    Assert.assertEquals(pageR, companyDao.createPage(page));
-//
-//    try {
-//      companyDao.createPage(null);
-//      Assert.fail("Should throw exception when the page is null");
-//    } catch (PersistenceException aExp) {
-//      assert (aExp.getMessage().contains("NullError"));
-//    }
-//  }
-//
-//}
+package com.excilys.formation.java.persistence;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.excilys.formation.java.model.Company;
+
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/test-persistenceContext.xml"})
+public class TestCompanyDao {
+
+    @Autowired
+    CompanyDao companyDao;
+    
+    List<Company> companies;
+    Company company1 = new Company(1L, "Apple Inc.");
+    Company company2 = new Company(2L, "Thinking Machines");
+    
+    @Autowired
+    DataSource dataSource;
+    
+    @Before
+    public void init() throws SQLException {
+        companies = new ArrayList<Company>();
+        companies.add(company1);
+        companies.add(company2);
+
+        Connection connection = DataSourceUtils.getConnection(dataSource);
+        
+        Statement stmt = connection.createStatement();
+        stmt.execute("drop table if exists computer;");  
+        stmt.execute("drop table if exists company;");
+        stmt.execute("create table company (id bigint not null auto_increment, name varchar(255), "
+                + "constraint pk_company primary key (id));");
+        stmt.execute("create table computer (id bigint not null auto_increment,name varchar(255), "
+                + "introduced timestamp NULL, discontinued timestamp NULL,"
+                + "company_id bigint default NULL,"
+                + "constraint pk_computer primary key (id));");
+        stmt.execute("alter table computer add constraint fk_computer_company_1 foreign key (company_id)"
+                + " references company (id) on delete restrict on update restrict;");
+        stmt.execute("create index ix_computer_company_1 on computer (company_id);");
+        
+        stmt.execute("insert into company (id,name) values (  1,'Apple Inc.');");
+        stmt.execute("insert into company (id,name) values (  2,'Thinking Machines');");
+        
+        stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  1,'MacBook Pro 15.4 inch',null,null,1);");
+        stmt.execute("insert into computer (id,name,introduced,discontinued,company_id) values (  2,'MacBook Pro','2006-01-10',null,1);");
+        connection.close();
+    }
+    
+    
+    /*
+     * Tests of the findAll function
+     */
+    @Test
+    public void findAll() {
+        assertEquals(companies, companyDao.findAll());
+    }
+    
+    
+    /*
+     * Tests of the findOne function
+     */
+    @Test
+    public void findOne() {
+        assertEquals(new Company(1L, "Apple Inc."), companyDao.findOne(1L));
+    }
+    
+    @Test
+    public void FindOneInvalid() {
+        assertNull(companyDao.findOne(-1L));
+    }
+    
+    
+}

@@ -1,129 +1,176 @@
 package com.excilys.formation.java.service;
 
-import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.Assert;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
+import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.model.PageWrapper;
 import com.excilys.formation.java.persistence.ComputerDao;
-import com.excilys.formation.java.service.ComputerDBService;
+import com.excilys.formation.java.service.impl.ComputerDBServiceImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestComputerDBService {
-  ComputerDBService computerDBService;
-  ComputerDao       computerDao;
-  Computer          computer = new Computer();
-  PageWrapper<Computer>    page;
-  PageWrapper<Computer>    pageR;
-
-  @Before
-  public void setUp() {
-    computerDao = Mockito.mock(ComputerDao.class);
-    computerDBService = new MockComputerDBService(computerDao);
-
-    page = new PageWrapper<Computer>();
-    pageR = new PageWrapper<Computer>(1, new ArrayList<Computer>(), 10, 12);
-
-    Mockito.when(computerDao.findOne(1l)).thenReturn(Computer.builder().id(1l).name("truc").build());
-    //Mockito.when(computerDao.createPage(page)).thenReturn(pageR);
-  }
-
-  /**
-   * test the getOne() method
-   */
-  @Test
-  public void testGetOne() {
-    Assert.assertEquals(Computer.builder().id(1L).name("truc").build(),
-        computerDBService.getOne(1L));
+ 
+    @InjectMocks
+    ComputerDBServiceImpl computerDBService;
     
-    try {
-      computerDBService.getOne(-10L);
-      Assert.fail("Should throw exception when the id is a negative number");
-    }catch(IllegalArgumentException aExp){
-      assert(aExp.getMessage().contains("negative"));
+    ComputerDao computerDao;
+    
+    List<Computer> computers;
+    
+    Company company1;
+    Company company2;
+    Company company3;
+    
+    Computer computer;
+ 
+    @Before
+    public void before() {
+        computerDao = mock(ComputerDao.class);
+ 
+        company1 = new Company(1L, "company 1");
+        company2 = new Company(2L, "company 2");
+        company3 = new Company(3L, "company 3");
+ 
+        computers = new ArrayList<Computer>();
+        
+        computers.add(new Computer(1L, "computer 1", null, null, company1));
+        computers.add(new Computer(2L, "computer 2", null, null, company2));
+        computers.add(new Computer(3L, "computer 3", null, null, company2));
+ 
+        computer = new Computer(4L, "computer 4", null, null, company3);
+ 
+        when(computerDao.findAll()).thenReturn(computers);
+ 
+        doAnswer(new Answer<Computer>() {
+            @Override
+            public Computer answer(InvocationOnMock invocation) {
+                long l = (Long) invocation.getArguments()[0];
+                if (l > 0 && l < computers.size()) {
+                   return computers.get((int) l - 1);
+                }
+                return null;
+            }
+        }).when(computerDao).findOne(anyLong());
+        
+        doAnswer(new Answer<Computer>() {
+            @Override
+            public Computer answer(InvocationOnMock invocation) {
+                Computer computer = (Computer) invocation.getArguments()[0];
+                if (computer != null && computer.getId() > 0 && computer.getId() < computers.size()) {
+                    computers.set( computer.getId().intValue() - 1, computer);
+                }
+                return null;
+            }
+            
+        }).when(computerDao).save(any(Computer.class));
+        
+        doAnswer(new Answer<Computer>() {
+            @Override
+            public Computer answer(InvocationOnMock invocation) {
+                long l = (Long) invocation.getArguments()[0];
+                computers.removeIf(c -> c.getId() == l);
+                return null;
+            }
+            
+        }).when(computerDao).delete(anyLong());
+ 
+        MockitoAnnotations.initMocks(this);
     }
     
-    try {
-      computerDBService.getOne(null);
-      Assert.fail("Should throw exception when the id is null");
-    }catch(IllegalArgumentException aExp){
-      assert(aExp.getMessage().contains("null"));
+    /*
+     * Test getAll function
+     */
+    @Test
+    public void getAll() {
+        assertEquals(computers, computerDBService.getAll());
     }
-  }
-
-  /**
-   * test the create() method
-   */
-  @Test
-  public void testCreate() {
-    computerDBService.create(computer);
-    Mockito.verify(computerDao).save(computer);
-    
-    try {
-      computerDBService.create(null);
-      Assert.fail("Should throw exception when the computer is null");
-    }catch(IllegalArgumentException aExp){
-      assert(aExp.getMessage().contains("null"));
+ 
+    /*
+     * Tests getOne function
+     */
+    @Test
+    public void getOne() {
+        assertEquals(computers.get(0), computerDBService.getOne(1L));
     }
-  }
-
-  /**
-   * test the update() method
-   */
-  @Test
-  public void testUpdate() {
-    computerDBService.update(computer);
-    Mockito.verify(computerDao).save(computer);
-    
-    try {
-      computerDBService.update(null);
-      Assert.fail("Should throw exception when the computer is null");
-    }catch(IllegalArgumentException aExp){
-      assert(aExp.getMessage().contains("null"));
-    }
-  }
-
-  /**
-   * test the delete() method
-   */
-  @Test
-  public void testDelete() {
-    computerDBService.delete(1l);
-    Mockito.verify(computerDao).delete(1l);
-    
-    try {
-      computerDBService.delete(-10L);
-      Assert.fail("Should throw exception when the id is a negative number");
-    }catch(IllegalArgumentException aExp){
-      assert(aExp.getMessage().contains("negative"));
+ 
+    @Test
+    public void getOneInvalid() {
+        assertNull(computerDBService.getOne(-1L));
+        assertNull(computerDBService.getOne(5L));
     }
     
-    try {
-      computerDBService.delete(null);
-      Assert.fail("Should throw exception when the id is null");
-    }catch(IllegalArgumentException aExp){
-      assert(aExp.getMessage().contains("null"));
+    /*
+     * Tests of create function
+     */    
+    @Test
+    public void createNull() {
+        computerDBService.create(null);
+        assertEquals(computers, computerDBService.getAll());
     }
-  }
-
-  /**
-   * test the createpage() method
-   */
-  @Test
-  public void testCreatePage() {
-    Assert.assertEquals(pageR, computerDBService.createPage(page));
     
-    try {
-      computerDBService.createPage(null);
-      Assert.fail("Should throw exception when the page is null");
-    }catch(IllegalArgumentException aExp){
-      assert(aExp.getMessage().contains("null"));
+    /*
+     * Tests of update function
+     */
+    @Test
+    public void update() {
+        computerDBService.update(computer);
+        assertEquals(computers, computerDBService.getAll());
     }
-  }
-}
+    
+    @Test
+    public void updateNull() {
+        computerDBService.update(null);
+        assertEquals(computers, computerDBService.getAll());
+    } 
+    
+    /*
+     * Tests createPage function
+     */
+    @Test
+    public void createPageNull() {
+        assertNull(computerDBService.createPage(null));
+    }  
+    
+    /*
+     * Tests of delete function
+     */
+    @Test
+    public void delete() {
+        int x = computerDBService.getAll().size();
+        
+        computerDBService.delete(3L);
+        
+        x--;
+        
+        assertEquals(x, computers.size());
+    }
+    
+    @Test
+    public void deleteInvalidId() {
+        int x = computerDBService.getAll().size();
+        
+        computerDBService.delete((long) -1);
+        computerDBService.delete(null);
+        
+        assertEquals(x, computers.size());
+    }
+ }

@@ -29,11 +29,6 @@ public class CompanyDBServiceImpl implements CompanyDBService {
   private Logger      logger = LoggerFactory.getLogger(CompanyDBServiceImpl.class);
 
   /**
-   * Singleton : provide the access service to the database (company)
-   */
-  public CompanyDBServiceImpl() {}
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -41,7 +36,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
   public Company getOne(Long id) {
     if (id == null || id < 1) {
       logger.error("Error with getOne()");
-      throw new IllegalArgumentException("id cannot be null or negative");
+      return null;
     }
     return companyDao.findOne(id);
   }
@@ -54,7 +49,7 @@ public class CompanyDBServiceImpl implements CompanyDBService {
   public PageWrapper<Company> createPage(PageWrapper<Company> page) {
     if (page == null) {
       logger.error("Error with createPage()");
-      throw new IllegalArgumentException("Page cannot be null");
+      return null;
     }
     Page<Company> pageCompany;
     
@@ -90,12 +85,10 @@ public class CompanyDBServiceImpl implements CompanyDBService {
   public void delete(Long id) {
     if (id == null || id < 1) {
       logger.error("Error with delete.");
-      throw new IllegalArgumentException("id cannot be null or negative");
+    } else {
+      computerDao.deleteByCompanyId(id);
+      companyDao.delete(id);
     }
-    
-    computerDao.deleteByCompanyId(id);
-    companyDao.delete(id);
-
   }
 
 }

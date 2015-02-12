@@ -16,12 +16,6 @@
 		<!-- Internal Dependencies -->
 		<dependency>
 			<groupId>computer-database</groupId>
-			<artifactId>core</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>computer-database</groupId>
 			<artifactId>persistence</artifactId>
 			<version>0.3.4-SNAPSHOT</version>
 		</dependency>
