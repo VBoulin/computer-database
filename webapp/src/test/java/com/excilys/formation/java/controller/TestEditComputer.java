@@ -21,7 +21,7 @@ public class TestEditComputer {
 
   @Test
   public void editComputer() {
-    driver.get("http://localhost:8080/computer-database/editComputer?id=7");
+    driver.get("http://localhost:8080/webapp/editComputer?id=7");
 
     WebElement name = driver.findElement(By.name("name"));
     name.sendKeys("NameTest");
@@ -43,7 +43,7 @@ public class TestEditComputer {
   
   @Test
   public void aditEmptyNameComputer() {
-    driver.get("http://localhost:8080/computer-database/editComputer?id=7");
+    driver.get("http://localhost:8080/webapp/editComputer?id=7");
 
     WebElement name = driver.findElement(By.name("name"));
     name.sendKeys("");
@@ -53,7 +53,7 @@ public class TestEditComputer {
   
   @Test
   public void editWrongDate() {
-    driver.get("http://localhost:8080/computer-database/editComputer?id=7");
+    driver.get("http://localhost:8080/webapp/editComputer?id=7");
 
     WebElement name = driver.findElement(By.name("name"));
     name.sendKeys("NameTest");

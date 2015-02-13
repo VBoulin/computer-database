@@ -22,10 +22,10 @@
 </c:if>
 <c:if test="${sort != null }">
 	<c:set var="sort" value="&sort=${sort}"/>
-</c:if>
-<c:if test="${order != null }">
-	<c:set var="order" value="&order=${order}"/>
+	<c:if test="${order != null }">
+		<c:set var="sort" value="${sort},${order}"/>
+	</c:if>
 </c:if>
 
-<a class="${classes}" href="${url}?page=${pageNumber}&nbResults=${nbResultsPerPage}${sort}${order}${search}">${content}</a>
+<a class="${classes}" href="${url}?page=${pageNumber}&nbResults=${nbResultsPerPage}${sort}${search}">${content}</a>
 

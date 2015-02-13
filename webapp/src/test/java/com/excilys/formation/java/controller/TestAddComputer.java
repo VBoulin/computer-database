@@ -20,7 +20,7 @@ public class TestAddComputer {
 
   @Test
   public void addComputer() {
-    driver.get("http://localhost:8080/computer-database/addComputer");
+    driver.get("http://localhost:8080/webapp/addComputer");
 
     WebElement name = driver.findElement(By.name("name"));
     name.sendKeys("NameTest");

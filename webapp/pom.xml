@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>computer-database</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.3.4-SNAPSHOT</version>
+		<version>0.4.0</version>
 	</parent>
 
 	<artifactId>webapp</artifactId>
@@ -18,19 +18,19 @@
 		<dependency>
 			<groupId>computer-database</groupId>
 			<artifactId>binding</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>computer-database</groupId>
 			<artifactId>core</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>computer-database</groupId>
 			<artifactId>service</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Servlets -->
@@ -72,6 +72,24 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring-context.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-taglibs</artifactId>
+			<version>${spring-security.version}</version>
 		</dependency>
 	</dependencies>
 </project>

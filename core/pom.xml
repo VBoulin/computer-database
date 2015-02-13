@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>computer-database</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.3.4-SNAPSHOT</version>
+		<version>0.4.0</version>
 	</parent>
 
 	<artifactId>core</artifactId>

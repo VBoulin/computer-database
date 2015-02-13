@@ -12,7 +12,7 @@ pageEncoding="UTF-8"%>
 				<a href="?lang=en" class="btn btn-primary">en</a>
 				<a href="?lang=fr" class="btn btn-primary">fr</a>
 			</span>
-			<h1 id="homeTitle">${page.nbResults} <spring:message code="title.dashboard"/></h1>
+			<h1 id="homeTitle">${page.totalElements} <spring:message code="title.dashboard"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -50,28 +50,66 @@ pageEncoding="UTF-8"%>
                             </span>
                         </th>
                         <!-- Table header for Computer name -->
-                        <th>
-                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="name" order="${page.order.order}" search="${page.search}" ><spring:message code="label.name"/></t:link>
-                        </th>
+                        <c:choose>
+							<c:when test="${order.equalsIgnoreCase(\"desc\") }">
+		                        <th>
+		                        	<t:link url="dashboard" pageNumber="${page.number}" nbResultsPerPage="${page.size}" sort="name" order="asc" search="${search}" ><spring:message code="label.name"/></t:link>
+		                        </th>
+		                        <c:set var="order" value="DESC"/>
+                        	</c:when>
+							<c:otherwise>
+		                        <th>
+		                        	<t:link url="dashboard" pageNumber="${page.number}" nbResultsPerPage="${page.size}" sort="name" order="desc" search="${search}" ><spring:message code="label.name"/></t:link>
+								</th>
+								<c:set var="order" value="ASC"/>
+							</c:otherwise>
+						</c:choose>
                         <!-- Table header for Introduced date -->
-                        <th>
-                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="introduced" order="${page.order.order}" search="${page.search}"><spring:message code="label.introduced"/></t:link>
-                        </th>
+                        <c:choose>
+							<c:when test="${order.equalsIgnoreCase(\"DESC\") }">
+		                        <th>
+		                        	<t:link url="dashboard" pageNumber="${page.number}" nbResultsPerPage="${page.size}" sort="introduced" order="asc" search="${search}" ><spring:message code="label.introduced"/></t:link>
+		                        </th>
+                        	</c:when>
+							<c:otherwise>
+		                        <th>
+		                        	<t:link url="dashboard" pageNumber="${page.number}" nbResultsPerPage="${page.size}" sort="introduced" order="desc" search="${search}" ><spring:message code="label.introduced"/></t:link>
+								</th>
+							</c:otherwise>
+						</c:choose>
                         <!-- Table header for Discontinued Date -->
-                        <th>
-                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="discontinued" order="${page.order.order}" search="${page.search}"><spring:message code="label.discontinued"/></t:link>
-                        </th>
+                        <c:choose>
+							<c:when test="${order.equalsIgnoreCase(\"DESC\") }">
+		                        <th>
+		                        	<t:link url="dashboard" pageNumber="${page.number}" nbResultsPerPage="${page.size}" sort="discontinued" order="asc" search="${search}" ><spring:message code="label.discontinued"/></t:link>
+		                        </th>
+                        	</c:when>
+							<c:otherwise>
+		                        <th>
+		                        	<t:link url="dashboard" pageNumber="${page.number}" nbResultsPerPage="${page.size}" sort="discontinued" order="desc" search="${search}" ><spring:message code="label.discontinued"/></t:link>
+								</th>
+							</c:otherwise>
+						</c:choose>
                         <!-- Table header for Company -->
-                        <th>
-                        	<t:link url="dashboard" pageNumber="${page.pageNumber}" nbResultsPerPage="${page.nbResultsPerPage}" sort="company_name" order="${page.order.order}" search="${page.search}"><spring:message code="label.company"/></t:link>
-                        </th>
+                        <c:choose>
+							<c:when test="${order.equalsIgnoreCase(\"DESC\") }">
+		                        <th>
+		                        	<t:link url="dashboard" pageNumber="${page.number}" nbResultsPerPage="${page.size}" sort="company.name" order="asc" search="${search}" ><spring:message code="label.company"/></t:link>
+		                        </th>
+                        	</c:when>
+							<c:otherwise>
+		                        <th>
+		                        	<t:link url="dashboard" pageNumber="${page.number}" nbResultsPerPage="${page.size}" sort="company.name" order="desc" search="${search}" ><spring:message code="label.company"/></t:link>
+								</th>
+							</c:otherwise>
+						</c:choose>
 
                     </tr>
                 </thead>
 
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${page.list}" var="computer">
+					<c:forEach items="${page.content}" var="computer">
 						<tr>
 							<td class="editMode">
 								<input type="checkbox" name="cb" class="cb" value="${computer.id}">
@@ -86,7 +124,7 @@ pageEncoding="UTF-8"%>
 								${computer.discontinued}
 							</td>
 							<td>
-								${computer.companyName}
+								${computer.company.name}
 							</td>
 						</tr>
 					</c:forEach>

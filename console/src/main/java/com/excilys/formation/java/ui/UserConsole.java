@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.excilys.formation.java.model.Company;
@@ -115,13 +118,14 @@ public class UserConsole {
    */
   public void displayAllComputers() {
     String input;
+    Pageable pageable = new PageRequest(0, 10);
 
     //Retrieve the first Page
-    PageWrapper<Computer> page = computerDBService.createPage(new PageWrapper<Computer>());
+    Page<Computer> page = computerDBService.createPage("", pageable);
 
     //Show the content of the page
-    System.out.println("Number of results found : " + page.getNbResults());
-    showComputerPage(page.getList());
+    System.out.println("Number of results found : " + page.getTotalElements());
+    showComputerPage(page.getContent());
 
     do {
       do {
@@ -131,19 +135,19 @@ public class UserConsole {
       switch (input) {
       //Show the previous Page
         case "1":
-          if (page.previousPageOrFirst()) {
-            page = computerDBService.createPage(page);
+          if (page.hasPrevious()) {
+            page = computerDBService.createPage("", page.previousPageable());
           }
-          System.out.println("Total : " + page.getNbResults());
-          showComputerPage(page.getList());
+          System.out.println("Total : " + page.getTotalElements());
+          showComputerPage(page.getContent());
           break;
         //Show the next Page
         case "2":
-          if (page.nextPage()) {
-            page = computerDBService.createPage(page);
+          if (page.hasNext()) {
+            page = computerDBService.createPage("", page.nextPageable());
           }
-          System.out.println("Total : " + page.getNbResults());
-          showComputerPage(page.getList());
+          System.out.println("Total : " + page.getTotalElements());
+          showComputerPage(page.getContent());
           break;
       }
     } while (!input.equals("0"));

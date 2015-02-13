@@ -2,8 +2,10 @@ package com.excilys.formation.java.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.model.PageWrapper;
 
 public interface ComputerDBService {
 	/**
@@ -42,6 +44,6 @@ public interface ComputerDBService {
    * @param page Raw page with only basics informations such as number of results per page
    * @return Page with a list
    */
-  PageWrapper<Computer> createPage(PageWrapper<Computer> page);
+  Page<Computer> createPage(String search, Pageable page);
 
 }

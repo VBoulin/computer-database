@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>computer-database</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.3.4-SNAPSHOT</version>
+		<version>0.4.0</version>
 	</parent>
 
 	<artifactId>console</artifactId>
@@ -17,25 +17,25 @@
 		<dependency>
 			<groupId>computer-database</groupId>
 			<artifactId>service</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>computer-database</groupId>
 			<artifactId>binding</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>computer-database</groupId>
 			<artifactId>core</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		
 		<!-- Spring framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
+			<artifactId>spring-context</artifactId>
 			<version>${spring-context.version}</version>
 		</dependency>
 	</dependencies>

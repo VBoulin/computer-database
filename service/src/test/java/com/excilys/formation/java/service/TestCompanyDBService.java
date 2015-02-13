@@ -118,25 +118,25 @@ public class TestCompanyDBService {
      */
     @Test
     public void delete() {
-        int x = companies.size();
-        int y = computers.size();
+        int companiesSize = companies.size();
+        int computersSize = computers.size();
         
         companyDBService.delete(1L);
         
-        x--;
-        y--;
+        companiesSize--;
+        computersSize--;
         
-        assertEquals(x, companies.size());
-        assertEquals(y, computers.size());
+        assertEquals(companiesSize, companies.size());
+        assertEquals(computersSize, computers.size());
     }
     
     @Test
     public void deleteInvalidId() {
-        int x = companies.size();
-        int y = computers.size();
+      int companiesSize = companies.size();
+      int computersSize = computers.size();
         companyDBService.delete(null);
         
-        assertEquals(x, companies.size());
-        assertEquals(y, computers.size());
+        assertEquals(companiesSize, companies.size());
+        assertEquals(computersSize, computers.size());
     }
 }

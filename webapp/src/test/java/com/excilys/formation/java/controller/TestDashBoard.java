@@ -16,18 +16,18 @@ public class TestDashBoard {
 
   @Test
   public void validInformations() {
-    driver.get("http://localhost:8080/computer-database/dashBoard?page=1&nbResults=10");
+    driver.get("http://localhost:8080/webapp/dashboard?page=1&nbResults=10");
 
   }
   
   @Test
   public void negativePage() {
-    driver.get("http://localhost:8080/computer-database/dashBoard?page=-1&nbResults=10");
+    driver.get("http://localhost:8080/webapp/dashboard?page=-1&nbResults=10");
   }
   
   @Test
   public void negativeResults() {
-    driver.get("http://localhost:8080/computer-database/dashBoard?page=1&nbResults=-15");
+    driver.get("http://localhost:8080/webapp/dashboard?page=1&nbResults=-15");
   }
 
   @After

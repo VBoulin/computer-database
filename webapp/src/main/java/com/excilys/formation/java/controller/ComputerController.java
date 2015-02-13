@@ -46,10 +46,8 @@ public class ComputerController {
   @RequestMapping(value="/addcomputer", method = RequestMethod.GET)
   protected String addGet(Model model) {
     List<Company> companies = companyDBService.getAll();
-
     model.addAttribute("computerDto", new ComputerDto());
     model.addAttribute("companies", companies);
-
     return "addComputer";
   }
 
@@ -82,17 +80,11 @@ public class ComputerController {
    */
   @RequestMapping(value="/editcomputer", method = RequestMethod.GET)
   protected String editGet(Model model, @RequestParam long id) {
-
     Computer computer = computerDBService.getOne(id);
-
     ComputerDto computerDto = computerDtoMapper.toDto(computer);
-
     model.addAttribute("computer", computerDto);
-
     List<Company> companies = companyDBService.getAll();
-
     model.addAttribute("companies", companies);
-
     return "editComputer";
   }
 

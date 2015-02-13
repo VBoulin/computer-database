@@ -6,13 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.model.PageWrapper;
 import com.excilys.formation.java.persistence.ComputerDao;
 import com.excilys.formation.java.service.ComputerDBService;
 
@@ -52,27 +50,12 @@ public class ComputerDBServiceImpl implements ComputerDBService {
    */
   @Override
   @Transactional(readOnly=true)
-  public PageWrapper<Computer> createPage(PageWrapper<Computer> page) {
+  public Page<Computer> createPage(String search, Pageable page) {
     if (page == null) {
       logger.error("Error with createPage()");
       return null;
     }
-    Page<Computer> pageComputer;
-    
-    Sort sort;
-    if(page.getOrder().getOrder().equals("ASC")) {
-      sort = new Sort(Sort.Direction.ASC, page.getSort().getColumn());
-    } else {
-      sort = new Sort(Sort.Direction.DESC, page.getSort().getColumn());
-    }
-    int nbResultTotal = computerDao.countByNameContainingOrCompanyNameContaining(page.getSearch(), page.getSearch());
-    page.setNbResults(nbResultTotal);
-
-    PageRequest pr = new PageRequest(page.getPageNumber()-1, page.getNbResultsPerPage(), sort);
-    pageComputer = computerDao.findByNameContainingOrCompanyNameContaining(page.getSearch(), page.getSearch(), pr);
-
-    page.setList(pageComputer.getContent());
-    return page;
+    return computerDao.findByNameContainingOrCompanyNameContaining(search, search, page);
   }
 
   /**

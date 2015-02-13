@@ -6,7 +6,7 @@ pageEncoding="UTF-8"%>
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<t:pagination url="dashboard" nbPages="${ nbPages }" pageNumber="${ page.pageNumber }" nbResultsPerPage="${ page.nbResultsPerPage }" sort="${page.sort.column}" order="${page.order.order}" search="${page.search}"></t:pagination>
+			<t:pagination url="dashboard" nbPages="${ page.totalPages }" pageNumber="${ page.number }" nbResultsPerPage="${ page.size }" sort="${sort}" order="${order}" search="${search}"></t:pagination>
 		</div>
 	</footer>
 	

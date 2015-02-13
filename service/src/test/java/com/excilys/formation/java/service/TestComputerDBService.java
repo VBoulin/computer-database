@@ -2,7 +2,6 @@ package com.excilys.formation.java.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
@@ -115,7 +114,7 @@ public class TestComputerDBService {
     @Test
     public void getOneInvalid() {
         assertNull(computerDBService.getOne(-1L));
-        assertNull(computerDBService.getOne(5L));
+        assertNull(computerDBService.getOne(null));
     }
     
     /*
@@ -147,7 +146,7 @@ public class TestComputerDBService {
      */
     @Test
     public void createPageNull() {
-        assertNull(computerDBService.createPage(null));
+        assertNull(computerDBService.createPage(null, null));
     }  
     
     /*
@@ -155,22 +154,19 @@ public class TestComputerDBService {
      */
     @Test
     public void delete() {
-        int x = computerDBService.getAll().size();
-        
+        int size = computerDBService.getAll().size();
         computerDBService.delete(3L);
-        
-        x--;
-        
-        assertEquals(x, computers.size());
+        size--;
+        assertEquals(size, computers.size());
     }
     
     @Test
     public void deleteInvalidId() {
-        int x = computerDBService.getAll().size();
+        int size = computerDBService.getAll().size();
         
         computerDBService.delete((long) -1);
         computerDBService.delete(null);
         
-        assertEquals(x, computers.size());
+        assertEquals(size, computers.size());
     }
  }
