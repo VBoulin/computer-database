@@ -24,6 +24,7 @@
 		<intercept-url pattern="/edit**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/delete**" access="hasRole('ROLE_ADMIN')" />
 		<http-basic />
+		<logout logout-success-url="/" invalidate-session="true" delete-cookies="true"/>
 		<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>
 	</http>
 	

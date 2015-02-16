@@ -128,6 +128,7 @@ public class ComputerController {
     } else {
       model.addAttribute("computer", computerDto);
       model.addAttribute("companies", companyDBService.getAll());
+      logger.info("Incorrect edition !");
       return "editcomputer";
     }
   }
