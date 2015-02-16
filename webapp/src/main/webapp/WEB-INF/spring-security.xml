@@ -18,17 +18,17 @@
         <beans:property name="key" value="acegi" />
     </beans:bean>
     
-	<http use-expressions="true" entry-point-ref="digestEntryPoint">
+	<http use-expressions="true">
 		<intercept-url pattern="/dashboard**" access="permitAll" />
 		<intercept-url pattern="/add**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/edit**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/delete**" access="hasRole('ROLE_ADMIN')" />
 		<http-basic />
+		<custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER"/>
 	</http>
+	
 
 	<authentication-manager>
-		<authentication-provider user-service-ref="userDBServiceImpl">
-		  	<password-encoder hash="sha-256"/>
-		</authentication-provider>
+		<authentication-provider user-service-ref="userDBServiceImpl"></authentication-provider>
 	</authentication-manager>
 </beans:beans>

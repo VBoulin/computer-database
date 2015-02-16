@@ -15,27 +15,26 @@ import com.excilys.formation.java.model.User;
 import com.excilys.formation.java.persistence.UserDao;
 
 @Service
-public class UserDBServiceImpl implements UserDetailsService{
+public class UserDBServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private UserDao userDao;
+  @Autowired
+  private UserDao userDao;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findByUsername(username);
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    User user = userDao.findByUsername(username);
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
+    if (user != null) {
+      List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+      authorities.add(new SimpleGrantedAuthority(user.getRole()));
 
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+      UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+          user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, authorities);
 
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-            user.getUsername(), user.getPassword(), user.isEnabled(), true,
-            true, true, authorities);
-        
-        return userDetails;
-
+      return userDetails;
+    } else {
+      throw new UsernameNotFoundException("User not found");
     }
+
+  }
 }

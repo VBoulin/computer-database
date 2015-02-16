@@ -7,36 +7,36 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="user")
+@Table(name = "user")
 public class User {
   @Id
   @GeneratedValue
-  @Column(name="id")
-  private long id;
-  @Column(name="username")
-  private String username;
-  @Column(name="password")
-  private String password;
-  @Column(name="role")
-  private String role;
-  @Column(name="enabled")
+  @Column(name = "id")
+  private long    id;
+  @Column(name = "username")
+  private String  username;
+  @Column(name = "password")
+  private String  password;
+  @Column(name = "role")
+  private String  role;
+  @Column(name = "enabled")
   private boolean enabled;
-  @Column(name="accountNonExpired")
+  @Column(name = "accountNonExpired")
   private boolean accountNonExpired;
-  @Column(name="credentialsNonExpired")
+  @Column(name = "credentialsNonExpired")
   private boolean credentialsNonExpired;
-  @Column(name="accountNonLocked")
+  @Column(name = "accountNonLocked")
   private boolean accountNonLocked;
- 
+
   //------------------------------
   //Constructors
   //------------------------------
-  
+
   public User() {
     super();
     // TODO Auto-generated constructor stub
   }
-  
+
   public User(long id, String username, String password, String role, boolean enabled,
       boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked) {
     super();
@@ -53,7 +53,7 @@ public class User {
   //------------------------------
   //Getters & setters
   //------------------------------
-  
+
   public long getId() {
     return id;
   }
@@ -121,7 +121,7 @@ public class User {
   //------------------------------
   //hashcode & equals & toString
   //------------------------------
-  
+
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
@@ -196,7 +196,5 @@ public class User {
       return false;
     return true;
   }
-  
-  
-  
+
 }
