@@ -1,6 +1,7 @@
 package com.excilys.formation.java.controller;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,8 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,13 +30,16 @@ import com.excilys.formation.java.service.ComputerDBService;
 
 @Controller
 public class ComputerController {
+  
+  @Autowired
+  private MessageSource messageSource;
 
   @Autowired
   private ComputerDBService                computerDBService;
   @Autowired
   private CompanyDBService                 companyDBService;
-
-  private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
+  @Autowired
+  private DtoMapper<ComputerDto, Computer> computerDtoMapper;
 
   private static final Pattern PATTERN          = Pattern.compile("\\d{1,19}");
 
@@ -59,8 +65,12 @@ public class ComputerController {
     Company company = null;
     Computer computer = null;
 
+    Locale locale = LocaleContextHolder.getLocale();    
+    String format = messageSource.getMessage("dateFormat", null, locale);
+    logger.info("format : "+format);
+    
     if (!rs.hasErrors()) {
-      computer = computerDtoMapper.fromDto(computerDto);
+      computer = computerDtoMapper.fromDto(computerDto, format);
       long id = computerDto.getIdCompany();
       if (id > 0) {
         company = companyDBService.getOne(computerDto.getIdCompany());
@@ -80,8 +90,12 @@ public class ComputerController {
    */
   @RequestMapping(value="/editcomputer", method = RequestMethod.GET)
   protected String editGet(Model model, @RequestParam long id) {
+    Locale locale = LocaleContextHolder.getLocale();    
+    String format = messageSource.getMessage("dateFormat", null, locale);
+    logger.info("format : "+format);
+    
     Computer computer = computerDBService.getOne(id);
-    ComputerDto computerDto = computerDtoMapper.toDto(computer);
+    ComputerDto computerDto = computerDtoMapper.toDto(computer, format);
     model.addAttribute("computer", computerDto);
     List<Company> companies = companyDBService.getAll();
     model.addAttribute("companies", companies);
@@ -97,8 +111,12 @@ public class ComputerController {
     Computer computer = null;
     Company company = null;
     
+    Locale locale = LocaleContextHolder.getLocale();    
+    String format = messageSource.getMessage("dateFormat", null, locale);
+    logger.info("format : "+format);
+    
     if (!rs.hasErrors()) {
-      computer = computerDtoMapper.fromDto(computerDto);
+      computer = computerDtoMapper.fromDto(computerDto, format);
       long id = computerDto.getIdCompany();
       if(id > 0){
         company=companyDBService.getOne(computerDto.getIdCompany());

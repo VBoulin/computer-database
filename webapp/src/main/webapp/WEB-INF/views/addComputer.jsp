@@ -59,8 +59,8 @@ pageEncoding="UTF-8"%>
 	<style> .error{ color: red; } </style>
     <style> .valid{ color: green; } </style>
     <script src="js/jquery.min.js"></script>
-	<script src="js/jquery.validate.min.js"></script>
-	<script src="js/validForm.js"></script>
+<!-- 	<script src="js/jquery.validate.min.js"></script> -->
+<!-- 	<script src="js/validForm.js"></script> -->
  
 </body>
 </html>

@@ -11,7 +11,7 @@ public class Validator {
    * @param input String to check
    * @return true if the format is correct
    */
-  public static boolean isDate(String input) {
+  public static boolean isDate(String input, String format) {
     if (input == null) {
       return false;
     }
@@ -19,7 +19,7 @@ public class Validator {
       return true;
     }
     
-    return GenericValidator.isDate(input, LocaleContextHolder.getLocale());
+    return GenericValidator.isDate(input, format, false);
       
   }
 

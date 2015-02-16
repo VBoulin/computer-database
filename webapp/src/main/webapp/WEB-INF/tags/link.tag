@@ -27,5 +27,5 @@
 	</c:if>
 </c:if>
 
-<a class="${classes}" href="${url}?page=${pageNumber}&nbResults=${nbResultsPerPage}${sort}${search}">${content}</a>
+<a class="${classes}" href="${url}?page=${pageNumber}&size=${nbResultsPerPage}${sort}${search}">${content}</a>
 

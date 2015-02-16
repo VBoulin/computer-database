@@ -1,10 +1,21 @@
 package com.excilys.formation.java.util;
 
+import java.util.Locale;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
+
+@Component
 public class ConstraintDateValidator implements ConstraintValidator<DateValidator, String> {
 
+  @Autowired
+  private MessageSource messageSource;
+  
   @Override
   public void initialize(DateValidator arg0) {}
 
@@ -15,7 +26,9 @@ public class ConstraintDateValidator implements ConstraintValidator<DateValidato
    */
   @Override
   public boolean isValid(String input, ConstraintValidatorContext context) {
-    return Validator.isDate(input);
+    Locale locale = LocaleContextHolder.getLocale();
+    String format = messageSource.getMessage("dateFormat", null, locale);
+    return Validator.isDate(input, format);
   }
 
 }

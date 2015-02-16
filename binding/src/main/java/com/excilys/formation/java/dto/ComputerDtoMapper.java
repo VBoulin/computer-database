@@ -4,31 +4,36 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
 
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.PageWrapper;
 
+@Component
 public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
-
+  
   /**
    * {@inheritDoc}
    */
-  public Computer fromDto(ComputerDto dto) {
+  public Computer fromDto(ComputerDto dto, String format) {
     Computer.Builder builder = Computer.builder();
     builder.id(dto.getId()).name(dto.getName());
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(LocaleContextHolder.getLocale());
     
     if (!StringUtils.isEmpty(dto.getIntroduced())) {
-      builder.introduced(LocalDate.parse(dto.getIntroduced(), formatter));
+      builder.introduced(LocalDate.parse(dto.getIntroduced(),  DateTimeFormatter.ofPattern(format)));
     }
     if (!StringUtils.isEmpty(dto.getDiscontinued())) {
       builder
-          .discontinued(LocalDate.parse(dto.getDiscontinued(), formatter));
+          .discontinued(LocalDate.parse(dto.getDiscontinued(),  DateTimeFormatter.ofPattern(format)));
     }
     
     return builder.build();
@@ -37,9 +42,9 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
   /**
    * {@inheritDoc}
    */
-  public List<Computer> fromDto(List<ComputerDto> dtos) {
+  public List<Computer> fromDto(List<ComputerDto> dtos, String format) {
     List<Computer> computers = dtos.stream().map(dto -> {
-      Computer computer = fromDto(dto);
+      Computer computer = fromDto(dto, format);
       if (computer != null) {
         return computer;
       } else {
@@ -52,15 +57,15 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
   /**
    * {@inheritDoc}
    */
-  public ComputerDto toDto(final Computer computer) {
+  public ComputerDto toDto(Computer computer, String format) {
     ComputerDto.Builder builder = ComputerDto.builder();
     builder.id(computer.getId()).name(computer.getName());
-
+    
     if (computer.getIntroduced() != null) {
-      builder.introduced(computer.getIntroduced().toString());
+      builder.introduced(computer.getIntroduced().format(DateTimeFormatter.ofPattern(format)));
     }
     if (computer.getDiscontinued() != null) {
-      builder.discontinued(computer.getDiscontinued().toString());
+      builder.discontinued(computer.getDiscontinued().format(DateTimeFormatter.ofPattern(format)));
     }
     if (computer.getCompany() != null) {
       builder.idCompany(computer.getCompany().getId());
@@ -73,9 +78,9 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
   /**
    * {@inheritDoc}
    */
-  public List<ComputerDto> toDto(List<Computer> computers) {
+  public List<ComputerDto> toDto(List<Computer> computers, String format) {
     List<ComputerDto> dtos = computers.stream().map(computer -> {
-      ComputerDto dto = toDto(computer);
+      ComputerDto dto = toDto(computer, format);
       if (dto != null) {
         return dto;
       } else {
@@ -83,37 +88,5 @@ public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
       }
     }).collect(Collectors.toList());
     return dtos;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public PageWrapper<ComputerDto> toDto(PageWrapper<Computer> page) {
-    PageWrapper<ComputerDto> pageReturn = new PageWrapper<ComputerDto>();
-    pageReturn.setNbResults(page.getNbResults());
-    pageReturn.setNbResultsPerPage(page.getNbResultsPerPage());
-    pageReturn.setPageNumber(page.getPageNumber());
-    pageReturn.setOrder(page.getOrder());
-    pageReturn.setSort(page.getSort());
-    pageReturn.setSearch(page.getSearch());
-    pageReturn.setList(toDto(page.getList()));
-    return pageReturn;
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public PageWrapper<Computer> fromDto(PageWrapper<ComputerDto> page) {
-    PageWrapper<Computer> pageReturn = new PageWrapper<Computer>();
-    pageReturn.setNbResults(page.getNbResults());
-    pageReturn.setNbResultsPerPage(page.getNbResultsPerPage());
-    pageReturn.setPageNumber(page.getPageNumber());
-    pageReturn.setOrder(page.getOrder());
-    pageReturn.setSort(page.getSort());
-    pageReturn.setSearch(page.getSearch());
-    pageReturn.setList(fromDto(page.getList()));
-    return pageReturn;
   }
 }

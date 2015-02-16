@@ -242,7 +242,7 @@ public class UserConsole {
     do {
       System.out.print("Enter introduced date (yyyy-mm-dd) or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !Validator.isDate(input));
+    } while (!input.equals("0") && !Validator.isDate(input,"yyyy-MM-dd"));
 
     if (!input.equals("0")) {
       b.introduced(LocalDate.parse(input));
@@ -251,7 +251,7 @@ public class UserConsole {
     do {
       System.out.print("Enter discontinued date (yyyy-mm-dd) or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !Validator.isDate(input));
+    } while (!input.equals("0") && !Validator.isDate(input,"yyyy-MM-dd"));
 
     if (!input.equals("0")) {
       b.discontinued(LocalDate.parse(input));
@@ -317,7 +317,7 @@ public class UserConsole {
       do {
         System.out.print("Enter the new discontinued date (yyyy-mm-dd) or enter 0 : ");
         input = scanner.next().trim();
-      } while (!input.equals("0") && !Validator.isDate(input));
+      } while (!input.equals("0") && !Validator.isDate(input,"yyyy-MM-dd"));
 
       if (!input.equals("0")) {
         b.discontinued(LocalDate.parse(input));

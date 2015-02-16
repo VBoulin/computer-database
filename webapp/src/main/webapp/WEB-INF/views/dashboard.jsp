@@ -109,7 +109,7 @@ pageEncoding="UTF-8"%>
 
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${page.content}" var="computer">
+					<c:forEach items="${computers}" var="computer">
 						<tr>
 							<td class="editMode">
 								<input type="checkbox" name="cb" class="cb" value="${computer.id}">
@@ -124,7 +124,7 @@ pageEncoding="UTF-8"%>
 								${computer.discontinued}
 							</td>
 							<td>
-								${computer.company.name}
+								${computer.companyName}
 							</td>
 						</tr>
 					</c:forEach>
