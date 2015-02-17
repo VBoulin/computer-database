@@ -10,22 +10,34 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 
+import com.excilys.formation.java.dto.ComputerDto;
+import com.excilys.formation.java.dto.ComputerDtoMapper;
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.PageWrapper;
-import com.excilys.formation.java.service.CompanyDBService;
-import com.excilys.formation.java.service.ComputerDBService;
 import com.excilys.formation.java.util.Validator;
+import com.excilys.formation.java.webservice.CompanyWebService;
+import com.excilys.formation.java.webservice.ComputerWebService;
 
-@Component
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+
 public class UserConsole {
 
-  @Autowired
-  private ComputerDBService computerDBService;
-  @Autowired
-  private CompanyDBService  companyDBService;
+//  @Autowired
+//  private ComputerDBService computerDBService;
+//  @Autowired
+//  private CompanyDBService  companyDBService;
+  
+  private ComputerWebService computerWebService;
+  
+  private CompanyWebService companyWebService;
+  
+  private ComputerDtoMapper computerDtoMapper;
 
   private boolean           stop = false;
   private Scanner           scanner;
@@ -36,6 +48,14 @@ public class UserConsole {
    */
   public UserConsole() {
     scanner = new Scanner(System.in);
+  }
+
+  public void setComputerWebService(ComputerWebService computerWebService) {
+    this.computerWebService = computerWebService;
+  }
+
+  public void setCompanyWebService(CompanyWebService companyWebService) {
+    this.companyWebService = companyWebService;
   }
 
   /**
@@ -106,10 +126,10 @@ public class UserConsole {
    * Display the content of the list
    * @param companies : list of company
    */
-  public void showComputerPage(List<Computer> computers) {
-    for (int i = 0; i < computers.size(); i++) {
-      System.out.println(new StringBuilder("Id : ").append(computers.get(i).getId())
-          .append(" | Name : ").append(computers.get(i).getName()));
+  public void showComputerPage(List<ComputerDto> list) {
+    for (int i = 0; i < list.size(); i++) {
+      System.out.println(new StringBuilder("Id : ").append(list.get(i).getId())
+          .append(" | Name : ").append(list.get(i).getName()));
     }
   }
 
@@ -118,14 +138,13 @@ public class UserConsole {
    */
   public void displayAllComputers() {
     String input;
-    Pageable pageable = new PageRequest(0, 10);
 
     //Retrieve the first Page
-    Page<Computer> page = computerDBService.createPage("", pageable);
+    PageWrapper<ComputerDto> page = computerWebService.createPage(0, 10);
 
     //Show the content of the page
-    System.out.println("Number of results found : " + page.getTotalElements());
-    showComputerPage(page.getContent());
+    System.out.println("Number of results found : " + page.getNbResults());
+    showComputerPage(page.getList());
 
     do {
       do {
@@ -135,19 +154,19 @@ public class UserConsole {
       switch (input) {
       //Show the previous Page
         case "1":
-          if (page.hasPrevious()) {
-            page = computerDBService.createPage("", page.previousPageable());
+          if (page.previousPageOrFirst()) {
+            page = computerWebService.createPage(page.getPageNumber(), 10);
           }
-          System.out.println("Total : " + page.getTotalElements());
-          showComputerPage(page.getContent());
+          System.out.println("Total : " + page.getNbResults());
+          showComputerPage(page.getList());
           break;
         //Show the next Page
         case "2":
-          if (page.hasNext()) {
-            page = computerDBService.createPage("", page.nextPageable());
+          if (page.nextPage()) {
+            page = computerWebService.createPage(page.getPageNumber(), 10);
           }
-          System.out.println("Total : " + page.getTotalElements());
-          showComputerPage(page.getContent());
+          System.out.println("Total : " + page.getNbResults());
+          showComputerPage(page.getList());
           break;
       }
     } while (!input.equals("0"));
@@ -171,7 +190,7 @@ public class UserConsole {
     String input;
 
     //Retrieve the first Page
-    PageWrapper<Company> page = companyDBService.createPage(new PageWrapper<Company>());
+    PageWrapper<Company> page = companyWebService.createPage(0,10);
 
     //Show the content of the page
     System.out.println("Number of results found : " + page.getNbResults());
@@ -186,7 +205,7 @@ public class UserConsole {
       //Show the previous Page
         case "1":
           if (page.previousPageOrFirst()) {
-            page = companyDBService.createPage(page);
+            page = companyWebService.createPage(page.getPageNumber(), 10);
           }
           System.out.println("Total : " + page.getNbResults());
           showCompanyPage(page.getList());
@@ -194,7 +213,7 @@ public class UserConsole {
         //Show the next Page
         case "2":
           if (page.nextPage()) {
-            page = companyDBService.createPage(page);
+            page = companyWebService.createPage(page.getPageNumber(), 10);
           }
           System.out.println("Total : " + page.getNbResults());
           showCompanyPage(page.getList());
@@ -215,7 +234,7 @@ public class UserConsole {
       input = scanner.next().trim();
     } while (!Validator.isID(input));
 
-    Computer computer = computerDBService.getOne(Long.parseLong(input));
+    ComputerDto computer = computerWebService.getOne(Long.parseLong(input));
 
     if(computer != null)
       System.out.println(computer.toString());
@@ -263,15 +282,15 @@ public class UserConsole {
     } while (!input.equals("0") && !Validator.isID(input));
 
     if (!input.equals("0")) {
-      company = companyDBService.getOne(Long.parseLong(input));
+      company = companyWebService.getOne(Long.parseLong(input));
       if (company != null)
-        b.company(companyDBService.getOne(Long.parseLong(input)));
+        b.company(companyWebService.getOne(Long.parseLong(input)));
     }
 
     Computer computer = b.build();
 
     //Add the computer to the database
-    computerDBService.create(computer);
+    computerWebService.create(computerDtoMapper.toDto(computer, "yyyy-MM-dd"));
     System.out.println("Computer created with success.");
   }
 
@@ -290,7 +309,7 @@ public class UserConsole {
     } while (!Validator.isID(input));
 
     id = Long.parseLong(input);
-    Computer computer = computerDBService.getOne(id);
+    Computer computer = computerDtoMapper.fromDto(computerWebService.getOne(id),"yyyy-MM-dd");
 
     //Check if the computer exist in the database
     if (computer == null) {
@@ -329,14 +348,14 @@ public class UserConsole {
       } while (!input.equals("0") && !Validator.isID(input));
 
       if (!input.equals("0")) {
-        company = companyDBService.getOne(Long.parseLong(input));
+        company = companyWebService.getOne(Long.parseLong(input));
         if (company != null)
-          b.company(companyDBService.getOne(Long.parseLong(input)));
+          b.company(companyWebService.getOne(Long.parseLong(input)));
       }
 
       computer = b.build();
       //Update the computer in the database
-      computerDBService.update(computer);
+      computerWebService.update(computerDtoMapper.toDto(computer, "yyyy-MM-dd"));
       System.out.println("Computer updated with success.");
     }
 
@@ -356,11 +375,11 @@ public class UserConsole {
     } while (!Validator.isID(input));
 
     id = Long.parseLong(input);
-    Computer computer = computerDBService.getOne(id);
+    ComputerDto computer = computerWebService.getOne(id);
 
     if (computer != null) {
       //Delete the computer in the database
-      computerDBService.delete(id);
+      computerWebService.delete(id);
       System.out.println("Computer deleted with success.");
     } else {
       System.out.println("Computer not found.");
@@ -381,11 +400,11 @@ public class UserConsole {
     } while (!Validator.isID(input));
 
     id = Long.parseLong(input);
-    Company company = companyDBService.getOne(id);
+    Company company = companyWebService.getOne(id);
 
     if (company != null) {
       //Delete the computer in the database
-      companyDBService.delete(id);
+      companyWebService.delete(id);
       System.out
           .println("Company deleted with success. Computers associated with that company deleted with success.");
     } else {
@@ -397,13 +416,28 @@ public class UserConsole {
    * Main function
    * Instantiation of the console
    * @param args
+   * @throws MalformedURLException 
    */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws MalformedURLException {
+    UserConsole console = new UserConsole();
     
-    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/consoleContext.xml");
-    UserConsole console = context.getBean(UserConsole.class);
+    URL computerUrl = new URL("http://localhost:9999/computer-database/webservice/computer?wsdl");
+    URL companyUrl = new URL("http://localhost:9999/computer-database/webservice/company?wsdl");
+    
+    QName qname = new QName("http://impl.webservice.java.formation.excilys.com/", "CompanyWebServiceImplService");
+    Service service = Service.create(companyUrl, qname);
+    
+    CompanyWebService companyWebService = service.getPort(CompanyWebService.class);
+    
+    qname = new QName("http://impl.webservice.java.formation.excilys.com/", "ComputerWebServiceImplService");
+    service = Service.create(computerUrl, qname);
+    
+    ComputerWebService computerWebService = service.getPort(ComputerWebService.class);
+    
+    console.setCompanyWebService(companyWebService);
+    console.setComputerWebService(computerWebService);
+    
     console.showMenu();
-    context.close();
   }
 
 }

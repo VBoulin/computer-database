@@ -1,9 +1,12 @@
 package com.excilys.formation.java.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PageWrapper<T> {
-
+public class PageWrapper<T> implements Serializable{
+  
+  private static final long serialVersionUID = 1L;
+  
   private int     pageNumber;
   private List<T> list;
   private int     nbResultsPerPage;
@@ -17,7 +20,7 @@ public class PageWrapper<T> {
   //Constructors
   //------------------------------
   public PageWrapper() {
-    pageNumber = 1;
+    pageNumber = 0;
     nbResultsPerPage = 10;
     sort=SortBy.ID;
     order=OrderBy.ASC;
@@ -176,7 +179,7 @@ public class PageWrapper<T> {
    * @return True : Page exist | False : otherwise
    */
   public boolean previousPageOrFirst() {
-    if (pageNumber > 1) {
+    if (pageNumber > 0) {
       pageNumber--;
       return true;
     }
@@ -194,6 +197,7 @@ public class PageWrapper<T> {
         nbTotalPage++;
       }
     }
+    nbTotalPage--;
     return nbTotalPage;
   }
 

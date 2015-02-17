@@ -2,8 +2,10 @@ package com.excilys.formation.java.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.excilys.formation.java.model.Company;
-import com.excilys.formation.java.model.PageWrapper;
 
 public interface CompanyDBService {
 
@@ -19,18 +21,18 @@ public interface CompanyDBService {
    * @return a list of companies
    */
   List<Company> getAll();
-
-  /**
-   * Create a page containing a list of companies
-   * @param page Raw page with only basics informations such as number of results per page
-   * @return Page with a list
-   */
-  PageWrapper<Company> createPage(PageWrapper<Company> page);
   
   /**
    * Delete a company and all the computer referencing that company
    * @param id id of the company
    */
   void delete(Long id);
+
+  /**
+   * Create a page containing a list of companies
+   * @param page Raw page with only basics informations such as number of results per page
+   * @return Page with a list
+   */
+  Page<Company> createPage(String search, Pageable page);
 
 }

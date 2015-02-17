@@ -38,8 +38,8 @@ public class ComputerController {
   private ComputerDBService                computerDBService;
   @Autowired
   private CompanyDBService                 companyDBService;
-  @Autowired
-  private DtoMapper<ComputerDto, Computer> computerDtoMapper;
+  
+  private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
 
   private static final Pattern PATTERN          = Pattern.compile("\\d{1,19}");
 

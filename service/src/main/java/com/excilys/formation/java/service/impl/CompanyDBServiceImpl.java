@@ -7,11 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.java.model.Company;
+import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.model.PageWrapper;
 import com.excilys.formation.java.persistence.CompanyDao;
 import com.excilys.formation.java.persistence.ComputerDao;
@@ -46,27 +48,12 @@ public class CompanyDBServiceImpl implements CompanyDBService {
    */
   @Override
   @Transactional(readOnly = true)
-  public PageWrapper<Company> createPage(PageWrapper<Company> page) {
+  public Page<Company> createPage(String search, Pageable page) {
     if (page == null) {
       logger.error("Error with createPage()");
       return null;
     }
-    Page<Company> pageCompany;
-    
-    Sort sort;
-    if(page.getOrder().getOrder().equals("ASC")) {
-      sort = new Sort(Sort.Direction.ASC, page.getSort().getColumn());
-    } else {
-      sort = new Sort(Sort.Direction.DESC, page.getSort().getColumn());
-    }
-    int nbResultTotal = companyDao.countByNameContaining(page.getSearch());
-    page.setNbResults(nbResultTotal);
-
-    PageRequest pr = new PageRequest(page.getPageNumber()-1, page.getNbResultsPerPage(), sort);
-    pageCompany = companyDao.findByNameContaining(page.getSearch(), pr);
-
-    page.setList(pageCompany.getContent());
-    return page;
+    return companyDao.findByNameContaining(search, page);
   }
 
   /**

@@ -17,7 +17,7 @@
         <div class="container">
             <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
              <span class="pull-right">
-		        <sec:authorize access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
+		        <sec:authorize access="hasRole('ROLE_ADMIN')">
 					<a href="<c:url value="j_spring_security_logout" />" > Logout</a>
 				</sec:authorize>
         	</span>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.formation.java.dto.ComputerDto;
+import com.excilys.formation.java.dto.ComputerDtoMapper;
 import com.excilys.formation.java.dto.DtoMapper;
 import com.excilys.formation.java.model.Computer;
 import com.excilys.formation.java.service.ComputerDBService;
@@ -29,8 +30,8 @@ public class DashBoard {
 
   @Autowired
   private ComputerDBService                computerDBService;
-  @Autowired
-  private DtoMapper<ComputerDto, Computer> computerDtoMapper;
+  
+  private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
   @Autowired
   private MessageSource messageSource;
 

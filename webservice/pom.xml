@@ -6,7 +6,7 @@
 		<version>0.4.0</version>
 	</parent>
 
-	<artifactId>console</artifactId>
+	<artifactId>webservice</artifactId>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
