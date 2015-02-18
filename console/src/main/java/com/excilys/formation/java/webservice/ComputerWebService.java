@@ -11,7 +11,6 @@ import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.model.PageWrapper;
 
 @WebService
-@SOAPBinding(style = Style.RPC)
 public interface ComputerWebService {
 
   @WebMethod

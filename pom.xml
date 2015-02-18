@@ -50,6 +50,9 @@
 		
 		<!-- hibernate -->
 		<hibernateVersion>4.3.8.Final</hibernateVersion>
+		
+		<jackson-version></jackson-version>
+		<jaxws-version></jaxws-version>
 	</properties>
 
 	<modules>

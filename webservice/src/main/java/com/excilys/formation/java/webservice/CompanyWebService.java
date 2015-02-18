@@ -11,7 +11,6 @@ import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.PageWrapper;
 
 @WebService
-@SOAPBinding(style = Style.RPC)
 public interface CompanyWebService {
 
   @WebMethod
