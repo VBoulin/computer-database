@@ -6,7 +6,6 @@ import javax.jws.WebService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.dto.ComputerDtoMapper;
@@ -45,21 +44,17 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 
     @Override
     public void create(ComputerDto computerDTO) {
-            Computer computer = computerDtoMapper.fromDto(computerDTO, DATE_FORMAT);
-            computerDBService.create(computer);
+            computerDBService.create(computerDtoMapper.fromDto(computerDTO, DATE_FORMAT));
     }
 
     @Override
     public void update(ComputerDto computerDTO) {
-            Computer computer = computerDtoMapper.fromDto(computerDTO, DATE_FORMAT);
-            computerDBService.update(computer);
+            computerDBService.update(computerDtoMapper.fromDto(computerDTO, DATE_FORMAT));
     }
 
     @Override
-    public PageWrapper<ComputerDto> createPage(int page, int size) {
-        Pageable pageable = new PageRequest(page, size);
-        Page<Computer> p = computerDBService.createPage("", pageable);
-        
+    public PageWrapper<ComputerDto> createPage(int page) {
+        Page<Computer> p = computerDBService.createPage("", new PageRequest(page, 10));
         PageWrapper<ComputerDto> pageWrapper = new PageWrapper<ComputerDto>();
         pageWrapper.setList(computerDtoMapper.toDto(p.getContent(), DATE_FORMAT));
         pageWrapper.setPageNumber(p.getNumber());

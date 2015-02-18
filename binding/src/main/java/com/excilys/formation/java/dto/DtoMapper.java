@@ -2,8 +2,6 @@ package com.excilys.formation.java.dto;
 
 import java.util.List;
 
-import com.excilys.formation.java.model.PageWrapper;
-
 public interface DtoMapper<X, Y> {
   
   /**

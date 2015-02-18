@@ -5,12 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
 import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.dto.ComputerDtoMapper;
 import com.excilys.formation.java.model.Company;
@@ -140,7 +134,7 @@ public class UserConsole {
     String input;
 
     //Retrieve the first Page
-    PageWrapper<ComputerDto> page = computerWebService.createPage(0, 10);
+    PageWrapper<ComputerDto> page = computerWebService.createPage(0);
 
     //Show the content of the page
     System.out.println("Number of results found : " + page.getNbResults());
@@ -155,7 +149,7 @@ public class UserConsole {
       //Show the previous Page
         case "1":
           if (page.previousPageOrFirst()) {
-            page = computerWebService.createPage(page.getPageNumber(), 10);
+            page = computerWebService.createPage(page.getPageNumber());
           }
           System.out.println("Total : " + page.getNbResults());
           showComputerPage(page.getList());
@@ -163,7 +157,7 @@ public class UserConsole {
         //Show the next Page
         case "2":
           if (page.nextPage()) {
-            page = computerWebService.createPage(page.getPageNumber(), 10);
+            page = computerWebService.createPage(page.getPageNumber());
           }
           System.out.println("Total : " + page.getNbResults());
           showComputerPage(page.getList());
@@ -190,7 +184,7 @@ public class UserConsole {
     String input;
 
     //Retrieve the first Page
-    PageWrapper<Company> page = companyWebService.createPage(0,10);
+    PageWrapper<Company> page = companyWebService.createPage(0);
 
     //Show the content of the page
     System.out.println("Number of results found : " + page.getNbResults());
@@ -205,7 +199,7 @@ public class UserConsole {
       //Show the previous Page
         case "1":
           if (page.previousPageOrFirst()) {
-            page = companyWebService.createPage(page.getPageNumber(), 10);
+            page = companyWebService.createPage(page.getPageNumber());
           }
           System.out.println("Total : " + page.getNbResults());
           showCompanyPage(page.getList());
@@ -213,7 +207,7 @@ public class UserConsole {
         //Show the next Page
         case "2":
           if (page.nextPage()) {
-            page = companyWebService.createPage(page.getPageNumber(), 10);
+            page = companyWebService.createPage(page.getPageNumber());
           }
           System.out.println("Total : " + page.getNbResults());
           showCompanyPage(page.getList());

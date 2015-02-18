@@ -6,7 +6,6 @@ import javax.jws.WebService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import com.excilys.formation.java.model.Company;
 import com.excilys.formation.java.model.PageWrapper;
@@ -39,10 +38,8 @@ public class CompanyWebServiceImpl implements CompanyWebService {
     }
 
     @Override
-    public PageWrapper<Company> createPage(int page, int size) {
-      Pageable pageable = new PageRequest(page, size);
-      Page<Company> p = companyDBService.createPage("", pageable);
-      
+    public PageWrapper<Company> createPage(int page) {
+      Page<Company> p = companyDBService.createPage("", new PageRequest(page, 10));
       PageWrapper<Company> pageWrapper = new PageWrapper<Company>();
       pageWrapper.setList(p.getContent());
       pageWrapper.setPageNumber(p.getNumber());

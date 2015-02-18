@@ -1,7 +1,6 @@
 package com.excilys.formation.java.util;
 
 import org.apache.commons.validator.GenericValidator;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 
 public class Validator {

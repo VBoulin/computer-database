@@ -19,5 +19,5 @@ public interface ComputerWebService {
     @WebMethod void create(ComputerDto computerDTO);
     @WebMethod void update(ComputerDto computerDTO);
     @WebMethod void delete(long id);
-    @WebMethod PageWrapper<ComputerDto> createPage(int page, int size);
+    @WebMethod PageWrapper<ComputerDto> createPage(int page);
 }
