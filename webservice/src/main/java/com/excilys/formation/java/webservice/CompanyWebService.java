@@ -14,8 +14,15 @@ import com.excilys.formation.java.model.PageWrapper;
 @SOAPBinding(style = Style.RPC)
 public interface CompanyWebService {
 
-    @WebMethod ArrayList<Company> getAll();
-    @WebMethod Company getOne(long l);
-    @WebMethod void delete(long l);
-    @WebMethod PageWrapper<Company> createPage(int page);
+  @WebMethod
+  ArrayList<Company> getAll();
+
+  @WebMethod
+  Company getOne(long l);
+
+  @WebMethod
+  void delete(long l);
+
+  @WebMethod
+  PageWrapper<Company> createPage(int page);
 }

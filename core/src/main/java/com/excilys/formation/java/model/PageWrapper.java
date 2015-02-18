@@ -167,7 +167,7 @@ public class PageWrapper<T> implements Serializable{
    * @return True : Page exist | False : otherwise
    */
   public boolean nextPage() {
-    if (pageNumber * nbResultsPerPage < nbResults) {
+    if (pageNumber * nbResultsPerPage < (nbResults-nbResultsPerPage)) {
       pageNumber++;
       return true;
     }
@@ -197,7 +197,6 @@ public class PageWrapper<T> implements Serializable{
         nbTotalPage++;
       }
     }
-    nbTotalPage--;
     return nbTotalPage;
   }
 

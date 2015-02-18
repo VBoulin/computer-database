@@ -13,11 +13,22 @@ import com.excilys.formation.java.model.PageWrapper;
 @WebService
 @SOAPBinding(style = Style.RPC)
 public interface ComputerWebService {
-    
-    @WebMethod ComputerDto getOne(long id);
-    @WebMethod ArrayList<ComputerDto> getAll();
-    @WebMethod void create(ComputerDto computerDTO);
-    @WebMethod void update(ComputerDto computerDTO);
-    @WebMethod void delete(long id);
-    @WebMethod PageWrapper<ComputerDto> createPage(int page);
+
+  @WebMethod
+  ComputerDto getOne(long id);
+
+  @WebMethod
+  ArrayList<ComputerDto> getAll();
+
+  @WebMethod
+  void create(ComputerDto computerDTO);
+
+  @WebMethod
+  void update(ComputerDto computerDTO);
+
+  @WebMethod
+  void delete(long id);
+
+  @WebMethod
+  PageWrapper<ComputerDto> createPage(int page);
 }

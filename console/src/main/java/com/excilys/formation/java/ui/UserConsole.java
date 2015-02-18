@@ -22,19 +22,16 @@ import javax.xml.ws.Service;
 
 public class UserConsole {
 
-//  @Autowired
-//  private ComputerDBService computerDBService;
-//  @Autowired
-//  private CompanyDBService  companyDBService;
-  
   private ComputerWebService computerWebService;
-  
-  private CompanyWebService companyWebService;
-  
-  private ComputerDtoMapper computerDtoMapper;
 
-  private boolean           stop = false;
-  private Scanner           scanner;
+  private CompanyWebService  companyWebService;
+
+  private ComputerDtoMapper  computerDtoMapper = new ComputerDtoMapper();
+
+  private boolean            stop              = false;
+  private Scanner            scanner;
+  
+  private static final String DATE_FORMAT = "yyyy-MM-dd";
 
   /**
    * Constructor
@@ -43,7 +40,6 @@ public class UserConsole {
   public UserConsole() {
     scanner = new Scanner(System.in);
   }
-
   public void setComputerWebService(ComputerWebService computerWebService) {
     this.computerWebService = computerWebService;
   }
@@ -230,7 +226,7 @@ public class UserConsole {
 
     ComputerDto computer = computerWebService.getOne(Long.parseLong(input));
 
-    if(computer != null)
+    if (computer != null)
       System.out.println(computer.toString());
     else
       System.out.println("Computer not found !");
@@ -253,18 +249,18 @@ public class UserConsole {
     Computer.Builder b = Computer.builder(input);
 
     do {
-      System.out.print("Enter introduced date (yyyy-mm-dd) or enter 0 : ");
+      System.out.print("Enter introduced date ("+DATE_FORMAT+") or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !Validator.isDate(input,"yyyy-MM-dd"));
+    } while (!input.equals("0") && !Validator.isDate(input, DATE_FORMAT));
 
     if (!input.equals("0")) {
       b.introduced(LocalDate.parse(input));
     }
 
     do {
-      System.out.print("Enter discontinued date (yyyy-mm-dd) or enter 0 : ");
+      System.out.print("Enter discontinued date ("+DATE_FORMAT+") or enter 0 : ");
       input = scanner.next().trim();
-    } while (!input.equals("0") && !Validator.isDate(input,"yyyy-MM-dd"));
+    } while (!input.equals("0") && !Validator.isDate(input, DATE_FORMAT));
 
     if (!input.equals("0")) {
       b.discontinued(LocalDate.parse(input));
@@ -284,7 +280,7 @@ public class UserConsole {
     Computer computer = b.build();
 
     //Add the computer to the database
-    computerWebService.create(computerDtoMapper.toDto(computer, "yyyy-MM-dd"));
+    computerWebService.create(computerDtoMapper.toDto(computer, DATE_FORMAT));
     System.out.println("Computer created with success.");
   }
 
@@ -303,7 +299,7 @@ public class UserConsole {
     } while (!Validator.isID(input));
 
     id = Long.parseLong(input);
-    Computer computer = computerDtoMapper.fromDto(computerWebService.getOne(id),"yyyy-MM-dd");
+    Computer computer = computerDtoMapper.fromDto(computerWebService.getOne(id), DATE_FORMAT);
 
     //Check if the computer exist in the database
     if (computer == null) {
@@ -319,7 +315,7 @@ public class UserConsole {
       b.name(input);
 
       do {
-        System.out.print("Enter the new introduced date (yyyy-mm-dd) or enter 0 : ");
+        System.out.print("Enter the new introduced date ("+DATE_FORMAT+") or enter 0 : ");
         input = scanner.next().trim();
       } while (!input.equals("0") && !Validator.isID(input));
 
@@ -328,9 +324,9 @@ public class UserConsole {
       }
 
       do {
-        System.out.print("Enter the new discontinued date (yyyy-mm-dd) or enter 0 : ");
+        System.out.print("Enter the new discontinued date ("+DATE_FORMAT+") or enter 0 : ");
         input = scanner.next().trim();
-      } while (!input.equals("0") && !Validator.isDate(input,"yyyy-MM-dd"));
+      } while (!input.equals("0") && !Validator.isDate(input, DATE_FORMAT));
 
       if (!input.equals("0")) {
         b.discontinued(LocalDate.parse(input));
@@ -349,7 +345,7 @@ public class UserConsole {
 
       computer = b.build();
       //Update the computer in the database
-      computerWebService.update(computerDtoMapper.toDto(computer, "yyyy-MM-dd"));
+      computerWebService.update(computerDtoMapper.toDto(computer, DATE_FORMAT));
       System.out.println("Computer updated with success.");
     }
 
@@ -414,23 +410,25 @@ public class UserConsole {
    */
   public static void main(String[] args) throws MalformedURLException {
     UserConsole console = new UserConsole();
-    
+
     URL computerUrl = new URL("http://localhost:9999/computer-database/webservice/computer?wsdl");
     URL companyUrl = new URL("http://localhost:9999/computer-database/webservice/company?wsdl");
-    
-    QName qname = new QName("http://impl.webservice.java.formation.excilys.com/", "CompanyWebServiceImplService");
+
+    QName qname = new QName("http://impl.webservice.java.formation.excilys.com/",
+        "CompanyWebServiceImplService");
     Service service = Service.create(companyUrl, qname);
-    
+
     CompanyWebService companyWebService = service.getPort(CompanyWebService.class);
-    
-    qname = new QName("http://impl.webservice.java.formation.excilys.com/", "ComputerWebServiceImplService");
+
+    qname = new QName("http://impl.webservice.java.formation.excilys.com/",
+        "ComputerWebServiceImplService");
     service = Service.create(computerUrl, qname);
-    
+
     ComputerWebService computerWebService = service.getPort(ComputerWebService.class);
-    
+
     console.setCompanyWebService(companyWebService);
     console.setComputerWebService(computerWebService);
-    
+
     console.showMenu();
   }
 

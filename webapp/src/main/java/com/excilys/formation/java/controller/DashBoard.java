@@ -30,10 +30,10 @@ public class DashBoard {
 
   @Autowired
   private ComputerDBService                computerDBService;
-  
+
   private DtoMapper<ComputerDto, Computer> computerDtoMapper = new ComputerDtoMapper();
   @Autowired
-  private MessageSource messageSource;
+  private MessageSource                    messageSource;
 
   private Logger                           logger            = LoggerFactory
                                                                  .getLogger(DashBoard.class);
@@ -42,35 +42,35 @@ public class DashBoard {
    * Creation of a page based on the request
    */
   @RequestMapping(method = RequestMethod.GET)
-  protected String doGet(Model model, @PageableDefault(page=0,value=10) Pageable pageable, 
-      @RequestParam(defaultValue = "", required = false, value = "search") String search){
+  protected String doGet(Model model, @PageableDefault(page = 0, value = 10) Pageable pageable,
+      @RequestParam(defaultValue = "", required = false, value = "search") String search) {
     Page<Computer> page = computerDBService.createPage(search, pageable);
-    
-    Locale locale = LocaleContextHolder.getLocale();    
+
+    Locale locale = LocaleContextHolder.getLocale();
     String format = messageSource.getMessage("dateFormat", null, locale);
-    logger.info("format : "+format);
-    
+    logger.info("format : " + format);
+
     if (page.getSort() != null) {
       model.addAttribute("sort", SortBy.getSortBy(page.getSort()).getSort());
       model.addAttribute("order", SortBy.getSortBy(page.getSort()).getOrder());
     }
     model.addAttribute("search", search);
     model.addAttribute("page", page);
-    
+
     List<ComputerDto> computers = computerDtoMapper.toDto(page.getContent(), format);
     model.addAttribute("computers", computers);
-    
-    logger.info("Page created with sucess");    
+
+    logger.info("Page created with sucess");
     return "dashboard";
   }
-  
+
   /**
    * ExceptionHandler that redirect any error catch to a custom error page
    */
-   @ExceptionHandler(Exception.class)
-   public String handleAllException(Exception ex) {
-     logger.info("Error in dashboard.");
-     return "error";
-   }
+  @ExceptionHandler(Exception.class)
+  public String handleAllException(Exception ex) {
+    logger.info("Error in dashboard.");
+    return "error";
+  }
 
 }
