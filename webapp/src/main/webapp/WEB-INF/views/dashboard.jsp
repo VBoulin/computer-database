@@ -109,7 +109,7 @@ pageEncoding="UTF-8"%>
 
 				<!-- Browse attribute computers -->
 				<tbody id="results">
-					<c:forEach items="${computers}" var="computer">
+					<c:forEach items="${page.content}" var="computer">
 						<tr>
 							<td class="editMode">
 								<input type="checkbox" name="cb" class="cb" value="${computer.id}">

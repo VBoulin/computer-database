@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -49,16 +50,16 @@ public class DashBoard {
     Locale locale = LocaleContextHolder.getLocale();
     String format = messageSource.getMessage("dateFormat", null, locale);
     logger.info("format : " + format);
+    
+    PageImpl<ComputerDto> pageReturned = new PageImpl<ComputerDto>(computerDtoMapper.toDto(
+        page.getContent(), format), pageable, page.getTotalElements());
 
     if (page.getSort() != null) {
       model.addAttribute("sort", SortBy.getSortBy(page.getSort()).getSort());
       model.addAttribute("order", SortBy.getSortBy(page.getSort()).getOrder());
     }
     model.addAttribute("search", search);
-    model.addAttribute("page", page);
-
-    List<ComputerDto> computers = computerDtoMapper.toDto(page.getContent(), format);
-    model.addAttribute("computers", computers);
+    model.addAttribute("page", pageReturned);
 
     logger.info("Page created with sucess");
     return "dashboard";

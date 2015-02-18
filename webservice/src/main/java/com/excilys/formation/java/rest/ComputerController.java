@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.excilys.formation.java.dto.ComputerDto;
 import com.excilys.formation.java.dto.ComputerDtoMapper;
 import com.excilys.formation.java.model.Computer;
-import com.excilys.formation.java.service.CompanyDBService;
 import com.excilys.formation.java.service.ComputerDBService;
 
 @RestController
@@ -21,8 +20,6 @@ import com.excilys.formation.java.service.ComputerDBService;
 public class ComputerController {
   @Autowired
   private ComputerDBService   computerDBService;
-  @Autowired
-  private CompanyDBService    companyDBService;
 
   private ComputerDtoMapper   computerDtoMapper = new ComputerDtoMapper();
 

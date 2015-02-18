@@ -126,7 +126,6 @@ public class ComputerController {
       logger.info("Computer updated with success");
       return "redirect:/dashboard";
     } else {
-      model.addAttribute("computer", computerDto);
       model.addAttribute("companies", companyDBService.getAll());
       logger.info("Incorrect edition !");
       return "editcomputer";
