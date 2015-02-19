@@ -17,7 +17,7 @@ import com.excilys.formation.java.service.ComputerDBService;
 
 @RestController
 @RequestMapping("/computer")
-public class ComputerController {
+public class RestComputerController {
   @Autowired
   private ComputerDBService   computerDBService;
 

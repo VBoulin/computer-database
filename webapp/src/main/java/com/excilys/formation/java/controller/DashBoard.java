@@ -1,6 +1,5 @@
 package com.excilys.formation.java.controller;
 
-import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;

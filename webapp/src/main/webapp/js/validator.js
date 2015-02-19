@@ -12,7 +12,6 @@ function checkName() {
 
 function checkDate(date, regex) {
 	var reg = new RegExp(regex);
-	console.log($("#" + date).val().length);
 	if ($("#" + date).val().length == 0)
 	{
 		$("#" + date).parent().removeClass("has-error");

@@ -10,12 +10,19 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
+/**
+ * Custom validator used by an annotation
+ * @author Vincent
+ */
 @Component
 public class ConstraintDateValidator implements ConstraintValidator<DateValidator, String> {
 
   @Autowired
   private MessageSource messageSource;
   
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void initialize(DateValidator arg0) {}
 

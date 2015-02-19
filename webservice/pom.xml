@@ -32,19 +32,6 @@
 			<artifactId>core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		<!-- Spring framework -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring-context.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring-context.version}</version>
-		</dependency>
 
 		<!-- Jackson -->
 		<dependency>

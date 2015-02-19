@@ -72,8 +72,6 @@ pageEncoding="UTF-8"%>
 			checkDate("discontinued", "<spring:message code="regex.date" />");
 		});
 	</script>
-<!-- 	<script src="js/jquery.validate.min.js"></script> -->
-<!-- 	<script src="js/validForm.js"></script> -->
  
 </body>
 </html>

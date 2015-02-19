@@ -34,7 +34,6 @@ public class User {
 
   public User() {
     super();
-    // TODO Auto-generated constructor stub
   }
 
   public User(long id, String username, String password, String role, boolean enabled,

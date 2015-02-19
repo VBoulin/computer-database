@@ -9,6 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.excilys.formation.java.model.Computer;
 
+/**
+ * Computer DTO mapper
+ * Convert a computer DTO into a computer and vice-versa
+ * @author Vincent
+ */
 public class ComputerDtoMapper implements DtoMapper<ComputerDto, Computer> {
   
   /**

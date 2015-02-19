@@ -20,6 +20,10 @@ import java.net.URL;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
+/**
+ * CLI (Command-line interface)
+ * @author Vincent
+ */
 public class UserConsole {
 
   private ComputerWebService computerWebService;
@@ -114,7 +118,7 @@ public class UserConsole {
 
   /**
    * Display the content of the list
-   * @param companies : list of company
+   * @param list : list of company
    */
   public void showComputerPage(List<ComputerDto> list) {
     for (int i = 0; i < list.size(); i++) {

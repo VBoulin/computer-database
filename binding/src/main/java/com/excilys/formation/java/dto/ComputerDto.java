@@ -7,6 +7,10 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.excilys.formation.java.util.DateValidator;
 
+/**
+ * Computer DTO 
+ * @author Vincent
+ */
 public class ComputerDto {
 
   @Min(value = 0, message = "Incorrect Computer id")

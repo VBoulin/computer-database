@@ -1,4 +1,4 @@
-package com.excilys.formation.java.webservice;
+
 
 import javax.xml.ws.Endpoint;
 
