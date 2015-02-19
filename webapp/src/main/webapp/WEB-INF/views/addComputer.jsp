@@ -59,6 +59,19 @@ pageEncoding="UTF-8"%>
 	<style> .error{ color: red; } </style>
     <style> .valid{ color: green; } </style>
     <script src="js/jquery.min.js"></script>
+	<script src="js/validator.js"></script>
+	<script type="text/javascript">
+		checkName();
+		$("#computerName").on('keyup change', function() {
+			checkName();
+		});
+		$("#introduced").on('keyup change', function() {
+			checkDate("introduced", "<spring:message code="regex.date" />");
+		});
+		$("#discontinued").on('keyup change', function() {
+			checkDate("discontinued", "<spring:message code="regex.date" />");
+		});
+	</script>
 <!-- 	<script src="js/jquery.validate.min.js"></script> -->
 <!-- 	<script src="js/validForm.js"></script> -->
  
