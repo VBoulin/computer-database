@@ -3,6 +3,12 @@ package com.excilys.formation.java.model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Model for a page
+ * @author Vincent
+ *
+ * @param <T>
+ */
 public class PageWrapper<T> implements Serializable{
   
   private static final long serialVersionUID = 1L;

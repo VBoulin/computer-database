@@ -13,6 +13,11 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+/**
+ * Model for a computer
+ * @author Vincent
+ *
+ */
 @Entity
 @Table(name="computer")
 public class Computer{

@@ -32,13 +32,6 @@
 			<artifactId>spring-tx</artifactId>
 			<version>${spring-context.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring-context.version}</version>
-			<scope>runtime</scope>
-		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.security</groupId>

@@ -96,7 +96,7 @@ public class ComputerController {
     
     Computer computer = computerDBService.getOne(id);
     ComputerDto computerDto = computerDtoMapper.toDto(computer, format);
-    model.addAttribute("computer", computerDto);
+    model.addAttribute("computerDto", computerDto);
     List<Company> companies = companyDBService.getAll();
     model.addAttribute("companies", companies);
     return "editComputer";
@@ -126,9 +126,10 @@ public class ComputerController {
       logger.info("Computer updated with success");
       return "redirect:/dashboard";
     } else {
+      model.addAttribute("computerDto", computerDto);
       model.addAttribute("companies", companyDBService.getAll());
       logger.info("Incorrect edition !");
-      return "editcomputer";
+      return "editComputer";
     }
   }
   

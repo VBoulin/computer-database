@@ -1,5 +1,10 @@
 package com.excilys.formation.java.exceptions;
 
+/**
+ * Custom exception
+ * @author Vincent
+ *
+ */
 public class PersistenceException extends RuntimeException {
 
   private static final long   serialVersionUID = 164146942369822205L;

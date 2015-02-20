@@ -5,6 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Model for a company
+ * @author Vincent
+ *
+ */
 @Entity
 @Table(name="company")
 public class Company {

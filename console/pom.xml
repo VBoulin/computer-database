@@ -32,13 +32,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		
-		<!-- Spring framework -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring-context.version}</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>com.sun.xml.ws</groupId>
 			<artifactId>jaxws-rt</artifactId>
